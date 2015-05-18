@@ -1,5 +1,4 @@
 #encoding: utf-8
-require 'byebug'
 require 'roo'
 require 'thor/rails'
 

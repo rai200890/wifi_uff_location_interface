@@ -9,7 +9,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'jbuilder', '~> 2.0'
 gem 'roo'
 gem 'thor-rails'
-#gem 'simple-spreadsheet'
+gem 'snmp'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
