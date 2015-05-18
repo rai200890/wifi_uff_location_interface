@@ -24,7 +24,7 @@ class Snmp < Thor
   method_option :host, :aliases => "-h", :desc => "Specify a host"
   desc "walk", "retrieve a subtree of management values using SNMP GETNEXT requests"
   def walk
-    SNMP::Manager.open(:host => "localhost") do |manager|
+    SNMP::Manager.open(host: options[:host], community: 'public') do |manager|
       manager.walk("ifSpeed") { |vb| puts vb }
     end
   end
