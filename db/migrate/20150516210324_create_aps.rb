@@ -8,7 +8,6 @@ class CreateAps < ActiveRecord::Migration
       t.integer :port
       t.string :socket
       t.string :panel_port
-      t.string :status
       t.string :ip
       t.text :comments
       t.boolean :validated

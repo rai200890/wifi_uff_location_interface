@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 20150517002020) do
     t.integer "port",              limit: 4
     t.string  "socket",            limit: 255
     t.string  "panel_port",        limit: 255
-    t.string  "status",            limit: 255
     t.string  "ip",                limit: 255
     t.text    "comments",          limit: 65535
     t.boolean "validated",         limit: 1
@@ -67,10 +66,10 @@ ActiveRecord::Schema.define(version: 20150517002020) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.string   "name",          limit: 255
-    t.integer  "department_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "name",        limit: 255
+    t.integer  "building_id", limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
 end

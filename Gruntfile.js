@@ -14,6 +14,15 @@ module.exports = function (grunt) {
 
     // Define the configuration for all the tasks
     grunt.initConfig({
+        watch: {
+            scripts: {
+                files: ['app/assets/templates/**/**.html', 'app/assets/templates/**.html'],
+                tasks: ['ngtemplates'],
+                options: {
+                    spawn: true
+                }
+            }
+        },
         ngtemplates:  {
             wifiUffLocation:        { /*Nome do módulo da applicação*/
                 prefix: "/",
@@ -25,5 +34,6 @@ module.exports = function (grunt) {
             }
         }
     });
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-angular-templates');
 };

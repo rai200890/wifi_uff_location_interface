@@ -7,13 +7,23 @@ Rails.application.routes.draw do
   # root 'welcome#index'
 
   # Example of regular route:
-     get '*path' => 'application#index'
+  # get '*path' => 'application#index'
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+
+  namespace :api do
+    resources :aps
+    resources :campi do
+      resources :buildings
+    end
+  end
+
+  get 'aps' => 'application#index'
+  get 'locations/:id' => 'application#index'
 
   # Example resource route with options:
   #   resources :products do

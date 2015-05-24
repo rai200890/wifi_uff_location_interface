@@ -13,7 +13,10 @@
 //= require jquery/dist/jquery.min
 //= require bootstrap/dist/js/bootstrap.min
 //= require angular/angular.min
+//= require angular-resource/angular-resource.min
 //= require angular-route/angular-route.min
 //= require angular-ui-router/release/angular-ui-router.min
+//= require_tree ./services
+//= require_tree ./controllers
 //= require app
 //= require templates
