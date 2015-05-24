@@ -6,7 +6,9 @@
 
 # Ignore bundler config.
 /.bundle
-
+.idea/*
 /log/*
 /tmp/*
+bower_components/*
 node_modules/*
+Controle.xlsx

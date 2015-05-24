@@ -25,7 +25,7 @@ class Aps < Thor
 
       campus = Campus.where(name: attributes[:campus]).first_or_create
       building = Building.where(name: attributes[:building], campus_id: campus.id).first_or_create
-      location = Location.where(name: attributes[:location]).first_or_create
+      location = Location.where(name: attributes[:location], building_id: building.id).first_or_create
       ap_model = ApModel.where(name: attributes[:ap_model]).first_or_create
       ap_status = ApStatus.where(name: attributes[:ap_status]).first_or_create
       control_region = ControlRegion.where(name: attributes[:control_region]).first_or_create
@@ -44,7 +44,7 @@ class Aps < Thor
   private
 
   def parse_attributes attributes
-    attributes.select{|key, value| !['-','?'].include?(value)}
+    attributes.select!{|key, value| !["-",'?'].include?(value.to_s.gsub(" ",""))}
     attributes[:validated] = attributes[:validated] == 'OK' ? true : nil
     attributes
   end

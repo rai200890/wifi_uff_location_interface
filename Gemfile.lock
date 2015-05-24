@@ -93,6 +93,8 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
     ref (1.0.5)
+    responders (2.1.0)
+      railties (>= 4.2.0, < 5)
     roo (2.0.0)
       nokogiri (~> 1)
       rubyzip (~> 1.1, < 2.0.0)
@@ -132,6 +134,7 @@ DEPENDENCIES
   mysql2
   rails (= 4.2.1)
   rake
+  responders
   roo
   sdoc (~> 0.4.0)
   snmp

@@ -1,0 +1,18 @@
+<table class="table table-hover table-striped">
+    <thead>
+    <th>ID</th>
+    <th>Name</th>
+    <th>IP</th>
+    <th>Campus</th>
+    <th>Validated</th>
+    </thead>
+    <tbody>
+    <tr ng-repeat="ap in aps">
+        <td>{{ap.id}}</td>
+        <td>{{ap.name}}</td>
+        <td>{{ap.ip}}</td>
+        <td tooltip="{{ap.building_name + ',' + ap.location_name}}" >{{ap.campus_name}}</td>
+        <td>{{ap.validated}}</td>
+    </tr>
+    </tbody>
+</table>
