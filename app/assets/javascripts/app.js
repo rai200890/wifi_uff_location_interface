@@ -1,4 +1,4 @@
-app = angular.module('wifiUffLocation', ['ui.router', 'ui.bootstrap','ngRoute','ngResource']);
+app = angular.module('wifiUffLocation', ['smart-table','ui.router', 'ui.bootstrap','ngRoute','ngResource']);
 app.controller('ApsController', ApsController);
 app.factory('Ap',  Ap);
 
@@ -7,6 +7,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
         $stateProvider
             .state('root', {
                 url: "",
+                abstract: true,
                 templateUrl: 'home.html',
                 controller: function($state){
 
@@ -22,6 +23,8 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
                 url: "/locations",
                 templateUrl: "locations/index.html"
             });
+
+        $urlRouterProvider.when('/', '/aps');
 
         $locationProvider.html5Mode({
             enabled: true,
