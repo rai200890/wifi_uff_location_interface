@@ -19,6 +19,7 @@
 //= require angular-bootstrap/ui-bootstrap-tpls.min
 //= require angular-resource/angular-resource.min
 //= require angular-ui-router/release/angular-ui-router.min
+//= require angular-smart-table/dist/smart-table.min
 //= require_tree ./services
 //= require_tree ./controllers
 //= require app

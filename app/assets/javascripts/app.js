@@ -1,6 +1,6 @@
 app = angular.module('wifiUffLocation', ['ui.router', 'ui.bootstrap','ngRoute','ngResource']);
 app.controller('ApsController', ApsController);
-app.factory('Ap', Ap);
+app.factory('Ap',  Ap);
 
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
     function($stateProvider, $locationProvider, $urlRouterProvider) {
@@ -16,7 +16,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
                 views: {
                     '': { templateUrl: 'aps/index.html'},
                     "new@aps": {templateUrl: "aps/new.html"},
-                    "list@aps": {templateUrl: "aps/list.html", controller: ApsController}
+                    "list@aps": {templateUrl: "aps/list.html", controller: 'ApsController'}
                 }
             }).state('root.locations', {
                 url: "/locations",

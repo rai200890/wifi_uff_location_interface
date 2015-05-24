@@ -22,8 +22,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'aps' => 'application#index'
-  get 'locations/:id' => 'application#index'
+  get '*path' => 'application#index'
 
   # Example resource route with options:
   #   resources :products do
