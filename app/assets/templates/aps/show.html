@@ -1,0 +1,27 @@
+<dl class="dl-horizontal">
+    <dt>ID</dt>
+    <dd>{{ap.id}}</dd>
+    <dt>Name</dt>
+    <dd>{{ap.name}}</dd>
+    <dt>IP</dt>
+    <dd>{{ap.ip}}</dd>
+    <dt>Switch IP</dt>
+    <dd>{{ap.switch_ip || '-'}}</dd>
+    <dt>Campus</dt>
+    <dd>{{ap.campus_name}}</dd>
+    <dt>Building</dt>
+    <dd>{{ap.building_name}}</dd>
+    <dt>Location</dt>
+    <dd>{{ap.location_name || '-'}}</dd>
+    <dt>Validated</dt>
+    <dd>
+        <span class="label label-success" ng-if='ap.validated'><i class="fa fa-thumbs-o-up"></i></span>
+        <span class="label label-danger" ng-if='!ap.validated'><i class="fa fa-thumbs-o-down"></i></span>
+    </dd>
+    <dt>Status</dt>
+    <dd>{{ap.ap_status.name || '-'}}</dd>
+    <dt>Model</dt>
+    <dd>{{ap.ap_model.name || '-'}}</dd>
+    <dt>Control Region</dt>
+    <dd>{{ap.control_region.name || '-'}}</dd>
+</dl>

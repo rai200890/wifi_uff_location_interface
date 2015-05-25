@@ -1,3 +1,3 @@
 function Ap($resource){
-    return $resource('api/aps/:id.json');
+    return $resource('/api/aps/:apId.json',{apId: '@id'});
 }

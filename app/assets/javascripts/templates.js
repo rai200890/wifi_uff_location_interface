@@ -2,28 +2,36 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   'use strict';
 
   $templateCache.put('aps/index.html',
-    "<h1 class=\"text-center\">Aps</h1>\n" +
-    "<!--<div ui-view=\"new@aps\"></div>-->\n" +
-    "<div ui-view=\"list@aps\"></div>"
+    "<div ui-view=\"\"></div>"
   );
 
 
   $templateCache.put('aps/list.html',
-    "<table class=\"table table-hover table-striped\">\n" +
+    "<h2 class=\"text-center\">Aps</h2>\n" +
+    "<table st-table=\"displayedAps\" st-safe-src=\"aps\" class=\"table table-hover table-striped\">\n" +
     "    <thead>\n" +
-    "    <th>ID</th>\n" +
-    "    <th>Name</th>\n" +
-    "    <th>IP</th>\n" +
-    "    <th>Campus</th>\n" +
-    "    <th>Validated</th>\n" +
+    "    <th st-sort='name'>Name</th>\n" +
+    "    <th st-sort=\"ip\">IP</th>\n" +
+    "    <th st-sort='campus_name'>Campus</th>\n" +
+    "    <th st-sort='building_name'>Building</th>\n" +
+    "    <th>Location</th>\n" +
+    "    <th st-sort='validated'>Validated</th>\n" +
+    "    <th>Options</th>\n" +
     "    </thead>\n" +
     "    <tbody>\n" +
-    "    <tr ng-repeat=\"ap in aps\">\n" +
-    "        <td>{{ap.id}}</td>\n" +
+    "    <tr ng-repeat=\"ap in displayedAps\">\n" +
     "        <td>{{ap.name}}</td>\n" +
     "        <td>{{ap.ip}}</td>\n" +
-    "        <td tooltip=\"{{ap.building_name + ',' + ap.location_name}}\" >{{ap.campus_name}}</td>\n" +
-    "        <td>{{ap.validated}}</td>\n" +
+    "        <td tooltip-append-to-body=\"true\" tooltip=\"{{ap.building_name + ',' + ap.location_name}}\" >{{ap.campus_name}}</td>\n" +
+    "        <td>{{ap.building_name}}</td>\n" +
+    "        <td>{{ap.location_name}}</td>\n" +
+    "        <td>\n" +
+    "            <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
+    "            <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
+    "        </td>\n" +
+    "        <td>\n" +
+    "            <button class=\"btn btn-default\" ui-sref=\"root.aps.show({ap_id: ap.id})\"><i class=\"fa fa-search-plus\"></i></button>\n" +
+    "        </td>\n" +
     "    </tr>\n" +
     "    </tbody>\n" +
     "</table>"
@@ -36,7 +44,33 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('aps/show.html',
-    ""
+    "<dl class=\"dl-horizontal\">\n" +
+    "    <dt>ID</dt>\n" +
+    "    <dd>{{ap.id}}</dd>\n" +
+    "    <dt>Name</dt>\n" +
+    "    <dd>{{ap.name}}</dd>\n" +
+    "    <dt>IP</dt>\n" +
+    "    <dd>{{ap.ip}}</dd>\n" +
+    "    <dt>Switch IP</dt>\n" +
+    "    <dd>{{ap.switch_ip || '-'}}</dd>\n" +
+    "    <dt>Campus</dt>\n" +
+    "    <dd>{{ap.campus_name}}</dd>\n" +
+    "    <dt>Building</dt>\n" +
+    "    <dd>{{ap.building_name}}</dd>\n" +
+    "    <dt>Location</dt>\n" +
+    "    <dd>{{ap.location_name || '-'}}</dd>\n" +
+    "    <dt>Validated</dt>\n" +
+    "    <dd>\n" +
+    "        <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
+    "        <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
+    "    </dd>\n" +
+    "    <dt>Status</dt>\n" +
+    "    <dd>{{ap.ap_status.name || '-'}}</dd>\n" +
+    "    <dt>Model</dt>\n" +
+    "    <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
+    "    <dt>Control Region</dt>\n" +
+    "    <dd>{{ap.control_region.name || '-'}}</dd>\n" +
+    "</dl>"
   );
 
 
@@ -44,24 +78,12 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "<nav class=\"navbar navbar-default\">\n" +
     "    <div class=\"container-fluid\">\n" +
     "        <div class=\"navbar-header\">\n" +
-    "            <a class=\"navbar-brand\" href=\"#\">Wifi-Uff Location</a>\n" +
+    "            <a class=\"navbar-brand\" ui-sref=\".aps.list\">Wifi-Uff Location</a>\n" +
     "        </div>\n" +
     "        <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n" +
     "            <ul class=\"nav navbar-nav\">\n" +
-    "                <li><a ui-sref=\".aps\">APs</a></li>\n" +
+    "                <li><a ui-sref=\".aps.list\">APs</a></li>\n" +
     "                <li><a ui-sref=\".locations\">Locations</a></li>\n" +
-    "                <!--<li class=\"dropdown\">-->\n" +
-    "                    <!--<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\">Dropdown <span class=\"caret\"></span></a>-->\n" +
-    "                    <!--<ul class=\"dropdown-menu\" role=\"menu\">-->\n" +
-    "                        <!--<li><a href=\"#\">Action</a></li>-->\n" +
-    "                        <!--<li><a href=\"#\">Another action</a></li>-->\n" +
-    "                        <!--<li><a href=\"#\">Something else here</a></li>-->\n" +
-    "                        <!--<li class=\"divider\"></li>-->\n" +
-    "                        <!--<li><a href=\"#\">Separated link</a></li>-->\n" +
-    "                        <!--<li class=\"divider\"></li>-->\n" +
-    "                        <!--<li><a href=\"#\">One more separated link</a></li>-->\n" +
-    "                    <!--</ul>-->\n" +
-    "                <!--</li>-->\n" +
     "            </ul>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -74,7 +96,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('locations/index.html',
-    ""
+    "<h2 class=\"text-center\">Locations</h2>"
   );
 
 }]);

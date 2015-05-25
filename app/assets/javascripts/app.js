@@ -1,5 +1,7 @@
 app = angular.module('wifiUffLocation', ['smart-table','ui.router', 'ui.bootstrap','ngRoute','ngResource']);
-app.controller('ApsController', ApsController);
+app.controller('ListApsController', ListApsController);
+app.controller('ShowApController', ShowApController);
+
 app.factory('Ap',  Ap);
 
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
@@ -14,11 +16,16 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
                 }
             }).state('root.aps', {
                 url: "/aps",
-                views: {
-                    '': { templateUrl: 'aps/index.html'},
-                    "new@aps": {templateUrl: "aps/new.html"},
-                    "list@aps": {templateUrl: "aps/list.html", controller: 'ApsController'}
-                }
+                abstract: true,
+                templateUrl: 'aps/index.html'})
+            .state('root.aps.list', {
+                url: "",
+                templateUrl: "aps/list.html",
+                controller: 'ListApsController'
+            }).state('root.aps.show', {
+                url: "/:ap_id",
+                templateUrl: "aps/show.html",
+                controller: 'ShowApController'
             }).state('root.locations', {
                 url: "/locations",
                 templateUrl: "locations/index.html"

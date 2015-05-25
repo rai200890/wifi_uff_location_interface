@@ -4,5 +4,6 @@ class Location < ActiveRecord::Base
   delegate :name, to: :building, prefix: true, allow_nil: true
   delegate :campus_name, to: :building, allow_nil: true
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, uniqueness: { scope: :building_id }
+  validates :building, presence: true
 end

@@ -26,6 +26,8 @@ class Aps < Thor
       campus = Campus.where(name: attributes[:campus]).first_or_create
       building = Building.where(name: attributes[:building], campus_id: campus.id).first_or_create
       location = Location.where(name: attributes[:location], building_id: building.id).first_or_create
+      puts({location: location.name, building: building.name})
+
       ap_model = ApModel.where(name: attributes[:ap_model]).first_or_create
       ap_status = ApStatus.where(name: attributes[:ap_status]).first_or_create
       control_region = ControlRegion.where(name: attributes[:control_region]).first_or_create
@@ -33,10 +35,10 @@ class Aps < Thor
       attributes = remove_associations attributes
 
       ap = Ap.where(attributes.merge({
-                                         location: location,
-                                         ap_model: ap_model,
-                                         ap_status: ap_status,
-                                         control_region: control_region
+                                         location_id: location.id,
+                                         ap_model_id: ap_model.id,
+                                         ap_status_id: ap_status.id,
+                                         control_region_id: control_region.id
                                      })).first_or_create
     end
   end

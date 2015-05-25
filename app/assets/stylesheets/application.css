@@ -12,5 +12,6 @@
  *
  *= require bootstrap/dist/css/bootstrap.min
  *= require angular-bootstrap/ui-bootstrap-csp
+ *= require font-awesome/css/font-awesome.min
  *= require_self
  */
