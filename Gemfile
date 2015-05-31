@@ -11,7 +11,8 @@ gem 'roo'
 gem 'thor-rails'
 gem 'snmp'
 gem 'responders'
-# bundle exec rake doc:rails generates the API under doc/api.
+gem 'simpler-tiles'
+gem 'thin'
 gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   gem 'awesome_print'

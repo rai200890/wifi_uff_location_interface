@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :aps
+    resources :tiles, only: :index
     resources :campi do
       resources :buildings
     end
