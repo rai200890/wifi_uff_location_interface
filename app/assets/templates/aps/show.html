@@ -24,4 +24,9 @@
     <dd>{{ap.ap_model.name || '-'}}</dd>
     <dt>Control Region</dt>
     <dd>{{ap.control_region.name || '-'}}</dd>
+    <dt>Latitude</dt>
+    <dd>{{ap.latitude || '-'}}</dd>
+    <dt>Longitude</dt>
+    <dd>{{ap.longitude || '-'}}</dd>
 </dl>
+<leaflet ng-if="hasLocation" center="center" tiles="tiles" markers="markers" defaults="defaults" width="40%" height="480px"></leaflet>

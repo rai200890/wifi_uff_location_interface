@@ -70,7 +70,12 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
     "    <dt>Control Region</dt>\n" +
     "    <dd>{{ap.control_region.name || '-'}}</dd>\n" +
-    "</dl>"
+    "    <dt>Latitude</dt>\n" +
+    "    <dd>{{ap.latitude || '-'}}</dd>\n" +
+    "    <dt>Longitude</dt>\n" +
+    "    <dd>{{ap.longitude || '-'}}</dd>\n" +
+    "</dl>\n" +
+    "<leaflet ng-if=\"hasLocation\" center=\"center\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\" width=\"40%\" height=\"480px\"></leaflet>\n"
   );
 
 

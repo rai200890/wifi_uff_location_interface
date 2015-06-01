@@ -1,4 +1,5 @@
-app = angular.module('wifiUffLocation', ['smart-table','ui.router', 'ui.bootstrap','ngRoute','ngResource']);
+app = angular.module('wifiUffLocation', ['smart-table','ui.router', 'ui.bootstrap','ngRoute','ngResource',
+    'leaflet-directive']);
 app.controller('ListApsController', ListApsController);
 app.controller('ShowApController', ShowApController);
 

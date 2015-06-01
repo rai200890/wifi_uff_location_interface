@@ -12,7 +12,9 @@
 //
 //= require jquery/dist/jquery.min
 //= require bootstrap/dist/js/bootstrap.min
+//= require leaflet/dist/leaflet
 //= require angular/angular.min
+//= require angular-leaflet-directive/dist/angular-leaflet-directive.min
 //= require angular-resource/angular-resource.min
 //= require angular-route/angular-route.min
 //= require angular-bootstrap/ui-bootstrap.min
