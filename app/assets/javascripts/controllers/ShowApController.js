@@ -3,9 +3,9 @@ function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafle
     $scope.hasLocation = false;
 
     $scope.tiles = {
-        url: "http://localhost:3000/tiles/planta_exemplo/{z}/{x}/{y}.png",
+        url: "http://localhost:3000/images/tiles/{z}/{x}/{y}.png",
         options:{
-            maxZoom: 5,
+            maxZoom: 2,
             minZoom: 1,
             continuousWorld: false,
             // this option disables loading tiles outside of the world bounds.
@@ -14,9 +14,9 @@ function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafle
         }
     };
 
-    //$scope.center = {
-    //    autoDiscover: true
-    //}
+    $scope.center = {
+        autoDiscover: true
+    }
 
     $scope.markers = {};
 
@@ -31,13 +31,13 @@ function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafle
 
         if ($scope.hasLocation) {
 
-            //$scope.markers[data.name] = {
-            //    lat: data.latitude,
-            //    lng: data.longitude,
-            //    message: data.name + " - " + data.syslocation,
-            //    focus: false,
-            //    icon: {}
-            //}
+            $scope.markers[data.name] = {
+                lat: data.latitude,
+                lng: data.longitude,
+                message: data.name + " - " + data.syslocation,
+                focus: false,
+                icon: {}
+            }
         }
 
     });
