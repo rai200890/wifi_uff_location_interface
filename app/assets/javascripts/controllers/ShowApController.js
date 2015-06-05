@@ -1,15 +1,11 @@
 function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafletData){
 
-
-
-
-    console.log(leafletData.getMap());
     $scope.hasLocation = false;
 
     $scope.tiles = {
         url: "/api/tiles.png?x={x}&y={y}&z={z}",
         options:{
-            maxZoom: 5,
+            maxZoom: 2,
             minZoom: 0,
             continuousWorld: false,
             // this option disables loading tiles outside of the world bounds.
@@ -29,10 +25,14 @@ function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafle
         }
     }
 
+    $scope.center = {
+        autoDiscover: true
+    }
+
     $scope.markers = {};
 
     $scope.defaults = {
-        zoom: 3
+        zoom: 1
     };
 
     Ap.get({apId: $stateParams.ap_id}, function(data){
