@@ -11,7 +11,6 @@ gem 'roo'
 gem 'thor-rails'
 gem 'snmp'
 gem 'responders'
-gem 'simpler-tiles'
 gem 'thin'
 gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do

@@ -104,7 +104,6 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    simpler-tiles (0.3.0)
     snmp (1.2.0)
     spring (1.3.6)
     sprockets (3.1.0)
@@ -144,7 +143,6 @@ DEPENDENCIES
   responders
   roo
   sdoc (~> 0.4.0)
-  simpler-tiles
   snmp
   spring
   therubyracer
@@ -153,4 +151,4 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
 
 BUNDLED WITH
-   1.10.2
+   1.10.3
