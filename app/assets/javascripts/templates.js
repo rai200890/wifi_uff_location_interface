@@ -85,7 +85,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "\n" +
     "<fieldset>\n" +
     "    <legend>Map</legend>\n" +
-    "<leaflet ng-if=\"hasLocation\" center=\"center\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\"  width=\"400px\" height=\"260px\"></leaflet>\n" +
+    "<leaflet ng-if=\"hasLocation\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\"  width=\"400px\" height=\"260px\"></leaflet>\n" +
     "</fieldset>"
   );
 
