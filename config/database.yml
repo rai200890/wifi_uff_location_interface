@@ -2,12 +2,12 @@ development:
   adapter: mysql2
   database: wifi_uff_location_development
   username: root
-  password: root
+  password:
 test:
   adapter: mysql2
   database: wifi_uff_location_test
   username: root
-  password: root
+  password:
 
 production:
   database: wifi_uff_location_production
