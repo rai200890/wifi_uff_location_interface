@@ -1,6 +1,6 @@
 class Building < ActiveRecord::Base
   belongs_to :campus
-  has_many :locations
+  has_many :floors
 
   delegate :name, to: :campus, prefix: true, allow_nil: true
 

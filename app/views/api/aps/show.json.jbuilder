@@ -13,9 +13,10 @@ json.syslocation @ap.syslocation
 json.latitude @ap.latitude
 json.longitude @ap.longitude
 json.height @ap.height
-json.id @ap.location_id
-json.location_id @ap.location_id
-json.location_name @ap.location_name
+json.floor_id @ap.floor_id
+#json.id @ap.location_id
+#json.location_id @ap.location.id
+#json.location_name @ap.location.name
 json.building_name @ap.building_name
 json.campus_name @ap.campus_name
 json.ap_model do

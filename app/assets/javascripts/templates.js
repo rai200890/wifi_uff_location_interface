@@ -44,38 +44,49 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('aps/show.html',
-    "<dl class=\"dl-horizontal\">\n" +
-    "    <dt>ID</dt>\n" +
-    "    <dd>{{ap.id}}</dd>\n" +
-    "    <dt>Name</dt>\n" +
-    "    <dd>{{ap.name}}</dd>\n" +
-    "    <dt>IP</dt>\n" +
-    "    <dd>{{ap.ip}}</dd>\n" +
-    "    <dt>Switch IP</dt>\n" +
-    "    <dd>{{ap.switch_ip || '-'}}</dd>\n" +
-    "    <dt>Campus</dt>\n" +
-    "    <dd>{{ap.campus_name}}</dd>\n" +
-    "    <dt>Building</dt>\n" +
-    "    <dd>{{ap.building_name}}</dd>\n" +
-    "    <dt>Location</dt>\n" +
-    "    <dd>{{ap.location_name || '-'}}</dd>\n" +
-    "    <dt>Validated</dt>\n" +
-    "    <dd>\n" +
-    "        <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
-    "        <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
-    "    </dd>\n" +
-    "    <dt>Status</dt>\n" +
-    "    <dd>{{ap.ap_status.name || '-'}}</dd>\n" +
-    "    <dt>Model</dt>\n" +
-    "    <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
-    "    <dt>Control Region</dt>\n" +
-    "    <dd>{{ap.control_region.name || '-'}}</dd>\n" +
-    "    <dt>Latitude</dt>\n" +
-    "    <dd>{{ap.latitude || '-'}}</dd>\n" +
-    "    <dt>Longitude</dt>\n" +
-    "    <dd>{{ap.longitude || '-'}}</dd>\n" +
-    "</dl>\n" +
-    "<leaflet ng-if=\"hasLocation\" center=\"center\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\" width=\"40%\" height=\"480px\"></leaflet>\n"
+    "<fieldset>\n" +
+    "    <legend>Ap Info</legend>\n" +
+    "    <dl class=\"dl-horizontal\">\n" +
+    "        <dt>ID</dt>\n" +
+    "        <dd>{{ap.id}}</dd>\n" +
+    "        <dt>Name</dt>\n" +
+    "        <dd>{{ap.name}}</dd>\n" +
+    "        <dt>IP</dt>\n" +
+    "        <dd>{{ap.ip}}</dd>\n" +
+    "        <dt>Switch IP</dt>\n" +
+    "        <dd>{{ap.switch_ip || '-'}}</dd>\n" +
+    "        <dt>Campus</dt>\n" +
+    "        <dd>{{ap.campus_name}}</dd>\n" +
+    "        <dt>Building</dt>\n" +
+    "        <dd>{{ap.building_name}}</dd>\n" +
+    "        <dt>Location</dt>\n" +
+    "        <dd>{{ap.location_name || '-'}}</dd>\n" +
+    "        <dt>Validated</dt>\n" +
+    "        <dd>\n" +
+    "            <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
+    "            <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
+    "        </dd>\n" +
+    "        <dt>Status</dt>\n" +
+    "        <dd>{{ap.ap_status.name || '-'}}</dd>\n" +
+    "        <dt>Model</dt>\n" +
+    "        <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
+    "        <dt>Control Region</dt>\n" +
+    "        <dd>{{ap.control_region.name || '-'}}</dd>\n" +
+    "        <dt>Latitude</dt>\n" +
+    "        <dd>{{ap.latitude || '-'}}</dd>\n" +
+    "        <dt>Longitude</dt>\n" +
+    "        <dd>{{ap.longitude || '-'}}</dd>\n" +
+    "    </dl>\n" +
+    "</fieldset>\n" +
+    "\n" +
+    "<fieldset>\n" +
+    "    <legend>SNMP Status</legend>\n" +
+    "</fieldset>\n" +
+    "\n" +
+    "<fieldset>\n" +
+    "    <legend>Map</legend>\n" +
+    "<leaflet ng-if=\"hasLocation\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\"  width=\"400px\" height=\"260px\"></leaflet>\n" +
+    "</fieldset>"
   );
 
 

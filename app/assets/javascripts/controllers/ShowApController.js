@@ -1,22 +1,38 @@
-function ShowApController($scope, $stateParams, Ap){
+function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafletData){
 
-    $scope.center = {lat: 0, lng: 0,  zoom: 1};
 
+
+
+    console.log(leafletData.getMap());
     $scope.hasLocation = false;
 
     $scope.tiles = {
         url: "/api/tiles.png?x={x}&y={y}&z={z}",
-        options: {
-            maxZoom: 3,
-            minZoom: 1,
+        options:{
+            maxZoom: 5,
+            minZoom: 0,
+            continuousWorld: false,
+            // this option disables loading tiles outside of the world bounds.
+            noWrap: true,
             attribution: '<strong>Custom Map</strong>'
         }
     };
 
+    $scope.maxBounds = {
+        northEast: {
+            lat: 51.51280224425956,
+            lng: 0
+        },
+        southWest: {
+            lat: 51.50211782162702,
+            lng: 20
+        }
+    }
+
     $scope.markers = {};
 
     $scope.defaults = {
-        zoom: 2
+        zoom: 3
     };
 
     Ap.get({apId: $stateParams.ap_id}, function(data){
@@ -25,9 +41,6 @@ function ShowApController($scope, $stateParams, Ap){
         $scope.hasLocation = data.latitude && data.longitude;
 
         if ($scope.hasLocation) {
-
-            $scope.center['lat'] = data.latitude;
-            $scope.center['lng'] = data.longitude;
 
             $scope.markers[data.name] = {
                 lat: data.latitude,

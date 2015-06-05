@@ -25,8 +25,15 @@ class Aps < Thor
 
       campus = Campus.where(name: attributes[:campus]).first_or_create
       building = Building.where(name: attributes[:building], campus_id: campus.id).first_or_create
-      location = Location.where(name: attributes[:location], building_id: building.id).first_or_create
-      puts({location: location.name, building: building.name})
+      floor_number = attributes[:location].to_s.match(/((\S+) ANDAR)/).to_a.last
+      floor_number = "0" if attributes[:location] and attributes[:location].include?("TERREO")
+
+      floor = Floor.where(number: floor_number, building_id: building.id).first_or_create
+
+
+      location = Location.where(name: attributes[:location], floor_id: floor.id).first_or_create
+
+      puts({location: location.name, floor: floor.number, building: building.name})
 
       ap_model = ApModel.where(name: attributes[:ap_model]).first_or_create
       ap_status = ApStatus.where(name: attributes[:ap_status]).first_or_create

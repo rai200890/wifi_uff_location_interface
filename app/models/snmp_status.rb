@@ -11,10 +11,10 @@ class SnmpStatus
     @protocol = params[:protocol]
     @port = params[:port]
     @version = params[:version]
-    @mib_modules = params[:mib_modules] || ['RFC1213-MIB']
+    @mib_modules = params[:mib_modules]
   end
 
-  def get fields = ['RFC1213-MIB::sysDescr.0']
+  def get fields = ['sysDescr.0']
     SNMP::Manager.open(manager_options) do |manager|
       begin
         response = manager.get(fields)
