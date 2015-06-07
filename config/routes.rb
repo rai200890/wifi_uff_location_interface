@@ -17,8 +17,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :aps do
-      resource :snmp_status
+      resource :snmp_status, only: :show
     end
+    resource :snmp_status, only: :show
     resources :tiles, only: :index
     resources :campi do
       resources :buildings

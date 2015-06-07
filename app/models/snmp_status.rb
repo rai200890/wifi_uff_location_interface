@@ -1,31 +1,30 @@
 class SnmpStatus
   include ActiveModel::Model
 
-  attr_accessor :host, :community, :protocol, :port, :version, :mib_modules
+  attr_accessor :host, :community, :port, :version, :mib_modules, :fields, :response
 
-  VERSIONS = [:SNMPv1, :SNMPv2c]
+  #SOURCE CODE: https://github.com/hallidave/ruby-snmp/blob/master/lib/snmp/manager.rb
 
   def initialize params = {}
-    @host = params[:host]
-    @community = params[:community]
-    @protocol = params[:protocol]
-    @port = params[:port]
-    @version = params[:version]
-    @mib_modules = params[:mib_modules]
+    @host = params[:host] || 'localhost'
+    @community = params[:community] || 'public'
+    @port = params[:port] || 161
+    @version = params[:version] || :SNMPv2c
+    @mib_modules = params[:mib_modules] || ["SNMPv2-SMI", "SNMPv2-MIB", "IF-MIB", "IP-MIB", "TCP-MIB", "UDP-MIB"]
+    @fields = params[:fields] || ['sysLocation.0', '1.3.6.1.4.1.2021.8.1.101.30', '1.3.6.1.4.1.2021.8.1.101.31']
   end
 
-  def get fields = ['sysDescr.0']
-    SNMP::Manager.open(manager_options) do |manager|
+  def self.get params = {}
+    snmp_status = SnmpStatus.new params
+    SNMP::Manager.open(snmp_status.manager_options) do |manager|
       begin
-        response = manager.get(fields)
+        snmp_status.response = manager.get(snmp_status.fields).varbind_list
       rescue Exception => e
-        self.errors.add(:base, e.message)
-        false
+        snmp_status.errors.add(:base, e.message)
       end
     end
+    snmp_status
   end
-
-  private
 
   def manager_options
     {host: host, community: community, version: version, port: port, mib_modules: mib_modules}

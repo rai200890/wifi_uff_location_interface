@@ -66,7 +66,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "            <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
     "            <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
     "        </dd>\n" +
-    "        <dt>Status</dt>\n" +
+    "        <dts>Status</dts>\n" +
     "        <dd>{{ap.ap_status.name || '-'}}</dd>\n" +
     "        <dt>Model</dt>\n" +
     "        <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
@@ -100,6 +100,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "            <ul class=\"nav navbar-nav\">\n" +
     "                <li><a ui-sref=\".aps.list\">APs</a></li>\n" +
     "                <li><a ui-sref=\".locations\">Locations</a></li>\n" +
+    "                <li><a ui-sref=\".snmp_status\">SNMP Status</a></li>\n" +
     "            </ul>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -113,6 +114,14 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
   $templateCache.put('locations/index.html',
     "<h2 class=\"text-center\">Locations</h2>"
+  );
+
+
+  $templateCache.put('snmp_status/show.html',
+    "<h2 class=\"text-center\">SNMP Status</h2>\n" +
+    "<div class=\"form-inline\">\n" +
+    "   <input class=\"form-control\" name=\"search\" type=\"text\" />\n" +
+    "</div>"
   );
 
 }]);

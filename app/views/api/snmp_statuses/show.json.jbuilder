@@ -1,5 +1,5 @@
-json.array!(snmp_status.varbind_list) do |item|
-  json.oid item.name
+json.array!(@snmp_status.response) do |item|
+  json.oid item.name.to_a.join(".")
   json.name item.name.to_s
-  json.description
+  json.value item.value.to_s
 end

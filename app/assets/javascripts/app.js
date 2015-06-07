@@ -11,10 +11,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
             .state('root', {
                 url: "",
                 abstract: true,
-                templateUrl: 'home.html',
-                controller: function($state){
-
-                }
+                templateUrl: 'home.html'
             }).state('root.aps', {
                 url: "/aps",
                 abstract: true,
@@ -30,6 +27,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
             }).state('root.locations', {
                 url: "/locations",
                 templateUrl: "locations/index.html"
+            }).state('root.snmp_status', {
+                url: "/snmp_status",
+                templateUrl: "snmp_status/show.html"
             });
 
         $urlRouterProvider.when('/', '/aps');
