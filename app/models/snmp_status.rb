@@ -18,7 +18,8 @@ class SnmpStatus
     snmp_status = SnmpStatus.new params
     SNMP::Manager.open(snmp_status.manager_options) do |manager|
       begin
-        snmp_status.response = manager.get(snmp_status.fields).varbind_list
+        response = manager.get(snmp_status.fields).varbind_list
+        snmp_status.response = response
       rescue Exception => e
         snmp_status.errors.add(:base, e.message)
       end

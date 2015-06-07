@@ -61,6 +61,8 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dd>{{ap.campus_name}}</dd>\n" +
     "                <dt>Building</dt>\n" +
     "                <dd>{{ap.building_name}}</dd>\n" +
+    "                <dt>Floor</dt>\n" +
+    "                <dd>{{ap.floor_number || '-'}}</dd>\n" +
     "                <dt>Location</dt>\n" +
     "                <dd>{{ap.location_name || '-'}}</dd>\n" +
     "                <dt>Validated</dt>\n" +
@@ -80,11 +82,18 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dd>{{ap.longitude || '-'}}</dd>\n" +
     "            </dl>\n" +
     "        </fieldset>\n" +
-    "        <alert>\n" +
-    "            <i class=\"fa fa-times pull-right\"></i>\n" +
-    "            <p class=\"text-center\">SNMP Status unavaliable!</p>\n" +
-    "            <button class=\"btn btn-default\"><i class=\"fa fa-times\"></i>Reload</button>\n" +
-    "        </alert>\n" +
+    "        <fieldset>\n" +
+    "            <legend>SNMP Status  <button class=\"btn btn-primary btn-xs\" ng-click=\"reloadSNMPStatus()\"><i class=\"fa fa-refresh\"></i></button></legend>\n" +
+    "            <dl class=\"dl-horizontal\">\n" +
+    "                <dt>SysLocation</dt>\n" +
+    "                <dd>{{snmp_status.syslocation.value}}</dd>\n" +
+    "                <dt>Channel</dt>\n" +
+    "                <dd>{{snmp_status.channel.value}}</dd>\n" +
+    "                <dt>Potency</dt>\n" +
+    "                <dd>{{snmp_status.potency.value}}</dd>\n" +
+    "            </dl>\n" +
+    "        </fieldset>\n" +
+    "\n" +
     "    </div>\n" +
     "    <div class=\"col-xs-6\">\n" +
     "        <fieldset>\n" +
@@ -96,7 +105,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "            </div>\n" +
     "        </fieldset>\n" +
     "    </div>\n" +
-    "</div>\n"
+    "</div>"
   );
 
 
@@ -116,7 +125,6 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    </div>\n" +
     "</nav>\n" +
     "<div class=\"container\" ui-view></div>\n" +
-    "\n" +
     "<footer class=\"container\">\n" +
     "    <h5 class=\"text-center\">Footer</h5>\n" +
     "</footer>\n"

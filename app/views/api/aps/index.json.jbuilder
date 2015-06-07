@@ -15,7 +15,7 @@ json.array!(@aps) do |ap|
   json.longitude ap.longitude
   json.height ap.height
   json.location_id ap.location_id
-  json.floor_id ap.location.floor_id
+  json.floor_number @ap.location.floor.number
   json.location_name ap.location.name
   json.building_name ap.location.floor.building.name
   json.campus_name ap.location.floor.building.campus.name

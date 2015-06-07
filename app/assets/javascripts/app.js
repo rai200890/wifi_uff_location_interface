@@ -3,7 +3,8 @@ app = angular.module('wifiUffLocation', ['smart-table','ui.router', 'ui.bootstra
 app.controller('ListApsController', ListApsController);
 app.controller('ShowApController', ShowApController);
 
-app.factory('Ap',  Ap);
+app.factory('Ap', ['$resource',  Ap]);
+app.factory('SNMPStatus', ['$resource',SNMPStatus]);
 
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
     function($stateProvider, $locationProvider, $urlRouterProvider) {

@@ -1,4 +1,4 @@
-function ShowApController($scope, $stateParams, Ap, $state, leafletData){
+function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletData){
 
     $scope.hasLocation = false;
 
@@ -40,13 +40,15 @@ function ShowApController($scope, $stateParams, Ap, $state, leafletData){
         var latlng = args.leafletEvent.latlng;
         console.log('Lat: ' + latlng.lat + '<br>Lng: ' + latlng.lng);
 
-        $scope.markers['m1'] = {
-            lat: latlng.lat,
-            lng: latlng.lng,
-            message: $scope.ap.name + " - " + $scope.ap.syslocation,
-            focus: true,
-            draggable: true,
-            icon: {}
+        if (!$scope.hasLocation) {
+            $scope.markers[$scope.ap.name] = {
+                lat: latlng.lat,
+                lng: latlng.lng,
+                message: $scope.ap.name + " - " + $scope.ap.syslocation,
+                focus: true,
+                draggable: true,
+                icon: {}
+            }
         }
     });
 
@@ -57,20 +59,32 @@ function ShowApController($scope, $stateParams, Ap, $state, leafletData){
     });
 
     $scope.saveLocation = function(){
-        Ap.update({apId: $scope.ap.id}, {ap: {
-            latitude: $scope.ap.latitude,
-            longitude: $scope.ap.longitude,
-        }},function(data){
+        Ap.update({apId: $scope.ap.id}, {
+            ap: {
+                latitude: $scope.ap.latitude,
+                longitude: $scope.ap.longitude,
+            }
+        },function(data){
             console.log("Location updated with success");
         });
     };
 
-    var oldLocation = {};
+    $scope.reloadSNMPStatus = function(){
+        SNMPStatus.get({apId: $stateParams.ap_id}, function(data){
+            $scope.snmp_status = data;
+        });
+    };
 
     $scope.restoreLocation = function() {
         //MARRETADA para resolver problema do angular-leaflet com markers
         $state.go($state.current, $stateParams, {reload: true});
     };
+
+    $scope.snmp_status = {response: []};
+
+    SNMPStatus.get({apId: $stateParams.ap_id}, function(data){
+        $scope.snmp_status = data;
+    });
 
     Ap.get({apId: $stateParams.ap_id}, function(data){
         $scope.ap = data;
@@ -88,7 +102,6 @@ function ShowApController($scope, $stateParams, Ap, $state, leafletData){
                 icon: {}
             }
         }
-
     });
 
 }

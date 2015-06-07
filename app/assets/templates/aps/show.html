@@ -15,6 +15,8 @@
                 <dd>{{ap.campus_name}}</dd>
                 <dt>Building</dt>
                 <dd>{{ap.building_name}}</dd>
+                <dt>Floor</dt>
+                <dd>{{ap.floor_number || '-'}}</dd>
                 <dt>Location</dt>
                 <dd>{{ap.location_name || '-'}}</dd>
                 <dt>Validated</dt>
@@ -34,11 +36,18 @@
                 <dd>{{ap.longitude || '-'}}</dd>
             </dl>
         </fieldset>
-        <alert>
-            <i class="fa fa-times pull-right"></i>
-            <p class="text-center">SNMP Status unavaliable!</p>
-            <button class="btn btn-default"><i class="fa fa-times"></i>Reload</button>
-        </alert>
+        <fieldset>
+            <legend>SNMP Status  <button class="btn btn-primary btn-xs" ng-click="reloadSNMPStatus()"><i class="fa fa-refresh"></i></button></legend>
+            <dl class="dl-horizontal">
+                <dt>SysLocation</dt>
+                <dd>{{snmp_status.syslocation.value}}</dd>
+                <dt>Channel</dt>
+                <dd>{{snmp_status.channel.value}}</dd>
+                <dt>Potency</dt>
+                <dd>{{snmp_status.potency.value}}</dd>
+            </dl>
+        </fieldset>
+
     </div>
     <div class="col-xs-6">
         <fieldset>

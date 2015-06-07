@@ -4,7 +4,8 @@ class Api::SnmpStatusesController < ApplicationController
   def show
     if params[:ap_id]
       ap = Ap.find(params[:ap_id])
-      @snmp_status = SnmpStatus.get host: ap.ip
+      #@snmp_status = SnmpStatus.get host: ap.ip
+      @snmp_status = SnmpStatus.get host: 'localhost'
     else
       @snmp_status = SnmpStatus.get snmp_status_params
     end
