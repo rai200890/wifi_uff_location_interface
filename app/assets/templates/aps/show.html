@@ -1,43 +1,53 @@
-<fieldset>
-    <legend>Ap Info</legend>
-    <dl class="dl-horizontal">
-        <dt>ID</dt>
-        <dd>{{ap.id}}</dd>
-        <dt>Name</dt>
-        <dd>{{ap.name}}</dd>
-        <dt>IP</dt>
-        <dd>{{ap.ip}}</dd>
-        <dt>Switch IP</dt>
-        <dd>{{ap.switch_ip || '-'}}</dd>
-        <dt>Campus</dt>
-        <dd>{{ap.campus_name}}</dd>
-        <dt>Building</dt>
-        <dd>{{ap.building_name}}</dd>
-        <dt>Location</dt>
-        <dd>{{ap.location_name || '-'}}</dd>
-        <dt>Validated</dt>
-        <dd>
-            <span class="label label-success" ng-if='ap.validated'><i class="fa fa-thumbs-o-up"></i></span>
-            <span class="label label-danger" ng-if='!ap.validated'><i class="fa fa-thumbs-o-down"></i></span>
-        </dd>
-        <dts>Status</dts>
-        <dd>{{ap.ap_status.name || '-'}}</dd>
-        <dt>Model</dt>
-        <dd>{{ap.ap_model.name || '-'}}</dd>
-        <dt>Control Region</dt>
-        <dd>{{ap.control_region.name || '-'}}</dd>
-        <dt>Latitude</dt>
-        <dd>{{ap.latitude || '-'}}</dd>
-        <dt>Longitude</dt>
-        <dd>{{ap.longitude || '-'}}</dd>
-    </dl>
-</fieldset>
-
-<fieldset>
-    <legend>SNMP Status</legend>
-</fieldset>
-
-<fieldset>
-    <legend>Map</legend>
-<leaflet ng-if="hasLocation" center="center" tiles="tiles" markers="markers" defaults="defaults"  width="400px" height="260px"></leaflet>
-</fieldset>
+<div class="row">
+    <div class="col-xs-6">
+        <fieldset>
+            <legend>Info</legend>
+            <dl class="dl-horizontal">
+                <dt>ID</dt>
+                <dd>{{ap.id}}</dd>
+                <dt>Name</dt>
+                <dd>{{ap.name}}</dd>
+                <dt>IP</dt>
+                <dd>{{ap.ip}}</dd>
+                <dt>Switch IP</dt>
+                <dd>{{ap.switch_ip || '-'}}</dd>
+                <dt>Campus</dt>
+                <dd>{{ap.campus_name}}</dd>
+                <dt>Building</dt>
+                <dd>{{ap.building_name}}</dd>
+                <dt>Location</dt>
+                <dd>{{ap.location_name || '-'}}</dd>
+                <dt>Validated</dt>
+                <dd>
+                    <span class="label label-success" ng-if='ap.validated'><i class="fa fa-thumbs-o-up"></i></span>
+                    <span class="label label-danger" ng-if='!ap.validated'><i class="fa fa-thumbs-o-down"></i></span>
+                </dd>
+                <dt>Status</dt>
+                <dd>{{ap.ap_status.name || '-'}}</dd>
+                <dt>Model</dt>
+                <dd>{{ap.ap_model.name || '-'}}</dd>
+                <dt>Control Region</dt>
+                <dd>{{ap.control_region.name || '-'}}</dd>
+                <dt>Latitude</dt>
+                <dd>{{ap.latitude || '-'}}</dd>
+                <dt>Longitude</dt>
+                <dd>{{ap.longitude || '-'}}</dd>
+            </dl>
+        </fieldset>
+        <alert>
+            <i class="fa fa-times pull-right"></i>
+            <p class="text-center">SNMP Status unavaliable!</p>
+            <button class="btn btn-default"><i class="fa fa-times"></i>Reload</button>
+        </alert>
+    </div>
+    <div class="col-xs-6">
+        <fieldset>
+            <legend>Location</legend>
+            <leaflet id="map" ng-if="hasLocation" center="center" tiles="tiles" markers="markers" defaults="defaults"  width="600px" height="400px"></leaflet>
+            <div class="btn-group" role="group">
+                <button type="button" ng-click="restoreLocation()" class="btn btn-default">Restore</button>
+                <button type="button" ng-click="saveLocation()" class="btn btn-primary">Save</button>
+            </div>
+        </fieldset>
+    </div>
+</div>

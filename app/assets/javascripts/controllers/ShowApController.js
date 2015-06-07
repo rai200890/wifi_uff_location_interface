@@ -1,12 +1,12 @@
-function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafletData){
+function ShowApController($scope, $stateParams, Ap, $state, leafletData){
 
     $scope.hasLocation = false;
 
     $scope.tiles = {
-        url: "http://localhost:3000/images/tiles/{z}/{x}/{y}.png",
+        url: "http://localhost:3000/images/tiles/blueprint/{z}/{x}/{y}.png",
         options:{
-            maxZoom: 2,
-            minZoom: 1,
+            maxZoom: 3,
+            minZoom: 0,
             continuousWorld: false,
             // this option disables loading tiles outside of the world bounds.
             noWrap: true,
@@ -18,10 +18,58 @@ function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafle
         autoDiscover: true
     }
 
-    $scope.markers = {};
+    angular.extend($scope, {
+        markers : {}
+    });
 
     $scope.defaults = {
-        zoom: 1
+        zoom: 3
+    };
+
+    $scope.events = {
+        map: {
+            enable: ['click', 'drag', 'blur', 'touchstart'],
+            logic: 'emit'
+        },
+        markers: {
+            enable: ['click']
+        }
+    }
+
+    $scope.$on('leafletDirectiveMap.click', function(event, args){
+        var latlng = args.leafletEvent.latlng;
+        console.log('Lat: ' + latlng.lat + '<br>Lng: ' + latlng.lng);
+
+        $scope.markers['m1'] = {
+            lat: latlng.lat,
+            lng: latlng.lng,
+            message: $scope.ap.name + " - " + $scope.ap.syslocation,
+            focus: true,
+            draggable: true,
+            icon: {}
+        }
+    });
+
+    $scope.$on('leafletDirectiveMarker.dragend', function(event, args){
+        var name = $scope.ap.name;
+        $scope.ap.latitude = args.model.lat;
+        $scope.ap.longitude = args.model.lng;
+    });
+
+    $scope.saveLocation = function(){
+        Ap.update({apId: $scope.ap.id}, {ap: {
+            latitude: $scope.ap.latitude,
+            longitude: $scope.ap.longitude,
+        }},function(data){
+            console.log("Location updated with success");
+        });
+    };
+
+    var oldLocation = {};
+
+    $scope.restoreLocation = function() {
+        //MARRETADA para resolver problema do angular-leaflet com markers
+        $state.go($state.current, $stateParams, {reload: true});
     };
 
     Ap.get({apId: $stateParams.ap_id}, function(data){
@@ -35,7 +83,8 @@ function ShowApController($scope, $stateParams, Ap, leafletBoundsHelpers, leafle
                 lat: data.latitude,
                 lng: data.longitude,
                 message: data.name + " - " + data.syslocation,
-                focus: false,
+                focus: true,
+                draggable: true,
                 icon: {}
             }
         }

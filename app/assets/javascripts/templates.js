@@ -44,49 +44,59 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('aps/show.html',
-    "<fieldset>\n" +
-    "    <legend>Ap Info</legend>\n" +
-    "    <dl class=\"dl-horizontal\">\n" +
-    "        <dt>ID</dt>\n" +
-    "        <dd>{{ap.id}}</dd>\n" +
-    "        <dt>Name</dt>\n" +
-    "        <dd>{{ap.name}}</dd>\n" +
-    "        <dt>IP</dt>\n" +
-    "        <dd>{{ap.ip}}</dd>\n" +
-    "        <dt>Switch IP</dt>\n" +
-    "        <dd>{{ap.switch_ip || '-'}}</dd>\n" +
-    "        <dt>Campus</dt>\n" +
-    "        <dd>{{ap.campus_name}}</dd>\n" +
-    "        <dt>Building</dt>\n" +
-    "        <dd>{{ap.building_name}}</dd>\n" +
-    "        <dt>Location</dt>\n" +
-    "        <dd>{{ap.location_name || '-'}}</dd>\n" +
-    "        <dt>Validated</dt>\n" +
-    "        <dd>\n" +
-    "            <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
-    "            <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
-    "        </dd>\n" +
-    "        <dts>Status</dts>\n" +
-    "        <dd>{{ap.ap_status.name || '-'}}</dd>\n" +
-    "        <dt>Model</dt>\n" +
-    "        <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
-    "        <dt>Control Region</dt>\n" +
-    "        <dd>{{ap.control_region.name || '-'}}</dd>\n" +
-    "        <dt>Latitude</dt>\n" +
-    "        <dd>{{ap.latitude || '-'}}</dd>\n" +
-    "        <dt>Longitude</dt>\n" +
-    "        <dd>{{ap.longitude || '-'}}</dd>\n" +
-    "    </dl>\n" +
-    "</fieldset>\n" +
-    "\n" +
-    "<fieldset>\n" +
-    "    <legend>SNMP Status</legend>\n" +
-    "</fieldset>\n" +
-    "\n" +
-    "<fieldset>\n" +
-    "    <legend>Map</legend>\n" +
-    "<leaflet ng-if=\"hasLocation\" center=\"center\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\"  width=\"400px\" height=\"260px\"></leaflet>\n" +
-    "</fieldset>"
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-xs-6\">\n" +
+    "        <fieldset>\n" +
+    "            <legend>Info</legend>\n" +
+    "            <dl class=\"dl-horizontal\">\n" +
+    "                <dt>ID</dt>\n" +
+    "                <dd>{{ap.id}}</dd>\n" +
+    "                <dt>Name</dt>\n" +
+    "                <dd>{{ap.name}}</dd>\n" +
+    "                <dt>IP</dt>\n" +
+    "                <dd>{{ap.ip}}</dd>\n" +
+    "                <dt>Switch IP</dt>\n" +
+    "                <dd>{{ap.switch_ip || '-'}}</dd>\n" +
+    "                <dt>Campus</dt>\n" +
+    "                <dd>{{ap.campus_name}}</dd>\n" +
+    "                <dt>Building</dt>\n" +
+    "                <dd>{{ap.building_name}}</dd>\n" +
+    "                <dt>Location</dt>\n" +
+    "                <dd>{{ap.location_name || '-'}}</dd>\n" +
+    "                <dt>Validated</dt>\n" +
+    "                <dd>\n" +
+    "                    <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
+    "                    <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
+    "                </dd>\n" +
+    "                <dt>Status</dt>\n" +
+    "                <dd>{{ap.ap_status.name || '-'}}</dd>\n" +
+    "                <dt>Model</dt>\n" +
+    "                <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
+    "                <dt>Control Region</dt>\n" +
+    "                <dd>{{ap.control_region.name || '-'}}</dd>\n" +
+    "                <dt>Latitude</dt>\n" +
+    "                <dd>{{ap.latitude || '-'}}</dd>\n" +
+    "                <dt>Longitude</dt>\n" +
+    "                <dd>{{ap.longitude || '-'}}</dd>\n" +
+    "            </dl>\n" +
+    "        </fieldset>\n" +
+    "        <alert>\n" +
+    "            <i class=\"fa fa-times pull-right\"></i>\n" +
+    "            <p class=\"text-center\">SNMP Status unavaliable!</p>\n" +
+    "            <button class=\"btn btn-default\"><i class=\"fa fa-times\"></i>Reload</button>\n" +
+    "        </alert>\n" +
+    "    </div>\n" +
+    "    <div class=\"col-xs-6\">\n" +
+    "        <fieldset>\n" +
+    "            <legend>Location</legend>\n" +
+    "            <leaflet id=\"map\" ng-if=\"hasLocation\" center=\"center\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
+    "            <div class=\"btn-group\" role=\"group\">\n" +
+    "                <button type=\"button\" ng-click=\"restoreLocation()\" class=\"btn btn-default\">Restore</button>\n" +
+    "                <button type=\"button\" ng-click=\"saveLocation()\" class=\"btn btn-primary\">Save</button>\n" +
+    "            </div>\n" +
+    "        </fieldset>\n" +
+    "    </div>\n" +
+    "</div>\n"
   );
 
 
@@ -105,8 +115,9 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "        </div>\n" +
     "    </div>\n" +
     "</nav>\n" +
-    "<div ui-view></div>\n" +
-    "<footer>\n" +
+    "<div class=\"container\" ui-view></div>\n" +
+    "\n" +
+    "<footer class=\"container\">\n" +
     "    <h5 class=\"text-center\">Footer</h5>\n" +
     "</footer>\n"
   );
