@@ -84,7 +84,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "        </fieldset>\n" +
     "        <fieldset>\n" +
     "            <legend>SNMP Status  <button class=\"btn btn-primary btn-xs\" ng-click=\"reloadSNMPStatus()\"><i class=\"fa fa-refresh\"></i></button></legend>\n" +
-    "            <dl class=\"dl-horizontal\">\n" +
+    "            <dl ng-show=\"snmp_status && !loading\" class=\"dl-horizontal\">\n" +
     "                <dt>SysLocation</dt>\n" +
     "                <dd>{{snmp_status.syslocation.value}}</dd>\n" +
     "                <dt>Channel</dt>\n" +
@@ -93,7 +93,8 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dd>{{snmp_status.potency.value}}</dd>\n" +
     "            </dl>\n" +
     "        </fieldset>\n" +
-    "\n" +
+    "        <h4 class=\"text-center\" ng-show=\"loading\">Loading</h4>\n" +
+    "        <h4 class=\"text-center\" ng-show=\"!snmp_status && !loading\">Unavaliable</h4>\n" +
     "    </div>\n" +
     "    <div class=\"col-xs-6\">\n" +
     "        <fieldset>\n" +

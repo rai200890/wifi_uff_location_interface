@@ -70,8 +70,12 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletD
     };
 
     $scope.reloadSNMPStatus = function(){
+        $scope.loading = true;
         SNMPStatus.get({apId: $stateParams.ap_id}, function(data){
             $scope.snmp_status = data;
+            $scope.loading = false;
+        }, function(){
+            $scope.loading = false;
         });
     };
 
@@ -80,11 +84,8 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletD
         $state.go($state.current, $stateParams, {reload: true});
     };
 
-    $scope.snmp_status = {response: []};
-
-    SNMPStatus.get({apId: $stateParams.ap_id}, function(data){
-        $scope.snmp_status = data;
-    });
+    $scope.snmp_status = null;
+    $scope.loading = true;
 
     Ap.get({apId: $stateParams.ap_id}, function(data){
         $scope.ap = data;
@@ -102,6 +103,14 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletD
                 icon: {}
             }
         }
+
+        SNMPStatus.get({apId: $stateParams.ap_id}, function(data){
+            $scope.snmp_status = data;
+            $scope.loading = false;
+        }, function(){
+            $scope.loading = false;
+        });
+
     });
 
 }

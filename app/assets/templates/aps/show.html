@@ -38,7 +38,7 @@
         </fieldset>
         <fieldset>
             <legend>SNMP Status  <button class="btn btn-primary btn-xs" ng-click="reloadSNMPStatus()"><i class="fa fa-refresh"></i></button></legend>
-            <dl class="dl-horizontal">
+            <dl ng-show="snmp_status && !loading" class="dl-horizontal">
                 <dt>SysLocation</dt>
                 <dd>{{snmp_status.syslocation.value}}</dd>
                 <dt>Channel</dt>
@@ -47,7 +47,8 @@
                 <dd>{{snmp_status.potency.value}}</dd>
             </dl>
         </fieldset>
-
+        <h4 class="text-center" ng-show="loading">Loading</h4>
+        <h4 class="text-center" ng-show="!snmp_status && !loading">Unavaliable</h4>
     </div>
     <div class="col-xs-6">
         <fieldset>
