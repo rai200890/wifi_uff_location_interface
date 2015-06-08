@@ -24,11 +24,12 @@ class Snmp < Thor
                 mib_modules: []}
 
     SNMP::Manager.open(host: options[:host], community: options[:community],
-                       version: options[:version], port: options[:port],
+                       version: options[:version].to_sym, port: options[:port],
                        mib_modules: options[:mib_modules]) do |manager|
       response = manager.get(options[:mibs])
-      #response = manager.get(['RFC1213-MIB::sysDescr.0'])
-      response.each_varbind do |vb|
+      response = manager.get(['RFC1213-MIB::sysDescr.0'])
+      byebug
+      response.varbind_list do |vb|
         puts "NAME: #{vb.name.to_s}, VALUE: #{vb.value.to_s}, ASN1_TYPE: #{vb.value.asn1_type}"
       end
     end

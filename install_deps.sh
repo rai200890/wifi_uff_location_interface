@@ -21,6 +21,12 @@ sudo apt-get install -y nodejs npm
 sudo ln -s /usr/bin/nodejs /usr/bin/node
 sudo npm install -g grunt grunt-cli bower
 
+#SNMP Agent (so that VM responds to localhost)
+sudo apt-get install snmpd
+
+#SNMP Manager (DAEMON, to run snmpwalk and snmpget, not necessary for this application)
+#sudo apt-get install snmp snmp-mibs-downloader
+
 #PROJECT DEPS
 cd /vagrant
 rvm install "$(< /vagrant/.ruby-version)"

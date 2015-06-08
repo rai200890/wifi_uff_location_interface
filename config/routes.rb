@@ -19,7 +19,9 @@ Rails.application.routes.draw do
     resources :aps do
       resource :snmp_status, only: :show
     end
-    resource :snmp_status, only: :show
+    resource :snmp_status, only: :search do
+      get :search
+    end
     resources :tiles, only: :index
     resources :campi do
       resources :buildings
