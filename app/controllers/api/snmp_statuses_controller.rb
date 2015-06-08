@@ -3,8 +3,8 @@ class Api::SnmpStatusesController < ApplicationController
 
   def show
     ap = Ap.find(params[:ap_id])
-    #@snmp_status = SnmpStatus.get host: ap.ip
-    @snmp_status = SnmpStatus.get host: 'localhost'
+    @snmp_status = SnmpStatus.get host: ap.ip
+    #@snmp_status = SnmpStatus.get host: 'localhost'
     if @snmp_status.errors.any?
       render json: @snmp_status.errors.full_messages, status: :not_found
     else
@@ -24,13 +24,7 @@ class Api::SnmpStatusesController < ApplicationController
   private
 
   def snmp_status_params
-    params.require(:host)
-    params.require(:community)
     params.permit(:host, :community, :port, :version, :mib_modules, :fields)
-  end
-
-  def version
-
   end
 
 end
