@@ -25,7 +25,10 @@ sudo npm install -g grunt grunt-cli bower
 sudo apt-get install snmpd
 
 #SNMP Manager (DAEMON, to run snmpwalk and snmpget, not necessary for this application)
-#sudo apt-get install snmp snmp-mibs-downloader
+sudo apt-get install snmp snmp-mibs-downloader
+
+#smitools 
+sudo apt-get install smitools
 
 #PROJECT DEPS
 cd /vagrant

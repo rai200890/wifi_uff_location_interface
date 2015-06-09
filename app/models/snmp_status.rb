@@ -5,6 +5,9 @@ class SnmpStatus
 
   #SOURCE CODE: https://github.com/hallidave/ruby-snmp/blob/master/lib/snmp/manager.rb
 
+  #UCD-SNMP-MIB::extOutput.30 - CHANNEL - 1.3.6.1.4.1.2021.8.1.101.30
+  #UCD-SNMP-MIB::extOutput.31 - POWER - 1.3.6.1.4.1.2021.8.1.101.31
+
   def initialize params = {}
     @host = params[:host] || 'localhost'
     @community = params[:community] || 'public'

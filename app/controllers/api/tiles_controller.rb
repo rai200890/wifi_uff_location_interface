@@ -1,11 +1,16 @@
 class Api::TilesController < ApplicationController
 
   respond_to :png
+
   def index
-    path = "#{Rails.root}/public/tiles/planta_exemplo/#{tiles_params[:z]}/#{tiles_params[:x]}/#{tiles_params[:y]}.png"
-    respond_with @user do |format|
+    path = "#{Rails.root}/public/images/tiles/blueprint/#{tiles_params[:z]}/#{tiles_params[:x]}/#{tiles_params[:y]}.png"
+    respond_with do |format|
       format.png do
-        send_file path, type: 'image/png', disposition: 'inline'
+        if File.exists? path
+          send_file path, type: 'image/png', disposition: 'inline'
+        else
+          render nothing: true, status: 404
+        end
       end
     end
   end

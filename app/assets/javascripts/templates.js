@@ -10,6 +10,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "<h2 class=\"text-center\">Aps</h2>\n" +
     "<table st-table=\"displayedAps\" st-safe-src=\"aps\" class=\"table table-hover table-striped\">\n" +
     "    <thead>\n" +
+    "    <th colspan=\"5\"><input st-search=\"\" class=\"form-control\" placeholder=\"Busque...\" type=\"text\"/></th\n" +
     "    <th st-sort='name'>Name</th>\n" +
     "    <th st-sort=\"ip\">IP</th>\n" +
     "    <th st-sort='campus_name'>Campus</th>\n" +
@@ -89,8 +90,8 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dd>{{snmp_status.syslocation.value}}</dd>\n" +
     "                <dt>Channel</dt>\n" +
     "                <dd>{{snmp_status.channel.value}}</dd>\n" +
-    "                <dt>Potency</dt>\n" +
-    "                <dd>{{snmp_status.potency.value}}</dd>\n" +
+    "                <dt>Power</dt>\n" +
+    "                <dd>{{snmp_status.power.value}}</dd>\n" +
     "            </dl>\n" +
     "        </fieldset>\n" +
     "        <h4 class=\"text-center\" ng-show=\"loading\">Loading</h4>\n" +

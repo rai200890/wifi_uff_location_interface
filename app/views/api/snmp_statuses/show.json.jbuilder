@@ -1,6 +1,6 @@
 syslocation = @snmp_status.response[0]
 channel = @snmp_status.response[1]
-potency = @snmp_status.response[2]
+power = @snmp_status.response[2]
 json.syslocation do |item|
   item.oid syslocation.name.to_a.join(".")
   item.name syslocation.name.to_s
@@ -11,8 +11,8 @@ json.channel do |item|
   item.name channel.name.to_s
   item.value channel.value
 end
-json.potency do |item|
-  item.oid potency.name.to_a.join(".")
-  item.name potency.name.to_s
-  item.value potency.value
+json.power do |item|
+  item.oid power.name.to_a.join(".")
+  item.name power.name.to_s
+  item.value power.value
 end

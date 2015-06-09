@@ -3,7 +3,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletD
     $scope.hasLocation = false;
 
     $scope.tiles = {
-        url: "http://localhost:3000/images/tiles/blueprint/{z}/{x}/{y}.png",
+        url: "http://localhost:3000/api/tiles.png?z={z}&x={x}&y={y}",
         options:{
             maxZoom: 3,
             minZoom: 0,
