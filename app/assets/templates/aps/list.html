@@ -1,14 +1,19 @@
 <h2 class="text-center">Aps</h2>
+
 <table st-table="displayedAps" st-safe-src="aps" class="table table-hover table-striped">
     <thead>
-    <th colspan="5"><input st-search="" class="form-control" placeholder="Busque..." type="text"/></th
-    <th st-sort='name'>Name</th>
-    <th st-sort="ip">IP</th>
-    <th st-sort='campus_name'>Campus</th>
-    <th st-sort='building_name'>Building</th>
-    <th>Location</th>
-    <th st-sort='validated'>Validated</th>
-    <th>Options</th>
+    <tr>
+        <th colspan="7"><input st-search="" type="search" class="form-control" placeholder="Busque..." /></th>
+    </tr>
+    <tr>
+        <th st-sort='name'>Name</th>
+        <th st-sort="ip">IP</th>
+        <th st-sort='campus_name'>Campus</th>
+        <th st-sort='building_name'>Building</th>
+        <th>Location</th>
+        <th st-sort='validated'>Validated</th>
+        <th>Options</th>
+    </tr>
     </thead>
     <tbody>
     <tr ng-repeat="ap in displayedAps">

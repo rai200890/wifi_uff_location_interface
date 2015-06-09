@@ -8,16 +8,21 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
   $templateCache.put('aps/list.html',
     "<h2 class=\"text-center\">Aps</h2>\n" +
+    "\n" +
     "<table st-table=\"displayedAps\" st-safe-src=\"aps\" class=\"table table-hover table-striped\">\n" +
     "    <thead>\n" +
-    "    <th colspan=\"5\"><input st-search=\"\" class=\"form-control\" placeholder=\"Busque...\" type=\"text\"/></th\n" +
-    "    <th st-sort='name'>Name</th>\n" +
-    "    <th st-sort=\"ip\">IP</th>\n" +
-    "    <th st-sort='campus_name'>Campus</th>\n" +
-    "    <th st-sort='building_name'>Building</th>\n" +
-    "    <th>Location</th>\n" +
-    "    <th st-sort='validated'>Validated</th>\n" +
-    "    <th>Options</th>\n" +
+    "    <tr>\n" +
+    "        <th colspan=\"7\"><input st-search=\"\" type=\"search\" class=\"form-control\" placeholder=\"Busque...\" /></th>\n" +
+    "    </tr>\n" +
+    "    <tr>\n" +
+    "        <th st-sort='name'>Name</th>\n" +
+    "        <th st-sort=\"ip\">IP</th>\n" +
+    "        <th st-sort='campus_name'>Campus</th>\n" +
+    "        <th st-sort='building_name'>Building</th>\n" +
+    "        <th>Location</th>\n" +
+    "        <th st-sort='validated'>Validated</th>\n" +
+    "        <th>Options</th>\n" +
+    "    </tr>\n" +
     "    </thead>\n" +
     "    <tbody>\n" +
     "    <tr ng-repeat=\"ap in displayedAps\">\n" +
