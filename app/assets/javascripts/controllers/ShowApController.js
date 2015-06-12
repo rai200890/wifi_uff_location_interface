@@ -1,12 +1,12 @@
-function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletData){
+function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletBoundsHelpers){
 
     $scope.hasLocation = false;
 
     $scope.tiles = {
         url: "http://localhost:3000/api/tiles.png?z={z}&x={x}&y={y}",
         options:{
-            maxZoom: 3,
-            minZoom: 0,
+            maxZoom: 5,
+            minZoom: 1,
             continuousWorld: false,
             // this option disables loading tiles outside of the world bounds.
             noWrap: true,
@@ -14,16 +14,13 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletD
         }
     };
 
-    $scope.center = {
-        autoDiscover: true
-    }
 
     angular.extend($scope, {
         markers : {}
     });
 
     $scope.defaults = {
-        zoom: 3
+        zoom: 1
     };
 
     $scope.events = {
@@ -87,6 +84,28 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletD
     $scope.snmp_status = null;
     $scope.loading = true;
 
+    var mapSize = {height: 352, width:  1252}
+
+    $scope.maxbounds = {
+        northEast: {
+            lat: -352,
+            lng: 0
+        },
+        southWest: {
+            lat: 352,
+            lng: 0
+        }
+    }
+
+    console.log($scope.maxbounds.southWest);
+
+    var isInsideBounds = function(lat, lng){
+        return lat >= $scope.maxbounds.northEast.lat
+            && lat <= $scope.maxbounds.southWest.lat &&
+            lng >= $scope.maxbounds.northEast.lng &&
+            lng <= $scope.maxbounds.southWest.lng
+    }
+
     Ap.get({apId: $stateParams.ap_id}, function(data){
         $scope.ap = data;
 
@@ -94,9 +113,14 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletD
 
         if ($scope.hasLocation) {
 
+            $scope.center = {
+                latitude: $scope.ap.latitude,
+                longitude: $scope.ap.longitude,
+            }
+
             $scope.markers[data.name] = {
-                lat: data.latitude,
-                lng: data.longitude,
+                lat: 0,
+                lng: 0,
                 message: data.name + " - " + data.syslocation,
                 focus: true,
                 draggable: true,

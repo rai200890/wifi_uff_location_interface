@@ -3,7 +3,7 @@ class Api::TilesController < ApplicationController
   respond_to :png
 
   def index
-    path = "#{Rails.root}/public/images/tiles/blueprint/#{tiles_params[:z]}/#{tiles_params[:x]}/#{tiles_params[:y]}.png"
+    path = "#{Rails.root}/public/images/tiles/buildings/25/#{tiles_params[:z]}/#{tiles_params[:x]}/#{tiles_params[:y]}.png"
     respond_with do |format|
       format.png do
         if File.exists? path

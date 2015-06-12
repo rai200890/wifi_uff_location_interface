@@ -103,9 +103,10 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "        <h4 class=\"text-center\" ng-show=\"!snmp_status && !loading\">Unavaliable</h4>\n" +
     "    </div>\n" +
     "    <div class=\"col-xs-6\">\n" +
+    "\n" +
     "        <fieldset>\n" +
     "            <legend>Location</legend>\n" +
-    "            <leaflet id=\"map\" ng-if=\"hasLocation\" center=\"center\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
+    "            <leaflet id=\"map\" ng-if=\"hasLocation\" maxbounds=\"maxbounds\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
     "            <div class=\"btn-group\" role=\"group\">\n" +
     "                <button type=\"button\" ng-click=\"restoreLocation()\" class=\"btn btn-default\">Restore</button>\n" +
     "                <button type=\"button\" ng-click=\"saveLocation()\" class=\"btn btn-primary\">Save</button>\n" +
