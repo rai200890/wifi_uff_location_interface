@@ -6,7 +6,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
         url: "http://localhost:3000/api/tiles.png?z={z}&x={x}&y={y}",
         options:{
             maxZoom: 5,
-            minZoom: 1,
+            minZoom: 5,
             continuousWorld: false,
             // this option disables loading tiles outside of the world bounds.
             noWrap: true,
@@ -84,16 +84,16 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
     $scope.snmp_status = null;
     $scope.loading = true;
 
-    var mapSize = {height: 352, width:  1252}
+    var mapSize = {height: 352, width:  1253}
 
     $scope.maxbounds = {
         northEast: {
-            lat: 0,
-            lng: 0
+            lat: -90,
+            lng: -180
         },
         southWest: {
-            lat: 0,
-            lng: 0
+            lat: 90,
+            lng: 180
         }
     }
 
@@ -116,7 +116,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
             $scope.center = {
                 lat: data.latitude,
                 lng: data.longitude,
-                zoom: 3
+                zoom: 5
             }
 
             $scope.markers[data.name] = {
