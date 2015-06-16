@@ -20,7 +20,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
     });
 
     $scope.defaults = {
-        zoom: 1
+        crs: 'EPSG3857'
     };
 
     $scope.events = {
@@ -88,11 +88,11 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
     $scope.maxbounds = {
         northEast: {
-            lat: -352,
+            lat: 0,
             lng: 0
         },
         southWest: {
-            lat: 352,
+            lat: 0,
             lng: 0
         }
     }
@@ -114,13 +114,14 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
         if ($scope.hasLocation) {
 
             $scope.center = {
-                latitude: $scope.ap.latitude,
-                longitude: $scope.ap.longitude,
+                lat: data.latitude,
+                lng: data.longitude,
+                zoom: 3
             }
 
             $scope.markers[data.name] = {
-                lat: 0,
-                lng: 0,
+                lat: data.latitude,
+                lng: data.longitude,
                 message: data.name + " - " + data.syslocation,
                 focus: true,
                 draggable: true,
