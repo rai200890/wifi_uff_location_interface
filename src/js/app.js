@@ -38,12 +38,12 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
 
         $locationProvider.html5Mode({
             enabled: true,
-            requireBase: false
+            requireBase: true
         });
     }]);
 
 app.run(['$rootScope', '$state',
     function($rootScope, $state) {
-        console.log("rodou.");
+
     }
 ]);

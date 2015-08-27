@@ -18,6 +18,7 @@
     "grunt-nodestatic": "^0.1.2"
   },
   "dependencies": {
+    "grunt-http-server": "^1.10.0",
     "node-static": "^0.7.7",
     "serve-static": "^1.10.0"
   }

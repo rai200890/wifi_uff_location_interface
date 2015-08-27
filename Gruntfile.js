@@ -30,12 +30,19 @@ module.exports = function (grunt) {
                     url:    function(url) { return url.replace('src/templates/', ''); }
                 }
             }
-        },
-        nodestatic: {
-            uses_defaults: {}
+        }, 'http-server': {
+            'dev': {
+                root: '.',
+                port: 8080,
+                host: "localhost",
+                showDir : true,
+                autoIndex: true,
+                ext: "html",
+                runInBackground: false
+            }
         }
     });
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-angular-templates');
-    grunt.loadNpmTasks('grunt-nodestatic');
+    grunt.loadNpmTasks('grunt-http-server');
 };
