@@ -1,5 +1,3 @@
-// client/Gruntfile.js
-
 // Generated on 2014-07-18 using generator-angular 0.9.5
 'use strict';
 
@@ -16,7 +14,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         watch: {
             scripts: {
-                files: ['app/assets/templates/**/**.html', 'app/assets/templates/**.html'],
+                files: ['src/templates/**/**.html', 'src/templates/**.html'],
                 tasks: ['ngtemplates'],
                 options: {
                     spawn: true
@@ -26,14 +24,18 @@ module.exports = function (grunt) {
         ngtemplates:  {
             wifiUffLocation:        { /*Nome do módulo da applicação*/
                 prefix: "/",
-                src:      ['app/assets/templates/**/**.html', 'app/assets/templates/**.html'],
-                dest:     'app/assets/javascripts/templates.js',
+                src:      ['src/templates/**/**.html', 'src/templates/**.html'],
+                dest:     'src/js/templates.js',
                 options:  {
-                    url:    function(url) { return url.replace('app/assets/templates/', ''); }
+                    url:    function(url) { return url.replace('src/templates/', ''); }
                 }
             }
+        },
+        nodestatic: {
+            uses_defaults: {}
         }
     });
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-angular-templates');
+    grunt.loadNpmTasks('grunt-nodestatic');
 };
