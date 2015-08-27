@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150605042525) do
+ActiveRecord::Schema.define(version: 20150617001519) do
 
   create_table "ap_models", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -44,6 +44,8 @@ ActiveRecord::Schema.define(version: 20150605042525) do
     t.integer "ap_model_id",       limit: 4
     t.integer "ap_status_id",      limit: 4
     t.integer "control_region_id", limit: 4
+    t.float   "lat",               limit: 24
+    t.float   "lng",               limit: 24
   end
 
   create_table "buildings", force: :cascade do |t|

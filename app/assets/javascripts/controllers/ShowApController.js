@@ -5,10 +5,12 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
     $scope.tiles = {
         url: "http://localhost:3000/api/tiles.png?z={z}&x={x}&y={y}",
         options:{
-            maxZoom: 5,
-            minZoom: 5,
+            center: [0,0],
+            maxZoom: 1,
+            minZoom: 1,
             continuousWorld: false,
             // this option disables loading tiles outside of the world bounds.
+            maxBounds: [[0,0],[0,256]],
             noWrap: true,
             attribution: '<strong>Custom Map</strong>'
         }
@@ -20,7 +22,10 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
     });
 
     $scope.defaults = {
+        zoomControl: false,
+
         crs: 'EPSG3857'
+        //crs: 'Simple'
     };
 
     $scope.events = {
@@ -86,25 +91,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
     var mapSize = {height: 352, width:  1253}
 
-    $scope.maxbounds = {
-        northEast: {
-            lat: -90,
-            lng: -180
-        },
-        southWest: {
-            lat: 90,
-            lng: 180
-        }
-    }
 
-    console.log($scope.maxbounds.southWest);
-
-    var isInsideBounds = function(lat, lng){
-        return lat >= $scope.maxbounds.northEast.lat
-            && lat <= $scope.maxbounds.southWest.lat &&
-            lng >= $scope.maxbounds.northEast.lng &&
-            lng <= $scope.maxbounds.southWest.lng
-    }
 
     Ap.get({apId: $stateParams.ap_id}, function(data){
         $scope.ap = data;
@@ -116,7 +103,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
             $scope.center = {
                 lat: data.latitude,
                 lng: data.longitude,
-                zoom: 5
+                zoom: 1
             }
 
             $scope.markers[data.name] = {

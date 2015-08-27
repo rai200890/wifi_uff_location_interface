@@ -11,6 +11,7 @@ gem 'thor-rails'
 gem 'snmp'
 gem 'responders'
 gem 'thin'
+gem 'railroady'
 gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   gem 'awesome_print'

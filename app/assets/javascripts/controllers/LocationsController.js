@@ -1,3 +1,3 @@
-function LocationsController($scope){
+function LocationsController($scope, ){
 
 }
