@@ -16,7 +16,7 @@ module.exports = function (grunt) {
                     'views/**.html',
                     'views/**/**.html'
                 ],
-                tasks: ['ngtemplates', 'concat:all', 'concat_css:all'],
+                tasks: ['build'],
                 options: {
                     spawn: true
                 }
@@ -49,9 +49,9 @@ module.exports = function (grunt) {
                     "app/assets/angular-bootstrap/ui-bootstrap-tpls.min.js",
                     "app/assets/angular-resource/angular-resource.min.js",
                     "app/assets/angular-ui-router/release/angular-ui-router.min.js",
-                    'app/controllers/**.js',
-                    'app/services/**.js',
                     'app/app.js',
+                    'app/services/**.js',
+                    'app/controllers/**.js',
                     'dist/templates.js'
                 ],
                 dest: 'dist/built.js'
@@ -80,7 +80,7 @@ module.exports = function (grunt) {
                         options: {
                             index: 'index.html'
                         }
-                    },
+                    }//,
                     //middleware: function(connect, options) {
                     //    return [function(req, res) {
                     //        require('fs').createReadStream('index.html').pipe(res);
@@ -90,10 +90,14 @@ module.exports = function (grunt) {
             }
         }
     });
+
     grunt.loadNpmTasks('grunt-concat-css');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-angular-templates');
+
+    grunt.registerTask('build', ['bundle assets'] ,['ngtemplates', 'concat', 'concat_css']);
+
 };

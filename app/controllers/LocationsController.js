@@ -1,3 +1,4 @@
-function LocationsController($scope){
+angular.module('wifiUffLocation').
+    controller('LocationsController', ['$scope', function LocationsController($scope){
 
-};
+    }]);
