@@ -125,4 +125,4 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
     });
 
-}
+};

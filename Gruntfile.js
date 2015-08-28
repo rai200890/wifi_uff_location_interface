@@ -1,21 +1,22 @@
-// Generated on 2014-07-18 using generator-angular 0.9.5
 'use strict';
-
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
-
 module.exports = function (grunt) {
-    // Load grunt tasks automatically
-
-    // Define the configuration for all the tasks
     grunt.initConfig({
         watch: {
             scripts: {
-                files: ['src/templates/**/**.html', 'src/templates/**.html'],
-                tasks: ['ngtemplates'],
+                files: [
+                    'assets/**/**.*',
+                    'app/controllers/**.js',
+                    'app/services/**.js',
+                    'app/**.js',
+                    'views/**.html',
+                    'views/**/**.html'
+                ],
+                tasks: ['ngtemplates', 'concat:all', 'concat_css:all'],
                 options: {
                     spawn: true
                 }
@@ -24,25 +25,75 @@ module.exports = function (grunt) {
         ngtemplates:  {
             wifiUffLocation:        { /*Nome do módulo da applicação*/
                 prefix: "/",
-                src:      ['src/templates/**/**.html', 'src/templates/**.html'],
-                dest:     'src/js/templates.js',
+                src:      ['views/**/**.html', 'views/**.html'],
+                dest:     'dist/templates.js',
                 options:  {
-                    url:    function(url) { return url.replace('src/templates/', ''); }
+                    url:    function(url) { return url.replace('views/', ''); }
                 }
             }
-        }, 'http-server': {
-            'dev': {
-                root: '.',
-                port: 8080,
-                host: "localhost",
-                showDir : true,
-                autoIndex: true,
-                ext: "html",
-                runInBackground: false
+        },
+        concat: {
+            options: {
+                separator: '\n',
+            },
+            all: {
+                src: [
+                    "app/assets/jquery/dist/jquery.min.js",
+                    "app/assets/bootstrap/dist/js/bootstrap.min.js",
+                    "app/assets/leaflet/dist/leaflet.js",
+                    "app/assets/angular/angular.min.js",
+                    "app/assets/angular-leaflet-directive/dist/angular-leaflet-directive.min.js",
+                    "app/assets/angular-smart-table/dist/smart-table.min.js",
+                    "app/assets/angular-resource/angular-resource.min.js",
+                    "app/assets/angular-route/angular-route.min.js",
+                    "app/assets/angular-bootstrap/ui-bootstrap-tpls.min.js",
+                    "app/assets/angular-resource/angular-resource.min.js",
+                    "app/assets/angular-ui-router/release/angular-ui-router.min.js",
+                    'app/controllers/**.js',
+                    'app/services/**.js',
+                    'app/app.js',
+                    'dist/templates.js'
+                ],
+                dest: 'dist/built.js'
+            },
+        },
+        concat_css: {
+            options: {
+
+            },
+            all: {
+                src: [
+                    "app/assets/bootstrap/dist/css/bootstrap.min.css",
+                    "app/assets/angular-bootstrap/ui-bootstrap-csp.css",
+                    "app/assets/font-awesome/css/font-awesome.min.css",
+                    "app/assets/leaflet/dist/leaflet.css"
+                ],
+                dest: "dist/styles.css"
+            },
+        },
+        connect: {
+            server: {
+                options: {
+                    port: 8080,
+                    base: {
+                        path: '.',
+                        options: {
+                            index: 'index.html'
+                        }
+                    },
+                    //middleware: function(connect, options) {
+                    //    return [function(req, res) {
+                    //        require('fs').createReadStream('index.html').pipe(res);
+                    //    }];
+                    //}
+                }
             }
         }
     });
+    grunt.loadNpmTasks('grunt-concat-css');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-angular-templates');
-    grunt.loadNpmTasks('grunt-http-server');
 };
