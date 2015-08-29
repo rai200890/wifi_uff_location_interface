@@ -28,9 +28,9 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <tr ng-repeat=\"ap in displayedAps\">\n" +
     "        <td>{{ap.name}}</td>\n" +
     "        <td>{{ap.ip}}</td>\n" +
-    "        <td tooltip-append-to-body=\"true\" tooltip=\"{{ap.building_name + ',' + ap.location_name}}\" >{{ap.campus_name}}</td>\n" +
-    "        <td>{{ap.building_name}}</td>\n" +
-    "        <td>{{ap.location_name}}</td>\n" +
+    "        <td tooltip-append-to-body=\"true\" tooltip=\"{{ap.location.building_name + ',' + ap.location.name}}\" >{{ap.location.campus_name}}</td>\n" +
+    "        <td>{{ap.location.building_name}}</td>\n" +
+    "        <td>{{ap.location.name}}</td>\n" +
     "        <td>\n" +
     "            <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
     "            <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
@@ -64,13 +64,13 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dt>Switch IP</dt>\n" +
     "                <dd>{{ap.switch_ip || '-'}}</dd>\n" +
     "                <dt>Campus</dt>\n" +
-    "                <dd>{{ap.campus_name}}</dd>\n" +
+    "                <dd>{{ap.location.campus_name}}</dd>\n" +
     "                <dt>Building</dt>\n" +
-    "                <dd>{{ap.building_name}}</dd>\n" +
+    "                <dd>{{ap.location.building_name}}</dd>\n" +
     "                <dt>Floor</dt>\n" +
-    "                <dd>{{ap.floor_number || '-'}}</dd>\n" +
+    "                <dd>{{ap.location.floor_number || '-'}}</dd>\n" +
     "                <dt>Location</dt>\n" +
-    "                <dd>{{ap.location_name || '-'}}</dd>\n" +
+    "                <dd>{{ap.location.name || '-'}}</dd>\n" +
     "                <dt>Validated</dt>\n" +
     "                <dd>\n" +
     "                    <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +

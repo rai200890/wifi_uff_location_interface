@@ -80,11 +80,12 @@ module.exports = function (grunt) {
                         options: {
                             index: 'index.html'
                         }
-                    }//,
-                    //middleware: function(connect, options) {
+                    }
+                    //, middleware: function(connect, options) {
                     //    return [function(req, res) {
-                    //        require('fs').createReadStream('index.html').pipe(res);
-                    //    }];
+                            //res.setHeader('content-type', 'text/html');
+                            //require('fs').createReadStream('index.html').pipe(res);
+                       // }];
                     //}
                 }
             }

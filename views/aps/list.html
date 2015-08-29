@@ -19,9 +19,9 @@
     <tr ng-repeat="ap in displayedAps">
         <td>{{ap.name}}</td>
         <td>{{ap.ip}}</td>
-        <td tooltip-append-to-body="true" tooltip="{{ap.building_name + ',' + ap.location_name}}" >{{ap.campus_name}}</td>
-        <td>{{ap.building_name}}</td>
-        <td>{{ap.location_name}}</td>
+        <td tooltip-append-to-body="true" tooltip="{{ap.location.building_name + ',' + ap.location.name}}" >{{ap.location.campus_name}}</td>
+        <td>{{ap.location.building_name}}</td>
+        <td>{{ap.location.name}}</td>
         <td>
             <span class="label label-success" ng-if='ap.validated'><i class="fa fa-thumbs-o-up"></i></span>
             <span class="label label-danger" ng-if='!ap.validated'><i class="fa fa-thumbs-o-down"></i></span>

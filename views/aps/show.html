@@ -12,13 +12,13 @@
                 <dt>Switch IP</dt>
                 <dd>{{ap.switch_ip || '-'}}</dd>
                 <dt>Campus</dt>
-                <dd>{{ap.campus_name}}</dd>
+                <dd>{{ap.location.campus_name}}</dd>
                 <dt>Building</dt>
-                <dd>{{ap.building_name}}</dd>
+                <dd>{{ap.location.building_name}}</dd>
                 <dt>Floor</dt>
-                <dd>{{ap.floor_number || '-'}}</dd>
+                <dd>{{ap.location.floor_number || '-'}}</dd>
                 <dt>Location</dt>
-                <dd>{{ap.location_name || '-'}}</dd>
+                <dd>{{ap.location.name || '-'}}</dd>
                 <dt>Validated</dt>
                 <dd>
                     <span class="label label-success" ng-if='ap.validated'><i class="fa fa-thumbs-o-up"></i></span>
