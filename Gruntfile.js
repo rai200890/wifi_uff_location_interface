@@ -69,24 +69,25 @@ module.exports = function (grunt) {
                     "app/assets/leaflet/dist/leaflet.css"
                 ],
                 dest: "dist/styles.css"
-            },
+            }
         },
         connect: {
             server: {
                 options: {
-                    port: 8080,
-                    base: {
-                        path: '.',
-                        options: {
-                            index: 'index.html'
-                        }
+                    /* Support `$locationProvider.html5Mode(true);`
+                     * Requires grunt 0.9.0 or higher
+                     * Otherwise you will see this error:
+                     *   Running "connect:livereload" (connect) task
+                     *   Warning: Cannot call method 'push' of undefined Use --force to continue.
+                     */
+                    middleware: function(connect, options, middlewares) {
+                        var modRewrite = require('connect-modrewrite');
+
+                        // enable Angular's HTML5 mode
+                        middlewares.unshift(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.woff|\\.woff2|\\.ttf$ /index.html [L]']));
+
+                        return middlewares;
                     }
-                    //, middleware: function(connect, options) {
-                    //    return [function(req, res) {
-                            //res.setHeader('content-type', 'text/html');
-                            //require('fs').createReadStream('index.html').pipe(res);
-                       // }];
-                    //}
                 }
             }
         }
