@@ -9,7 +9,7 @@ module.exports = function (grunt) {
         watch: {
             scripts: {
                 files: [
-                    'assets/**/**.*',
+                    'node_modules/**/**.*',
                     'app/controllers/**.js',
                     'app/services/**.js',
                     'app/**.js',
@@ -38,17 +38,17 @@ module.exports = function (grunt) {
             },
             all: {
                 src: [
-                    "app/assets/jquery/dist/jquery.min.js",
-                    "app/assets/bootstrap/dist/js/bootstrap.min.js",
-                    "app/assets/leaflet/dist/leaflet.js",
-                    "app/assets/angular/angular.min.js",
-                    "app/assets/angular-leaflet-directive/dist/angular-leaflet-directive.min.js",
-                    "app/assets/angular-smart-table/dist/smart-table.min.js",
-                    "app/assets/angular-resource/angular-resource.min.js",
-                    "app/assets/angular-route/angular-route.min.js",
-                    "app/assets/angular-bootstrap/ui-bootstrap-tpls.min.js",
-                    "app/assets/angular-resource/angular-resource.min.js",
-                    "app/assets/angular-ui-router/release/angular-ui-router.min.js",
+                    "node_modules/jquery/dist/jquery.min.js",
+                    "node_modules/bootstrap/dist/js/bootstrap.min.js",
+                    "node_modules/leaflet/dist/leaflet.js",
+                    "node_modules/angular/angular.min.js",
+                    "node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.min.js",
+                    "node_modules/angular-smart-table/dist/smart-table.min.js",
+                    "node_modules/angular-resource/angular-resource.min.js",
+                    "node_modules/angular-route/angular-route.min.js",
+                    "node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js",
+                    "node_modules/angular-resource/angular-resource.min.js",
+                    "node_modules/angular-ui-router/release/angular-ui-router.min.js",
                     'app/app.js',
                     'app/services/**.js',
                     'app/controllers/**.js',
@@ -63,10 +63,11 @@ module.exports = function (grunt) {
             },
             all: {
                 src: [
-                    "app/assets/bootstrap/dist/css/bootstrap.min.css",
-                    "app/assets/angular-bootstrap/ui-bootstrap-csp.css",
-                    "app/assets/font-awesome/css/font-awesome.min.css",
-                    "app/assets/leaflet/dist/leaflet.css"
+                    "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                    "node_modules/angular-bootstrap/ui-bootstrap.min.css",
+                    "node_modules/angular-bootstrap/ui-bootstrap-tpls.min.css",
+                    "node_modules/font-awesome/css/font-awesome.min.css",
+                    "node_modules/leaflet/dist/leaflet.css"
                 ],
                 dest: "dist/styles.css"
             }
