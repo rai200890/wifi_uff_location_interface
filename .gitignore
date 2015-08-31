@@ -11,5 +11,4 @@
 /log/*
 /tmp/*
 vendor/plugins/*
-bower_components/*
 node_modules/*
