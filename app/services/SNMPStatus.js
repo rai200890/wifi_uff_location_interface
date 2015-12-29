@@ -1,5 +1,13 @@
-angular.module('wifiUffLocation').
-    factory('SNMPStatus', ['$resource', function SNMPStatus($resource){
-        return $resource('http://localhost:3000/api/aps/:apId/snmp_status.json',{apId: '@id'},
-            {show: {method: 'GET', isArray: true}});
-    }]);
+angular.
+  module('wifiUffLocation').
+  service("SNMPStatus", function($http){
+    var self = this;
+
+    self.get = function(id) {
+      return $http({
+        method: "get",
+        url: "/api/aps/"+ id +"/snmp_status.json"
+      });
+    };
+
+  });

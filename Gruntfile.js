@@ -75,6 +75,7 @@ module.exports = function (grunt) {
         connect: {
             server: {
                 options: {
+		keepalive: true,
                     /* Support `$locationProvider.html5Mode(true);`
                      * Requires grunt 0.9.0 or higher
                      * Otherwise you will see this error:
@@ -91,9 +92,17 @@ module.exports = function (grunt) {
                     }
                 }
             }
-        }
+        },
+        browserify: {
+            js: {
+                // A single entry point for our app
+                src: 'app/app.js',
+                // Compile to a single file to add a script tag for in your HTML
+                dest: 'dist/built.js',
+            },
+        },
     });
-
+    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-concat-css');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');

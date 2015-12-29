@@ -112,7 +112,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "            </div>\n" +
     "        </fieldset>\n" +
     "    </div>\n" +
-    "</div>"
+    "</div>\n"
   );
 
 

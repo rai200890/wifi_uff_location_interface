@@ -1,5 +1,14 @@
-app = angular.module('wifiUffLocation', ['smart-table','ui.router', 'ui.bootstrap','ngRoute','ngResource',
-    'leaflet-directive']);
+var app = angular.module('wifiUffLocation', ['smart-table',
+'ui.bootstrap','leaflet-directive', 'ngResource',
+'ngRoute','ui.router']);
+
+app.factory('Ap', Ap);
+app.factory('Building', Building);
+//app.factory('SNMPStatus', SNMPStatus);
+
+app.controller('ListApsController', ListApsController);
+app.controller('LocationsController', LocationsController);
+app.controller('ShowApController', ShowApController);
 
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
     function($stateProvider, $locationProvider, $urlRouterProvider) {
