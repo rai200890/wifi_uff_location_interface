@@ -490,31 +490,54 @@ function ListApsController($scope, Ap){
 function LocationsController($scope){
 
 };
-function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletBoundsHelpers){
+function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletBoundsHelpers, leafletData){
     $scope.hasLocation = false;
 
     $scope.tiles = {
+        //http://localhost:3000/api/tiles.png?z=20&x=0&y=0
         url: "http://localhost:3000/api/tiles.png?z={z}&x={x}&y={y}",
         options:{
+            //tms: true,
             center: [0,0],
+            zoom: 20,
             maxZoom: 20,
-            minZoom: 17,
-            continuousWorld: false,
+            minZoom: 20,
+            continuousWorld: true,
             // this option disables loading tiles outside of the world bounds.
-            //maxBounds: [[0,0],[0,256]],
             noWrap: true,
             attribution: '<strong>Custom Map</strong>'
         }
     };
 
+    $scope.layers = {
+        baselayers: {
+            building: {
+                name: 'Building',
+                type: 'imageOverlay',
+                url: 'http://localhost:3000/images/planta_ic_4_andar.png',
+                bounds: [[-430,-2237], [430,2237]],
+                layerParams: {
+                    noWrap: true
+                }
+            }
+        }
+    };
 
     angular.extend($scope, {
         markers : {}
     });
 
-    $scope.defaults = {
-        zoomControl: false,
+    $scope.center = {
+        lat: 0,
+        lng: 0,
+        zoom: 0
+    };
 
+    $scope.defaults = {
+        zoom: 0,
+        maxZoom: 0,
+        minZoom: 0,
+        zoomControl: true,
         //crs: 'EPSG3857'
         crs: 'Simple'
     };
@@ -580,8 +603,6 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
     $scope.snmp_status = null;
     $scope.loading = true;
 
-    var mapSize = {height: 352, width:  1253};
-
     Ap.get({apId: $stateParams.ap_id}, function(data){
         $scope.ap = data;
 
@@ -589,20 +610,33 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
         if ($scope.hasLocation) {
 
-            $scope.center = {
-                lat: data.latitude,
-                lng: data.longitude,
-                zoom: 1
-            }
+            leafletData.getMap("map").then(
+                function (map) {
+                    var latLng = L.latLng(data.latitude, data.longitude);
+                    var point = map.project(latLng, $scope.defaults.zoom);
 
-            $scope.markers[data.name] = {
-                lat: data.latitude,
-                lng: data.longitude,
-                message: data.name + " - " + data.syslocation,
-                focus: true,
-                draggable: true,
-                icon: {}
-            }
+                    $scope.center = {
+                        lat: point.x,
+                        lng: point.y,
+                        zoom: 1
+                    };
+
+                    console.log(data.latitude);
+                    console.log(data.longitude);
+
+                    $scope.ap.latitude = point.x;
+                    $scope.ap.longitude = point.y;
+
+                    $scope.markers[data.name] = {
+                        lat: point.x,
+                        lng: point.y,
+                        message: data.name + " - " + data.syslocation,
+                        focus: true,
+                        draggable: true,
+                        icon: {}
+                    }
+                });
+
         }
 
         SNMPStatus.get($stateParams.ap_id).success(function(data){
@@ -723,7 +757,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <div class=\"col-xs-6\">\n" +
     "        <fieldset>\n" +
     "            <legend>Location</legend>\n" +
-    "            <leaflet id=\"map\" ng-if=\"hasLocation\"  center=\"center\" tiles=\"tiles\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
+    "            <leaflet id=\"map\" ng-if=\"hasLocation\" maxbounds=\"maxBounds\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
     "            <div class=\"btn-group\" role=\"group\">\n" +
     "                <button type=\"button\" ng-click=\"restoreLocation()\" class=\"btn btn-default\">Restore</button>\n" +
     "                <button type=\"button\" ng-click=\"saveLocation()\" class=\"btn btn-primary\">Save</button>\n" +
