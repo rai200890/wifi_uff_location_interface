@@ -518,7 +518,8 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
                 bounds: [[-430,-2237], [430,2237]],
                 layerParams: {
                     noWrap: true
-                }
+                },
+                attribution: '<strong>Custom Map</strong>'
             }
         }
     };
@@ -530,13 +531,13 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
     $scope.center = {
         lat: 0,
         lng: 0,
-        zoom: 0
+        zoom: -3
     };
 
     $scope.defaults = {
-        zoom: 0,
-        maxZoom: 0,
-        minZoom: 0,
+        zoom: -3,
+        maxZoom: 1,
+        minZoom: -3,
         zoomControl: true,
         //crs: 'EPSG3857'
         crs: 'Simple'
@@ -569,16 +570,25 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
     });
 
     $scope.$on('leafletDirectiveMarker.dragend', function(event, args){
-        var name = $scope.ap.name;
-        $scope.ap.latitude = args.model.lat;
-        $scope.ap.longitude = args.model.lng;
+      leafletData.getMap("map").then(function (map) {
+             var x = args.model.lat;
+             var y = args.model.lng;
+             var point = L.point(x, y);
+             var latLng = map.unproject(point, $scope.defaults.zoom);
+            console.log(point);
+            console.log(latLng);
+            });
+
+        $scope.ap.lat = args.model.lat;
+        $scope.ap.lng = args.model.lng;
     });
 
     $scope.saveLocation = function(){
+
         Ap.update({apId: $scope.ap.id}, {
             ap: {
-                latitude: $scope.ap.latitude,
-                longitude: $scope.ap.longitude,
+                latitude: $scope.ap.lat,
+                longitude: $scope.ap.lng,
             }
         },function(data){
             console.log("Location updated with success");
@@ -618,14 +628,11 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
                     $scope.center = {
                         lat: point.x,
                         lng: point.y,
-                        zoom: 1
+                        zoom: -3
                     };
 
-                    console.log(data.latitude);
-                    console.log(data.longitude);
-
-                    $scope.ap.latitude = point.x;
-                    $scope.ap.longitude = point.y;
+                    $scope.ap.lat = point.x;
+                    $scope.ap.lng = point.y;
 
                     $scope.markers[data.name] = {
                         lat: point.x,
@@ -734,10 +741,14 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
     "                <dt>Control Region</dt>\n" +
     "                <dd>{{ap.control_region.name || '-'}}</dd>\n" +
-    "                <dt>Latitude</dt>\n" +
+    "                <dt>Real Latitude</dt>\n" +
     "                <dd>{{ap.latitude || '-'}}</dd>\n" +
-    "                <dt>Longitude</dt>\n" +
+    "                <dt>Real Longitude</dt>\n" +
     "                <dd>{{ap.longitude || '-'}}</dd>\n" +
+    "                <dt>Latitude</dt>\n" +
+    "                <dd>{{ap.lat || '-'}}</dd>\n" +
+    "                <dt>Longitude</dt>\n" +
+    "                <dd>{{ap.lng || '-'}}</dd>\n" +
     "            </dl>\n" +
     "        </fieldset>\n" +
     "        <fieldset>\n" +

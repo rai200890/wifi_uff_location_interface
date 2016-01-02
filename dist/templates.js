@@ -82,10 +82,14 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
     "                <dt>Control Region</dt>\n" +
     "                <dd>{{ap.control_region.name || '-'}}</dd>\n" +
-    "                <dt>Latitude</dt>\n" +
+    "                <dt>Real Latitude</dt>\n" +
     "                <dd>{{ap.latitude || '-'}}</dd>\n" +
-    "                <dt>Longitude</dt>\n" +
+    "                <dt>Real Longitude</dt>\n" +
     "                <dd>{{ap.longitude || '-'}}</dd>\n" +
+    "                <dt>Latitude</dt>\n" +
+    "                <dd>{{ap.lat || '-'}}</dd>\n" +
+    "                <dt>Longitude</dt>\n" +
+    "                <dd>{{ap.lng || '-'}}</dd>\n" +
     "            </dl>\n" +
     "        </fieldset>\n" +
     "        <fieldset>\n" +
