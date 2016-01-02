@@ -83,13 +83,13 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dt>Control Region</dt>\n" +
     "                <dd>{{ap.control_region.name || '-'}}</dd>\n" +
     "                <dt>Real Latitude</dt>\n" +
-    "                <dd>{{ap.latitude || '-'}}</dd>\n" +
+    "                <dd>{{ap.latitude}}</dd>\n" +
     "                <dt>Real Longitude</dt>\n" +
-    "                <dd>{{ap.longitude || '-'}}</dd>\n" +
+    "                <dd>{{ap.longitude}}</dd>\n" +
     "                <dt>Latitude</dt>\n" +
-    "                <dd>{{ap.lat || '-'}}</dd>\n" +
+    "                <dd>{{ap.lat}}</dd>\n" +
     "                <dt>Longitude</dt>\n" +
-    "                <dd>{{ap.lng || '-'}}</dd>\n" +
+    "                <dd>{{ap.lng}}</dd>\n" +
     "            </dl>\n" +
     "        </fieldset>\n" +
     "        <fieldset>\n" +
@@ -109,11 +109,12 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <div class=\"col-xs-6\">\n" +
     "        <fieldset>\n" +
     "            <legend>Location</legend>\n" +
-    "            <leaflet id=\"map\" ng-if=\"hasLocation\" maxbounds=\"maxBounds\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
+    "            <leaflet id=\"map\" ng-if=\"hasLocation\" center=\"center\" maxbounds=\"maxBounds\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
     "            <div class=\"btn-group\" role=\"group\">\n" +
     "                <button type=\"button\" ng-click=\"restoreLocation()\" class=\"btn btn-default\">Restore</button>\n" +
     "                <button type=\"button\" ng-click=\"saveLocation()\" class=\"btn btn-primary\">Save</button>\n" +
     "            </div>\n" +
+    "            <label>Current Zoom Level: </label><span>{{center.zoom}}</span>\n" +
     "        </fieldset>\n" +
     "    </div>\n" +
     "</div>\n"

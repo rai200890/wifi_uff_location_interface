@@ -31,13 +31,13 @@
                 <dt>Control Region</dt>
                 <dd>{{ap.control_region.name || '-'}}</dd>
                 <dt>Real Latitude</dt>
-                <dd>{{ap.latitude || '-'}}</dd>
+                <dd>{{ap.latitude}}</dd>
                 <dt>Real Longitude</dt>
-                <dd>{{ap.longitude || '-'}}</dd>
+                <dd>{{ap.longitude}}</dd>
                 <dt>Latitude</dt>
-                <dd>{{ap.lat || '-'}}</dd>
+                <dd>{{ap.lat}}</dd>
                 <dt>Longitude</dt>
-                <dd>{{ap.lng || '-'}}</dd>
+                <dd>{{ap.lng}}</dd>
             </dl>
         </fieldset>
         <fieldset>
@@ -57,11 +57,12 @@
     <div class="col-xs-6">
         <fieldset>
             <legend>Location</legend>
-            <leaflet id="map" ng-if="hasLocation" maxbounds="maxBounds" center="center" layers="layers" markers="markers" defaults="defaults"  width="600px" height="400px"></leaflet>
+            <leaflet id="map" ng-if="hasLocation" center="center" maxbounds="maxBounds" layers="layers" markers="markers" defaults="defaults"  width="600px" height="400px"></leaflet>
             <div class="btn-group" role="group">
                 <button type="button" ng-click="restoreLocation()" class="btn btn-default">Restore</button>
                 <button type="button" ng-click="saveLocation()" class="btn btn-primary">Save</button>
             </div>
+            <label>Current Zoom Level: </label><span>{{center.zoom}}</span>
         </fieldset>
     </div>
 </div>

@@ -491,59 +491,38 @@ function LocationsController($scope){
 
 };
 function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletBoundsHelpers, leafletData){
-    $scope.hasLocation = false;
+    var imageBounds = [[-430,-2237], [430,2237]],
+    maxBounds = leafletBoundsHelpers.createBoundsFromArray(imageBounds);
 
-    $scope.tiles = {
-        //http://localhost:3000/api/tiles.png?z=20&x=0&y=0
-        url: "http://localhost:3000/api/tiles.png?z={z}&x={x}&y={y}",
-        options:{
-            //tms: true,
-            center: [0,0],
-            zoom: 20,
-            maxZoom: 20,
-            minZoom: 20,
-            continuousWorld: true,
-            // this option disables loading tiles outside of the world bounds.
-            noWrap: true,
-            attribution: '<strong>Custom Map</strong>'
-        }
-    };
-
-    $scope.layers = {
+    angular.extend($scope, {
+    hasLocation: false,
+    layers: {
         baselayers: {
             building: {
                 name: 'Building',
                 type: 'imageOverlay',
                 url: 'http://localhost:3000/images/planta_ic_4_andar.png',
-                bounds: [[-430,-2237], [430,2237]],
+                bounds: imageBounds,
                 layerParams: {
                     noWrap: true
                 },
                 attribution: '<strong>Custom Map</strong>'
             }
         }
-    };
-
-    angular.extend($scope, {
-        markers : {}
-    });
-
-    $scope.center = {
+    },
+   markers: {},
+   maxBounds: maxBounds,
+   center: {
         lat: 0,
         lng: 0,
-        zoom: -3
-    };
-
-    $scope.defaults = {
-        zoom: -3,
-        maxZoom: 1,
-        minZoom: -3,
+        zoom: 0
+    },
+    defaults: {
+        maxZoom: 1,//ele se perde com um zoom maior, talvez bounds deva ser dinâmico
+        minZoom: -2,
         zoomControl: true,
-        //crs: 'EPSG3857'
         crs: 'Simple'
-    };
-
-    $scope.events = {
+    },events: {
         map: {
             enable: ['click', 'drag', 'blur', 'touchstart'],
             logic: 'emit'
@@ -551,7 +530,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
         markers: {
             enable: ['click']
         }
-    }
+    }});
 
     $scope.$on('leafletDirectiveMap.click', function(event, args){
         var latlng = args.leafletEvent.latlng;
@@ -574,21 +553,22 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
              var x = args.model.lat;
              var y = args.model.lng;
              var point = L.point(x, y);
-             var latLng = map.unproject(point, $scope.defaults.zoom);
-            console.log(point);
-            console.log(latLng);
+             var latLng = map.unproject(point, $scope.center.zoom);
+             $scope.ap.latitude = latLng.lat;
+             $scope.ap.longitude = latLng.lng;
             });
 
         $scope.ap.lat = args.model.lat;
         $scope.ap.lng = args.model.lng;
+
     });
 
     $scope.saveLocation = function(){
 
         Ap.update({apId: $scope.ap.id}, {
             ap: {
-                latitude: $scope.ap.lat,
-                longitude: $scope.ap.lng,
+                latitude: $scope.ap.latitude,
+                longitude: $scope.ap.longitude,
             }
         },function(data){
             console.log("Location updated with success");
@@ -623,27 +603,23 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
             leafletData.getMap("map").then(
                 function (map) {
                     var latLng = L.latLng(data.latitude, data.longitude);
-                    var point = map.project(latLng, $scope.defaults.zoom);
+                    var point = map.project(latLng, $scope.center.zoom);
 
-                    $scope.center = {
-                        lat: point.x,
-                        lng: point.y,
-                        zoom: -3
-                    };
+                    $scope.center.lat = point.x;
+                    $scope.center.lng = point.y;
 
                     $scope.ap.lat = point.x;
                     $scope.ap.lng = point.y;
 
                     $scope.markers[data.name] = {
-                        lat: point.x,
-                        lng: point.y,
+                        lat: $scope.ap.lat,
+                        lng: $scope.ap.lng,
                         message: data.name + " - " + data.syslocation,
                         focus: true,
                         draggable: true,
                         icon: {}
                     }
                 });
-
         }
 
         SNMPStatus.get($stateParams.ap_id).success(function(data){
@@ -742,13 +718,13 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <dt>Control Region</dt>\n" +
     "                <dd>{{ap.control_region.name || '-'}}</dd>\n" +
     "                <dt>Real Latitude</dt>\n" +
-    "                <dd>{{ap.latitude || '-'}}</dd>\n" +
+    "                <dd>{{ap.latitude}}</dd>\n" +
     "                <dt>Real Longitude</dt>\n" +
-    "                <dd>{{ap.longitude || '-'}}</dd>\n" +
+    "                <dd>{{ap.longitude}}</dd>\n" +
     "                <dt>Latitude</dt>\n" +
-    "                <dd>{{ap.lat || '-'}}</dd>\n" +
+    "                <dd>{{ap.lat}}</dd>\n" +
     "                <dt>Longitude</dt>\n" +
-    "                <dd>{{ap.lng || '-'}}</dd>\n" +
+    "                <dd>{{ap.lng}}</dd>\n" +
     "            </dl>\n" +
     "        </fieldset>\n" +
     "        <fieldset>\n" +
@@ -768,11 +744,12 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <div class=\"col-xs-6\">\n" +
     "        <fieldset>\n" +
     "            <legend>Location</legend>\n" +
-    "            <leaflet id=\"map\" ng-if=\"hasLocation\" maxbounds=\"maxBounds\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
+    "            <leaflet id=\"map\" ng-if=\"hasLocation\" center=\"center\" maxbounds=\"maxBounds\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
     "            <div class=\"btn-group\" role=\"group\">\n" +
     "                <button type=\"button\" ng-click=\"restoreLocation()\" class=\"btn btn-default\">Restore</button>\n" +
     "                <button type=\"button\" ng-click=\"saveLocation()\" class=\"btn btn-primary\">Save</button>\n" +
     "            </div>\n" +
+    "            <label>Current Zoom Level: </label><span>{{center.zoom}}</span>\n" +
     "        </fieldset>\n" +
     "    </div>\n" +
     "</div>\n"
