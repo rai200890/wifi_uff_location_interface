@@ -130,8 +130,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "        <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n" +
     "            <ul class=\"nav navbar-nav\">\n" +
     "                <li><a ui-sref=\".aps.list\">APs</a></li>\n" +
-    "                <li><a ui-sref=\".locations\">Locations</a></li>\n" +
-    "                <li><a ui-sref=\".snmp_status\">SNMP Status</a></li>\n" +
+    "                <li><a ui-sref=\".search\">Search</a></li>\n" +
     "            </ul>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -143,17 +142,20 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   );
 
 
-  $templateCache.put('locations/index.html',
+  $templateCache.put('search/index.html',
+    "<div class=\"row\">\n" +
     "<h2 class=\"text-center\">Locations</h2>\n" +
-    "<leaflet tiles=\"tiles\" defaults=\"defaults\"></leaflet>\n"
-  );
-
-
-  $templateCache.put('snmp_status/show.html',
-    "<h2 class=\"text-center\">SNMP Status</h2>\n" +
-    "<div class=\"form-inline\">\n" +
-    "   <input class=\"form-control\" name=\"search\" type=\"text\" />\n" +
-    "</div>"
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"hasMap\">\n" +
+    " <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"hasMap\">\n" +
+    " <div class=\"btn-group\" role=\"group\">\n" +
+    "     <button type=\"button\" ng-click=\"restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
+    "     <button type=\"button\" ng-click=\"saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
+    " </div>\n" +
+    " <label>Current Zoom Level: </label><span>{{center.zoom}}</span>\n" +
+    "</div>\n"
   );
 
 }]);

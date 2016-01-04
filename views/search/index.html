@@ -1,0 +1,13 @@
+<div class="row">
+<h2 class="text-center">Locations</h2>
+</div>
+<div class="row" ng-if="hasMap">
+ <leaflet id="map" center="center" layers="layers" markers="markers" defaults="defaults" width="100%" height="500px"></leaflet>
+</div>
+<div class="row" ng-if="hasMap">
+ <div class="btn-group" role="group">
+     <button type="button" ng-click="restoreLocations()" class="btn btn-default">Restore</button>
+     <button type="button" ng-click="saveLocations()" class="btn btn-primary">Save</button>
+ </div>
+ <label>Current Zoom Level: </label><span>{{center.zoom}}</span>
+</div>

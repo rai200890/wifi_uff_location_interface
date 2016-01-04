@@ -1,6 +1,7 @@
+angular.module('wifiUffLocation').controller("ShowApController",
 function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletBoundsHelpers, leafletData){
     var imageBounds = [[-430,-2237], [430,2237]],
-    maxBounds = leafletBoundsHelpers.createBoundsFromArray(imageBounds);
+    maxBounds = leafletBoundsHelpers.createBoundsFromArray([[-430,-2237], [430,2237]]);
 
     angular.extend($scope, {
     hasLocation: false,
@@ -58,8 +59,8 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
     $scope.$on('leafletDirectiveMarker.dragend', function(event, args){
       leafletData.getMap("map").then(function (map) {
-             var x = args.model.lat;
-             var y = args.model.lng;
+             var y = args.model.lat;
+             var x = args.model.lng;
              var point = L.point(x, y);
              var latLng = map.unproject(point, $scope.center.zoom);
              $scope.ap.latitude = latLng.lat;
@@ -113,11 +114,11 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
                     var latLng = L.latLng(data.latitude, data.longitude);
                     var point = map.project(latLng, $scope.center.zoom);
 
-                    $scope.center.lat = point.x;
-                    $scope.center.lng = point.y;
+                    $scope.center.lat = point.y;
+                    $scope.center.lng = point.x;
 
-                    $scope.ap.lat = point.x;
-                    $scope.ap.lng = point.y;
+                    $scope.ap.lat = point.y;
+                    $scope.ap.lng = point.x;
 
                     $scope.markers[data.name] = {
                         lat: $scope.ap.lat,
@@ -139,4 +140,4 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
     });
 
-};
+});

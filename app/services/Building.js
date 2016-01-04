@@ -1,3 +1,3 @@
-function Building($resource){
-    return $resource('/http://localhost:3000/api/:apId.json',{apId: '@id'});
-};
+angular.module('wifiUffLocation').service("Building", function Building($resource){
+    return $resource('/api/buildings/:buildingId.json', {buildingId: '@id'});
+});

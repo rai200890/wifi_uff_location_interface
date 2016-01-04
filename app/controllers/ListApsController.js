@@ -1,3 +1,4 @@
+angular.module('wifiUffLocation').controller("ListApsController",
 function ListApsController($scope, Ap){
     $scope.aps = [];
 
@@ -5,4 +6,4 @@ function ListApsController($scope, Ap){
         $scope.aps = data;
     });
     $scope.displayedAps = [].concat($scope.aps);
-};
+});

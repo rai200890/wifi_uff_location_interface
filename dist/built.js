@@ -407,14 +407,6 @@ var app = angular.module('wifiUffLocation', ['smart-table',
 'ui.bootstrap','leaflet-directive', 'ngResource',
 'ngRoute','ui.router']);
 
-app.factory('Ap', Ap);
-app.factory('Building', Building);
-//app.factory('SNMPStatus', SNMPStatus);
-
-app.controller('ListApsController', ListApsController);
-app.controller('LocationsController', LocationsController);
-app.controller('ShowApController', ShowApController);
-
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
     function($stateProvider, $locationProvider, $urlRouterProvider) {
         $stateProvider
@@ -434,13 +426,11 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
                 url: "/:ap_id",
                 templateUrl: "aps/show.html",
                 controller: 'ShowApController'
-            }).state('root.locations', {
-                url: "/locations",
-                templateUrl: "locations/index.html"
-            }).state('root.snmp_status', {
-                url: "/snmp_status",
-                templateUrl: "snmp_status/show.html"
-            });
+            }).state('root.search', {
+                url: "/search?campus_id&building_id&floor_id",
+                controller: 'SearchController',
+                templateUrl: "search/index.html"
+            })
 
         $urlRouterProvider.when('/', '/aps');
 
@@ -456,18 +446,24 @@ app.run(['$rootScope', '$state',
     }
 ]);
 
-function Ap($resource){
+angular.module('wifiUffLocation').service("Ap",function Ap($resource){
     return $resource('/api/aps/:apId.json', {apId: '@id'},
         {update: {method:'PUT'}});
-};
+});
 
-function Building($resource){
-    return $resource('/http://localhost:3000/api/:apId.json',{apId: '@id'});
-};
+angular.module('wifiUffLocation').service("Building", function Building($resource){
+    return $resource('/api/buildings/:buildingId.json', {buildingId: '@id'});
+});
 
-angular.
-  module('wifiUffLocation').
-  service("SNMPStatus", function($http){
+angular.module('wifiUffLocation').service("Floor", function Building($resource){
+    return $resource('/api/floors/:floorId.json',{floorId: '@id'});
+});
+
+angular.module('wifiUffLocation').service("Marker", function(SNMPStatus){
+
+});
+
+angular.module('wifiUffLocation').service("SNMPStatus", function($http){
     var self = this;
 
     self.get = function(id) {
@@ -479,6 +475,7 @@ angular.
 
   });
 
+angular.module('wifiUffLocation').controller("ListApsController",
 function ListApsController($scope, Ap){
     $scope.aps = [];
 
@@ -486,13 +483,94 @@ function ListApsController($scope, Ap){
         $scope.aps = data;
     });
     $scope.displayedAps = [].concat($scope.aps);
-};
-function LocationsController($scope){
+});
 
-};
+angular.module('wifiUffLocation').controller("SearchController",
+function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams, leafletData){
+    angular.extend($scope, {
+    hasMap: false,
+    layers: {
+      baselayers: {
+        map: {}
+      }
+    },
+    markers: {},
+    center: {
+        lat: 0,
+        lng: 0,
+        zoom: 0
+    },
+    defaults: {
+        maxZoom: 1,
+        minZoom: -2,
+        zoomControl: true,
+        crs: 'Simple'
+    },
+    events: {
+        map: {
+            enable: ['click', 'drag', 'blur', 'touchstart'],
+            logic: 'emit'
+        },
+        markers: {
+            enable: ['click','drag'],
+            logic: 'emit'
+        }
+    }});
+
+    $scope.saveLocations = function(){
+
+    };
+
+    $scope.restoreLocations = function(){
+
+    };
+
+    if ($stateParams.floor_id){
+      Floor.get({floorId: $stateParams.floor_id}, function(floor){
+       var name = floor.campus_name + ", " + floor.building_name + ", " + floor.number + "º ANDAR"
+       if (floor.map_url) {
+        var bounds = L.latLngBounds(floor.map_bounds);//workaround
+        leafletData.getMap("map").then(function (map){
+            map.setMaxBounds(bounds);
+        });
+        $scope.layers.baselayers.map = {
+               name: name,
+               type: 'imageOverlay',
+               url: floor.map_url,
+               bounds: bounds,
+               layerParams: {
+                 showOnSelector: false,
+                 noWrap: true,
+                 attribution: name
+               }
+        };
+
+        Ap.query({floor_id: $stateParams.floor_id}, function(aps){
+          var markers = aps.map(function(ap,index){
+              return {
+                lat: ap.latitude,
+                lng: ap.longitude,
+                message: ap.name + " - " + ap.syslocation,
+                focus: true,
+                draggable: true,
+                icon: {
+                  iconUrl: 'http://localhost:8000/images/default_icon.png',
+                  iconSize: [25, 41], // size of the icon
+                }
+          }});
+        $scope.markers = markers;
+        });
+
+        $scope.hasMap = true;
+      }
+      });
+    }
+});
+
+angular.module('wifiUffLocation').controller("ShowApController",
 function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletBoundsHelpers, leafletData){
     var imageBounds = [[-430,-2237], [430,2237]],
-    maxBounds = leafletBoundsHelpers.createBoundsFromArray(imageBounds);
+    maxBounds = leafletBoundsHelpers.createBoundsFromArray([[-430,-2237], [430,2237]]);
 
     angular.extend($scope, {
     hasLocation: false,
@@ -550,8 +628,8 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
     $scope.$on('leafletDirectiveMarker.dragend', function(event, args){
       leafletData.getMap("map").then(function (map) {
-             var x = args.model.lat;
-             var y = args.model.lng;
+             var y = args.model.lat;
+             var x = args.model.lng;
              var point = L.point(x, y);
              var latLng = map.unproject(point, $scope.center.zoom);
              $scope.ap.latitude = latLng.lat;
@@ -605,11 +683,11 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
                     var latLng = L.latLng(data.latitude, data.longitude);
                     var point = map.project(latLng, $scope.center.zoom);
 
-                    $scope.center.lat = point.x;
-                    $scope.center.lng = point.y;
+                    $scope.center.lat = point.y;
+                    $scope.center.lng = point.x;
 
-                    $scope.ap.lat = point.x;
-                    $scope.ap.lng = point.y;
+                    $scope.ap.lat = point.y;
+                    $scope.ap.lng = point.x;
 
                     $scope.markers[data.name] = {
                         lat: $scope.ap.lat,
@@ -631,7 +709,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
     });
 
-};
+});
 
 angular.module('wifiUffLocation').run(['$templateCache', function($templateCache) {
   'use strict';
@@ -765,8 +843,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "        <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n" +
     "            <ul class=\"nav navbar-nav\">\n" +
     "                <li><a ui-sref=\".aps.list\">APs</a></li>\n" +
-    "                <li><a ui-sref=\".locations\">Locations</a></li>\n" +
-    "                <li><a ui-sref=\".snmp_status\">SNMP Status</a></li>\n" +
+    "                <li><a ui-sref=\".search\">Search</a></li>\n" +
     "            </ul>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -778,17 +855,20 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   );
 
 
-  $templateCache.put('locations/index.html',
+  $templateCache.put('search/index.html',
+    "<div class=\"row\">\n" +
     "<h2 class=\"text-center\">Locations</h2>\n" +
-    "<leaflet tiles=\"tiles\" defaults=\"defaults\"></leaflet>\n"
-  );
-
-
-  $templateCache.put('snmp_status/show.html',
-    "<h2 class=\"text-center\">SNMP Status</h2>\n" +
-    "<div class=\"form-inline\">\n" +
-    "   <input class=\"form-control\" name=\"search\" type=\"text\" />\n" +
-    "</div>"
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"hasMap\">\n" +
+    " <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"hasMap\">\n" +
+    " <div class=\"btn-group\" role=\"group\">\n" +
+    "     <button type=\"button\" ng-click=\"restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
+    "     <button type=\"button\" ng-click=\"saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
+    " </div>\n" +
+    " <label>Current Zoom Level: </label><span>{{center.zoom}}</span>\n" +
+    "</div>\n"
   );
 
 }]);

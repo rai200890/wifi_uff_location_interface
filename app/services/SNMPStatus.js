@@ -1,6 +1,4 @@
-angular.
-  module('wifiUffLocation').
-  service("SNMPStatus", function($http){
+angular.module('wifiUffLocation').service("SNMPStatus", function($http){
     var self = this;
 
     self.get = function(id) {
