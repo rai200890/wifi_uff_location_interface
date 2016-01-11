@@ -19,7 +19,6 @@
     "leaflet": "^0.7.3"
   },
   "devDependencies": {
-    "browserify": "^11.0.1",
     "connect-modrewrite": "^0.8.2",
     "grunt": "latest",
     "grunt-angular-templates": "^0.5.7",
@@ -31,7 +30,9 @@
     "grunt-contrib-watch": "^0.6.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+   "test": "echo \"Error: no test specified\" && exit 1",
+   "postinstall": "grunt build",
+   "start": "grunt connect"
   },
   "repository": {
     "type": "git",
@@ -42,9 +43,5 @@
   "bugs": {
     "url": "https://github.com/rai200890/wifi_uff_location_interface/issues"
   },
-  "homepage": "https://github.com/rai200890/wifi_uff_location_interface#readme",
-  "browser": {
-    "angular": "./node_modules/angular/angular.js",
-    "angular-bootstrap": "./node_modules/angular-bootstrap/dist/angular-local-storage.js"
-  }
+  "homepage": "https://github.com/rai200890/wifi_uff_location_interface#readme"
 }
