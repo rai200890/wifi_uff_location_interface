@@ -1,6 +1,6 @@
 var app = angular.module('wifiUffLocation', ['smart-table',
 'ui.bootstrap','leaflet-directive', 'ngResource',
-'ngRoute','ui.router']);
+'ngRoute','ui.router','angularFileUpload']);
 
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
     function($stateProvider, $locationProvider, $urlRouterProvider) {
@@ -25,6 +25,10 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
                 url: "/search?campus_id&building_id&floor_id",
                 controller: 'SearchController',
                 templateUrl: "search/index.html"
+            }).state('root.db_uploader', {
+                url: "/db_uploader",
+                controller: 'DBUploaderController',
+                templateUrl: "db_uploader/index.html"
             })
 
         $urlRouterProvider.when('/', '/aps');

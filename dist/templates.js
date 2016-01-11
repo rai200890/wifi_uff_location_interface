@@ -121,6 +121,19 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   );
 
 
+  $templateCache.put('db_uploader/index.html',
+    "<h1>Upload spreadsheet</h1>\n" +
+    " <uib-alert  close=\"closeAlert()\">{{\"deu ruim nisso aqui\"}}</uib-alert>\n" +
+    "<form>\n" +
+    "  <div class=\"form-group\">\n" +
+    "    <label for=\"exampleInputFile\">File input</label>\n" +
+    "    <input type=\"file\" nv-file-select=\"\" uploader=\"uploader\" />\n" +
+    "  </div>\n" +
+    "  <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-default\">Enviar</button>\n" +
+    "</form>\n"
+  );
+
+
   $templateCache.put('home.html',
     "<nav class=\"navbar navbar-default\">\n" +
     "    <div class=\"container-fluid\">\n" +
@@ -131,6 +144,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "            <ul class=\"nav navbar-nav\">\n" +
     "                <li><a ui-sref=\".aps.list\">APs</a></li>\n" +
     "                <li><a ui-sref=\".search\">Search</a></li>\n" +
+    "                <li><a ui-sref=\".db_uploader\">DBUploader</a></li>\n" +
     "            </ul>\n" +
     "        </div>\n" +
     "    </div>\n" +
