@@ -1,6 +1,6 @@
 var app = angular.module('wifiUffLocation', ['smart-table',
 'ui.bootstrap','leaflet-directive', 'ngResource',
-'ngRoute','ui.router','angularFileUpload']);
+'ngRoute','ui.router','angularFileUpload','nemLogging']);
 
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
     function($stateProvider, $locationProvider, $urlRouterProvider) {
