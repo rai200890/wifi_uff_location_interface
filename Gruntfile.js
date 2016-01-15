@@ -36,12 +36,13 @@ module.exports = function (grunt) {
             options: {
                 separator: '\n',
             },
-            all: {
+            development: {
                 src: [
                     "node_modules/jquery/dist/jquery.min.js",
                     "node_modules/bootstrap/dist/js/bootstrap.min.js",
                     "node_modules/leaflet/dist/leaflet.js",
                     "node_modules/angular/angular.min.js",
+		                "node_modules/angular-simple-logger/dist/angular-simple-logger.min.js",
                     "node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.min.js",
                     "node_modules/angular-smart-table/dist/smart-table.min.js",
                     "node_modules/angular-resource/angular-resource.min.js",
@@ -51,19 +52,40 @@ module.exports = function (grunt) {
                     "node_modules/angular-resource/angular-resource.min.js",
                     "node_modules/angular-ui-router/release/angular-ui-router.min.js",
                     "node_modules/angular-file-upload/dist/angular-file-upload.min.js",
-
                     'app/app.js',
+                    'config/development.js',
                     'app/services/**.js',
                     'app/controllers/**.js',
                     'dist/templates.js'
                 ],
                 dest: 'dist/built.js'
-            },
+          },
+          production: {
+              src: [
+                  "node_modules/jquery/dist/jquery.min.js",
+                  "node_modules/bootstrap/dist/js/bootstrap.min.js",
+                  "node_modules/leaflet/dist/leaflet.js",
+                  "node_modules/angular/angular.min.js",
+		              "node_modules/angular-simple-logger/dist/angular-simple-logger.min.js",
+                  "node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.min.js",
+                  "node_modules/angular-smart-table/dist/smart-table.min.js",
+                  "node_modules/angular-resource/angular-resource.min.js",
+                  "node_modules/angular-route/angular-route.min.js",
+                  "node_modules/angular-bootstrap/ui-bootstrap.min.js",
+                  "node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js",
+                  "node_modules/angular-resource/angular-resource.min.js",
+                  "node_modules/angular-ui-router/release/angular-ui-router.min.js",
+                  "node_modules/angular-file-upload/dist/angular-file-upload.min.js",
+                  'app/app.js',
+                  'config/production.js',
+                  'app/services/**.js',
+                  'app/controllers/**.js',
+                  'dist/templates.js'
+              ],
+              dest: 'dist/built.js'
+        }
         },
         concat_css: {
-            options: {
-
-            },
             all: {
                 src: [
                     "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -79,6 +101,7 @@ module.exports = function (grunt) {
             server: {
                 options: {
                     keepalive: true,
+                    port: process.env.PORT || 5000,
                     /* Support `$locationProvider.html5Mode(true);`
                      * Requires grunt 0.9.0 or higher
                      * Otherwise you will see this error:
@@ -104,6 +127,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-angular-templates');
 
-    grunt.registerTask('build', ['bundle assets'] ,['ngtemplates', 'concat', 'concat_css']);
-
+    grunt.registerTask('build:production', ['bundle assets'] ,['ngtemplates', 'concat:production','concat_css']);
+    grunt.registerTask('build:development', ['bundle assets'] ,['ngtemplates', 'concat:production','concat_css']);
 };
