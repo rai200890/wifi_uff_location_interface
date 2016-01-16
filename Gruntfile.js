@@ -16,7 +16,7 @@ module.exports = function (grunt) {
                     'views/**.html',
                     'views/**/**.html'
                 ],
-                tasks: ['build'],
+                tasks: ['build:development'],
                 options: {
                     spawn: true
                 }
@@ -47,8 +47,8 @@ module.exports = function (grunt) {
                     "node_modules/angular-smart-table/dist/smart-table.min.js",
                     "node_modules/angular-resource/angular-resource.min.js",
                     "node_modules/angular-route/angular-route.min.js",
-                    "node_modules/angular-bootstrap/ui-bootstrap.min.js",
-                    "node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js",
+                    "node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js",
+                    "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
                     "node_modules/angular-resource/angular-resource.min.js",
                     "node_modules/angular-ui-router/release/angular-ui-router.min.js",
                     "node_modules/angular-file-upload/dist/angular-file-upload.min.js",
@@ -62,25 +62,25 @@ module.exports = function (grunt) {
           },
           production: {
               src: [
-                  "node_modules/jquery/dist/jquery.min.js",
-                  "node_modules/bootstrap/dist/js/bootstrap.min.js",
-                  "node_modules/leaflet/dist/leaflet.js",
-                  "node_modules/angular/angular.min.js",
-		              "node_modules/angular-simple-logger/dist/angular-simple-logger.min.js",
-                  "node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.min.js",
-                  "node_modules/angular-smart-table/dist/smart-table.min.js",
-                  "node_modules/angular-resource/angular-resource.min.js",
-                  "node_modules/angular-route/angular-route.min.js",
-                  "node_modules/angular-bootstrap/ui-bootstrap.min.js",
-                  "node_modules/angular-bootstrap/ui-bootstrap-tpls.min.js",
-                  "node_modules/angular-resource/angular-resource.min.js",
-                  "node_modules/angular-ui-router/release/angular-ui-router.min.js",
-                  "node_modules/angular-file-upload/dist/angular-file-upload.min.js",
-                  'app/app.js',
-                  'config/production.js',
-                  'app/services/**.js',
-                  'app/controllers/**.js',
-                  'dist/templates.js'
+                "node_modules/jquery/dist/jquery.min.js",
+                "node_modules/bootstrap/dist/js/bootstrap.min.js",
+                "node_modules/leaflet/dist/leaflet.js",
+                "node_modules/angular/angular.min.js",
+                "node_modules/angular-simple-logger/dist/angular-simple-logger.min.js",
+                "node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.min.js",
+                "node_modules/angular-smart-table/dist/smart-table.min.js",
+                "node_modules/angular-resource/angular-resource.min.js",
+                "node_modules/angular-route/angular-route.min.js",
+                "node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js",
+                "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
+                "node_modules/angular-resource/angular-resource.min.js",
+                "node_modules/angular-ui-router/release/angular-ui-router.min.js",
+                "node_modules/angular-file-upload/dist/angular-file-upload.min.js",
+                'app/app.js',
+                'config/production.js',
+                'app/services/**.js',
+                'app/controllers/**.js',
+                'dist/templates.js'
               ],
               dest: 'dist/built.js'
         }
@@ -89,8 +89,7 @@ module.exports = function (grunt) {
             all: {
                 src: [
                     "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                    "node_modules/angular-bootstrap/ui-bootstrap.min.css",
-                    "node_modules/angular-bootstrap/ui-bootstrap-tpls.min.css",
+                    "node_modules/angular-bootstrap/dist/ui-bootstrap-csp.css",
                     "node_modules/font-awesome/css/font-awesome.min.css",
                     "node_modules/leaflet/dist/leaflet.css"
                 ],
@@ -128,5 +127,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-angular-templates');
 
     grunt.registerTask('build:production', ['bundle assets'] ,['ngtemplates', 'concat:production','concat_css']);
-    grunt.registerTask('build:development', ['bundle assets'] ,['ngtemplates', 'concat:production','concat_css']);
+    grunt.registerTask('build:development', ['bundle assets'] ,['ngtemplates', 'concat:development','concat_css']);
 };

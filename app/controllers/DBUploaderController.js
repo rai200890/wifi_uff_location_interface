@@ -1,11 +1,11 @@
 angular.module('wifiUffLocation').controller('DBUploaderController',
-['$scope', 'FileUploader', function($scope, FileUploader, API_URL) {
+['$scope', 'FileUploader','API_URL', function($scope, FileUploader, API_URL) {
     var uploader = $scope.uploader = new FileUploader({
-        url: "https://wifi-uff-location-api.herokuapp.com/api/db_importer.json"
+        url: API_URL+"/api/db_importer.json"
     });
 
     uploader.onSuccessItem = function(fileItem, response, status, headers) {
-
+      console.info("mandou um com sucesso");
     };
 
     uploader.onCompleteAll = function() {
