@@ -122,14 +122,14 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('db_uploader/index.html',
-    "<h1>Upload spreadsheet</h1>\n" +
-    " <uib-alert  close=\"closeAlert()\">{{\"deu ruim nisso aqui\"}}</uib-alert>\n" +
+    "<h1 class=\"text-center\">Upload spreadsheet</h1>\n" +
+    " <uib-alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.message}}</uib-alert>\n" +
     "<form>\n" +
     "  <div class=\"form-group\">\n" +
-    "    <label for=\"exampleInputFile\">File input</label>\n" +
-    "    <input type=\"file\" nv-file-select=\"\" uploader=\"uploader\" />\n" +
+    "    <input type=\"file\" nv-file-select uploader=\"uploader\" class=\"btn btn-default\" options=\"\"/>\n" +
     "  </div>\n" +
-    "  <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-default\">Enviar</button>\n" +
+    "  <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"loading\"> Send </button>\n" +
+    "<button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-show=\"loading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\" ></i></button>\n" +
     "</form>\n"
   );
 

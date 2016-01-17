@@ -13682,7 +13682,7 @@ app.run(['$rootScope', '$state',
 angular.module("wifiUffLocation")
   .constant('API_URL', "http://localhost:3000");
 
-angular.module('wifiUffLocation').service("Ap",function Ap($resource, API_URL){
+angular.module('wifiUffLocation').service("Ap", function Ap($resource, API_URL){
     return $resource(API_URL+'/api/aps/:apId.json', {apId: '@id'},
         {update: {method:'PUT'}});
 });
@@ -13715,22 +13715,37 @@ angular.module('wifiUffLocation').service("SNMPStatus", function($http,API_URL){
 
 angular.module('wifiUffLocation').controller('DBUploaderController',
 ['$scope', 'FileUploader','API_URL', function($scope, FileUploader, API_URL) {
-    var uploader = $scope.uploader = new FileUploader({
-        url: API_URL+"/api/db_importer.json"
-    });
 
-    uploader.onSuccessItem = function(fileItem, response, status, headers) {
-      console.info("mandou um com sucesso");
+    var uploader = $scope.uploader = new FileUploader({
+        url: API_URL + "/api/db_importer.json"
+    });
+    var file = null;
+
+    $scope.alerts = [];
+    $scope.loading = false;
+    $scope.errors = null;
+    $scope.success = null;
+
+    $scope.closeAlert = function(index){
+      $scope.alerts.splice(index, 1);
     };
 
-    uploader.onCompleteAll = function() {
-      console.info("terminou o enviar os arquivos");
+    uploader.onSuccessItem = function(fileItem, response, status, headers) {
+      $scope.loading = false;
+      $scope.alerts.push({message: response.success, type: "success"});
+    };
+
+    uploader.onErrorItem = function(fileItem, response, status, headers) {
+      $scope.loading = false;
+      $scope.alerts.push({message: response.errors, type: "danger"});
     };
 
     $scope.upload = function(){
-      uploader.uploadAll();
+      $scope.loading = true;
+      file = uploader.queue[uploader.queue.length-1];
+      uploader.uploadItem(file);
+      uploader.addToQueue(file);
     };
-
 }]);
 
 angular.module('wifiUffLocation').controller("ListApsController",
@@ -14093,14 +14108,14 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('db_uploader/index.html',
-    "<h1>Upload spreadsheet</h1>\n" +
-    " <uib-alert  close=\"closeAlert()\">{{\"deu ruim nisso aqui\"}}</uib-alert>\n" +
+    "<h1 class=\"text-center\">Upload spreadsheet</h1>\n" +
+    " <uib-alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.message}}</uib-alert>\n" +
     "<form>\n" +
     "  <div class=\"form-group\">\n" +
-    "    <label for=\"exampleInputFile\">File input</label>\n" +
-    "    <input type=\"file\" nv-file-select=\"\" uploader=\"uploader\" />\n" +
+    "    <input type=\"file\" nv-file-select uploader=\"uploader\" class=\"btn btn-default\" options=\"\"/>\n" +
     "  </div>\n" +
-    "  <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-default\">Enviar</button>\n" +
+    "  <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"loading\"> Send </button>\n" +
+    "<button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-show=\"loading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\" ></i></button>\n" +
     "</form>\n"
   );
 
