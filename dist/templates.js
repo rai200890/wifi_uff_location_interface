@@ -160,6 +160,14 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "<div class=\"row\">\n" +
     "<h2 class=\"text-center\">Locations</h2>\n" +
     "</div>\n" +
+    "<div class=\"row\" ng-show=\"loading\">\n" +
+    "<h3 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-5 fa-spin\"></i></h3>\n" +
+    "</div>\n" +
+    "<div class=\"row\">\n" +
+    "<form>\n" +
+    "  <input type=\"text\" ng-model=\"floorId\"/>\n" +
+    "</form>\n" +
+    "</div>\n" +
     "<div class=\"row\" ng-if=\"hasMap\">\n" +
     " <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
     "</div>\n" +

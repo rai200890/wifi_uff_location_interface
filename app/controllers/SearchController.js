@@ -1,7 +1,9 @@
 angular.module('wifiUffLocation').controller("SearchController",
-function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams, leafletData){
+function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams, leafletData, API_URL, $location){
     angular.extend($scope, {
     hasMap: false,
+    loading: false,
+    floorId: $stateParams.floor_id || 1,
     layers: {
       baselayers: {
         map: {}
@@ -38,14 +40,21 @@ function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
 
     };
 
-    if ($stateParams.floor_id){
-      Floor.get({floorId: $stateParams.floor_id}, function(floor){
+    if ($scope.floorId){
+
+      $scope.loading = true;
+
+      Floor.get({floorId: $scope.floorId}, function(floor){
        var name = floor.campus_name + ", " + floor.building_name + ", " + floor.number + "º ANDAR"
+
+       console.log(floor);
+
        if (floor.map_url) {
         var bounds = L.latLngBounds(floor.map_bounds);//workaround
         leafletData.getMap("map").then(function (map){
             map.setMaxBounds(bounds);
         });
+
         $scope.layers.baselayers.map = {
                name: name,
                type: 'imageOverlay',
@@ -58,7 +67,8 @@ function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
                }
         };
 
-        Ap.query({floor_id: $stateParams.floor_id}, function(aps){
+        Ap.query({floor_id: $scope.floorId}, function(aps){
+
           var markers = aps.map(function(ap,index){
               return {
                 lat: ap.latitude,
@@ -67,14 +77,18 @@ function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
                 focus: true,
                 draggable: true,
                 icon: {
-                  iconUrl: 'http://localhost:8000/images/default_icon.png',
+                  iconUrl:  "http://" + $location.host() + ":" + $location.port() + "/images/default_icon.png",
                   iconSize: [25, 41], // size of the icon
                 }
           }});
-        $scope.markers = markers;
+
+          $scope.markers = markers;
+          $scope.loading = false;
+
         });
 
         $scope.hasMap = true;
+
       }
       });
     }
