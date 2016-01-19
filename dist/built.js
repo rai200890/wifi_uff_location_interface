@@ -13691,8 +13691,18 @@ angular.module('wifiUffLocation').service("Building", function Building($resourc
     return $resource(API_URL +'/api/buildings/:buildingId.json', {buildingId: '@id'});
 });
 
-angular.module('wifiUffLocation').service("Floor", function Building($resource, API_URL){
-    return $resource(API_URL + '/api/floors/:floorId.json',{floorId: '@id'});
+angular.module('wifiUffLocation').service("Floor", function Building($http, API_URL){
+
+   var self = this;
+
+   self.get = function(id) {
+    var url = API_URL+"/api/floors/"+ id +".json";
+    return $http({
+      method: "get",
+      url: url
+    });
+  };
+
 });
 
 angular.module('wifiUffLocation').service("Marker", function(SNMPStatus){
@@ -13704,7 +13714,6 @@ angular.module('wifiUffLocation').service("SNMPStatus", function($http,API_URL){
 
     self.get = function(id) {
       var url = API_URL+"/api/aps/"+ id +"/snmp_status.json";
-      console.log(url);
       return $http({
         method: "get",
         url: url
@@ -13719,7 +13728,6 @@ angular.module('wifiUffLocation').controller('DBUploaderController',
     var uploader = $scope.uploader = new FileUploader({
         url: API_URL + "/api/db_importer.json"
     });
-    var file = null;
 
     $scope.alerts = [];
     $scope.loading = false;
@@ -13742,7 +13750,7 @@ angular.module('wifiUffLocation').controller('DBUploaderController',
 
     $scope.upload = function(){
       $scope.loading = true;
-      file = uploader.queue[uploader.queue.length-1];
+      var file = uploader.queue[uploader.queue.length-1];
       uploader.uploadItem(file);
       uploader.addToQueue(file);
     };
@@ -13759,38 +13767,30 @@ function ListApsController($scope, Ap){
 });
 
 angular.module('wifiUffLocation').controller("SearchController",
-function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams, leafletData, API_URL, $location){
-    angular.extend($scope, {
-    hasMap: false,
-    loading: false,
-    floorId: $stateParams.floor_id || 1,
-    layers: {
-      baselayers: {
-        map: {}
-      }
-    },
-    markers: {},
-    center: {
-        lat: 0,
-        lng: 0,
-        zoom: 0
-    },
-    defaults: {
-        maxZoom: 1,
-        minZoom: -2,
-        zoomControl: true,
-        crs: 'Simple'
-    },
-    events: {
+function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
+   leafletData, API_URL, $location, FileUploader){
+
+    $scope.hasMap = null;
+    $scope.loading = false;
+    $scope.uploading = false;
+    $scope.floorId = $stateParams.floor_id;
+    $scope.layers = {baselayers: {map: {}}};
+    $scope.markers = {};
+    $scope.center = {lat: 0, lng: 0, zoom: 0};
+    $scope.defaults = {maxZoom: 1, minZoom: -2, zoomControl: true, crs: 'Simple'};
+    $scope.events = {
         map: {
-            enable: ['click', 'drag', 'blur', 'touchstart'],
-            logic: 'emit'
-        },
-        markers: {
-            enable: ['click','drag'],
-            logic: 'emit'
+        //    enable: ['click', 'drag', 'blur', 'touchstart'],
+        //    logic: 'emit'
+        //}
+        //,
+        //markers: {
+        //    enable: ['click','drag'],
+        //    logic: 'emit'
         }
-    }});
+    };
+
+    var uploader = $scope.uploader = new FileUploader({method: "PUT"});
 
     $scope.saveLocations = function(){
 
@@ -13800,58 +13800,78 @@ function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
 
     };
 
-    if ($scope.floorId){
+    uploader.onSuccessItem = function(fileItem, response, status, headers) {
+      $scope.loading = false;
+      $scope.success = "Map has been uploaded with success";
+      $scope.loadMap();
+    };
 
+    uploader.onErrorItem = function(fileItem, response, status, headers) {
+      $scope.loading = false;
+      $scope.errors = response.errors;
+    };
+
+    $scope.upload = function(){
       $scope.loading = true;
+      var file = uploader.queue[uploader.queue.length-1];
+      file.url = API_URL + "/api/floors/"+ $scope.floorId +".json"
+      uploader.uploadItem(file);
+      uploader.addToQueue(file);
+    };
 
-      Floor.get({floorId: $scope.floorId}, function(floor){
-       var name = floor.campus_name + ", " + floor.building_name + ", " + floor.number + "º ANDAR"
+    $scope.loadMap = function(){
+        if ($scope.floorId){
+          $scope.loading = true;
+          Floor.get($scope.floorId).success(function(floor){
+            var name = floor.campus_name + ", " + floor.building_name + ", " + floor.number + "º ANDAR"
 
-       console.log(floor);
+            $scope.loading = false;
 
-       if (floor.map_url) {
-        var bounds = L.latLngBounds(floor.map_bounds);//workaround
-        leafletData.getMap("map").then(function (map){
-            map.setMaxBounds(bounds);
+            if (floor.map_url) {
+              $scope.hasMap = true;
+
+              var bounds = L.latLngBounds(floor.map_bounds);//workaround
+              leafletData.getMap("map").then(function (map){
+                map.setMaxBounds(bounds);
+              });
+
+              $scope.layers.baselayers.map = {
+                 name: name,
+                 type: 'imageOverlay',
+                 url: floor.map_url,
+                 bounds: bounds,
+                 layerParams: {
+                   showOnSelector: false,
+                   noWrap: true,
+                   attribution: name
+                 }
+          };
+
+          Ap.query({floor_id: $scope.floorId}, function(aps){
+            var markers = aps.map(function(ap,index){
+                return {
+                  lat: ap.latitude,
+                  lng: ap.longitude,
+                  message: ap.name + " - " + ap.syslocation,
+                  focus: true,
+                  draggable: true,
+                  icon: {
+                    iconUrl:  "https://wifi-uff-location.herokuapp.com/images/default_icon.png",
+                    iconSize: [25, 41], // size of the icon
+                  }
+            }});
+            $scope.markers = markers;
         });
 
-        $scope.layers.baselayers.map = {
-               name: name,
-               type: 'imageOverlay',
-               url: floor.map_url,
-               bounds: bounds,
-               layerParams: {
-                 showOnSelector: false,
-                 noWrap: true,
-                 attribution: name
-               }
-        };
-
-        Ap.query({floor_id: $scope.floorId}, function(aps){
-
-          var markers = aps.map(function(ap,index){
-              return {
-                lat: ap.latitude,
-                lng: ap.longitude,
-                message: ap.name + " - " + ap.syslocation,
-                focus: true,
-                draggable: true,
-                icon: {
-                  iconUrl:  "http://" + $location.host() + ":" + $location.port() + "/images/default_icon.png",
-                  iconSize: [25, 41], // size of the icon
-                }
-          }});
-
-          $scope.markers = markers;
+        }}).error(function(){
           $scope.loading = false;
-
+          $scope.hasMap = false;
         });
-
-        $scope.hasMap = true;
-
+      }else{
+        $scope.hasMap = false;
       }
-      });
-    }
+    };
+    $scope.loadMap();
 });
 
 angular.module('wifiUffLocation').controller("ShowApController",
@@ -14044,11 +14064,6 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   );
 
 
-  $templateCache.put('aps/new.html',
-    "<h1>New</h1>"
-  );
-
-
   $templateCache.put('aps/show.html',
     "<div class=\"row\">\n" +
     "    <div class=\"col-xs-6\">\n" +
@@ -14128,7 +14143,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  <div class=\"form-group\">\n" +
     "    <input type=\"file\" nv-file-select uploader=\"uploader\" class=\"btn btn-default\" options=\"\"/>\n" +
     "  </div>\n" +
-    "  <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"loading\"> Send </button>\n" +
+    "<button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"loading\"> Send </button>\n" +
     "<button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-show=\"loading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\" ></i></button>\n" +
     "</form>\n"
   );
@@ -14156,28 +14171,61 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   );
 
 
+  $templateCache.put('map/show.html',
+    "<div class=\"row\">\n" +
+    "<h3>Map</h3>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"loading\">\n" +
+    "  <h2 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-5 fa-spin\"></i></h2>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"!loading && hasMap\">\n" +
+    "  <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"!loading && hasMap\">\n" +
+    "    <div class=\"btn-group\" role=\"group\">\n" +
+    "     <button type=\"button\" ng-click=\"restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
+    "     <button type=\"button\" ng-click=\"saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
+    "   </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('map/upload.html',
+    "<class=\"row\">\n" +
+    "  <form class=\"form-horizontal\">\n" +
+    "    <div class=\"row\">\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <label>This floor has no map yet, please upload one</label>\n" +
+    "        <input type=\"file\" nv-file-select uploader=\"uploader\" class=\"btn btn-default form-control\" options=\"\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"uploading\"> Send </button>\n" +
+    "        <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-show=\"uploading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\" ></i></button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "</form>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('search/index.html',
     "<div class=\"row\">\n" +
     "<h2 class=\"text-center\">Locations</h2>\n" +
     "</div>\n" +
-    "<div class=\"row\" ng-show=\"loading\">\n" +
-    "<h3 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-5 fa-spin\"></i></h3>\n" +
-    "</div>\n" +
     "<div class=\"row\">\n" +
-    "<form>\n" +
-    "  <input type=\"text\" ng-model=\"floorId\"/>\n" +
+    "<form class=\"form-horizontal\">\n" +
+    "  <div class=\"row\">\n" +
+    "  <div class=\"form-group\">\n" +
+    "    <label>Floor ID: </label>\n" +
+    "    <input class=\"form-control\" type=\"text\" ng-model=\"floorId\" ng-change=\"loadMap()\"/>\n" +
+    "  </div>\n" +
+    "</div>\n" +
     "</form>\n" +
     "</div>\n" +
-    "<div class=\"row\" ng-if=\"hasMap\">\n" +
-    " <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
-    "</div>\n" +
-    "<div class=\"row\" ng-if=\"hasMap\">\n" +
-    " <div class=\"btn-group\" role=\"group\">\n" +
-    "     <button type=\"button\" ng-click=\"restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
-    "     <button type=\"button\" ng-click=\"saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
-    " </div>\n" +
-    " <label>Current Zoom Level: </label><span>{{center.zoom}}</span>\n" +
-    "</div>\n"
+    "<div ng-show=\"floorId && !hasMap && !loading \" ng-include=\"'map/upload.html'\"></div>\n" +
+    "<div ng-show=\"floorId && (loading || hasMap)\" ng-include=\"'map/show.html'\"></div>\n"
   );
 
 }]);

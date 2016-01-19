@@ -1,3 +1,13 @@
-angular.module('wifiUffLocation').service("Floor", function Building($resource, API_URL){
-    return $resource(API_URL + '/api/floors/:floorId.json',{floorId: '@id'});
+angular.module('wifiUffLocation').service("Floor", function Building($http, API_URL){
+
+   var self = this;
+
+   self.get = function(id) {
+    var url = API_URL+"/api/floors/"+ id +".json";
+    return $http({
+      method: "get",
+      url: url
+    });
+  };
+
 });

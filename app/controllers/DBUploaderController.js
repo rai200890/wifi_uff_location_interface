@@ -4,7 +4,6 @@ angular.module('wifiUffLocation').controller('DBUploaderController',
     var uploader = $scope.uploader = new FileUploader({
         url: API_URL + "/api/db_importer.json"
     });
-    var file = null;
 
     $scope.alerts = [];
     $scope.loading = false;
@@ -27,7 +26,7 @@ angular.module('wifiUffLocation').controller('DBUploaderController',
 
     $scope.upload = function(){
       $scope.loading = true;
-      file = uploader.queue[uploader.queue.length-1];
+      var file = uploader.queue[uploader.queue.length-1];
       uploader.uploadItem(file);
       uploader.addToQueue(file);
     };

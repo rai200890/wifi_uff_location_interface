@@ -44,11 +44,6 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   );
 
 
-  $templateCache.put('aps/new.html',
-    "<h1>New</h1>"
-  );
-
-
   $templateCache.put('aps/show.html',
     "<div class=\"row\">\n" +
     "    <div class=\"col-xs-6\">\n" +
@@ -128,7 +123,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  <div class=\"form-group\">\n" +
     "    <input type=\"file\" nv-file-select uploader=\"uploader\" class=\"btn btn-default\" options=\"\"/>\n" +
     "  </div>\n" +
-    "  <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"loading\"> Send </button>\n" +
+    "<button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"loading\"> Send </button>\n" +
     "<button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-show=\"loading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\" ></i></button>\n" +
     "</form>\n"
   );
@@ -156,28 +151,61 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   );
 
 
+  $templateCache.put('map/show.html',
+    "<div class=\"row\">\n" +
+    "<h3>Map</h3>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"loading\">\n" +
+    "  <h2 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-5 fa-spin\"></i></h2>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"!loading && hasMap\">\n" +
+    "  <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"!loading && hasMap\">\n" +
+    "    <div class=\"btn-group\" role=\"group\">\n" +
+    "     <button type=\"button\" ng-click=\"restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
+    "     <button type=\"button\" ng-click=\"saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
+    "   </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('map/upload.html',
+    "<class=\"row\">\n" +
+    "  <form class=\"form-horizontal\">\n" +
+    "    <div class=\"row\">\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <label>This floor has no map yet, please upload one</label>\n" +
+    "        <input type=\"file\" nv-file-select uploader=\"uploader\" class=\"btn btn-default form-control\" options=\"\"/>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"uploading\"> Send </button>\n" +
+    "        <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-show=\"uploading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\" ></i></button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "</form>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('search/index.html',
     "<div class=\"row\">\n" +
     "<h2 class=\"text-center\">Locations</h2>\n" +
     "</div>\n" +
-    "<div class=\"row\" ng-show=\"loading\">\n" +
-    "<h3 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-5 fa-spin\"></i></h3>\n" +
-    "</div>\n" +
     "<div class=\"row\">\n" +
-    "<form>\n" +
-    "  <input type=\"text\" ng-model=\"floorId\"/>\n" +
+    "<form class=\"form-horizontal\">\n" +
+    "  <div class=\"row\">\n" +
+    "  <div class=\"form-group\">\n" +
+    "    <label>Floor ID: </label>\n" +
+    "    <input class=\"form-control\" type=\"text\" ng-model=\"floorId\" ng-change=\"loadMap()\"/>\n" +
+    "  </div>\n" +
+    "</div>\n" +
     "</form>\n" +
     "</div>\n" +
-    "<div class=\"row\" ng-if=\"hasMap\">\n" +
-    " <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
-    "</div>\n" +
-    "<div class=\"row\" ng-if=\"hasMap\">\n" +
-    " <div class=\"btn-group\" role=\"group\">\n" +
-    "     <button type=\"button\" ng-click=\"restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
-    "     <button type=\"button\" ng-click=\"saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
-    " </div>\n" +
-    " <label>Current Zoom Level: </label><span>{{center.zoom}}</span>\n" +
-    "</div>\n"
+    "<div ng-show=\"floorId && !hasMap && !loading \" ng-include=\"'map/upload.html'\"></div>\n" +
+    "<div ng-show=\"floorId && (loading || hasMap)\" ng-include=\"'map/show.html'\"></div>\n"
   );
 
 }]);
