@@ -10,7 +10,7 @@
   "dependencies": {
     "angular": "^1.4.8",
     "angular-file-upload": "^2.2.0",
-    "angular-leaflet-directive": "^0.10.0",
+    "ui-leaflet": "^1.0.0",
     "angular-resource": "^1.4.8",
     "angular-route": "^1.4.8",
     "angular-simple-logger": "^0.1.5",
@@ -21,7 +21,7 @@
     "connect-modrewrite": "^0.8.2",
     "font-awesome": "^4.4.0",
     "grunt": "0.4.5",
-    "grunt-angular-templates": "^0.6.0",
+    "grunt-angular-templates": "^1.0.2",
     "grunt-cli": "0.1.13",
     "grunt-concat-css": "^0.3.1",
     "grunt-contrib-concat": "^0.5.1",
