@@ -1,6 +1,6 @@
 angular.module('wifiUffLocation').controller("SearchController",
 function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
-   leafletData, API_URL, $location, FileUploader){
+   leafletData, API_URL, $location, FileUploader, Marker, SNMPStatus){
 
     $scope.hasMap = null;
     $scope.loading = false;
@@ -33,18 +33,18 @@ function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
     };
 
     uploader.onSuccessItem = function(fileItem, response, status, headers) {
-      $scope.loading = false;
+      $scope.uploading = false;
       $scope.success = "Map has been uploaded with success";
       $scope.loadMap();
     };
 
     uploader.onErrorItem = function(fileItem, response, status, headers) {
-      $scope.loading = false;
+      $scope.uploading = true;
       $scope.errors = response.errors;
     };
 
     $scope.upload = function(){
-      $scope.loading = true;
+      $scope.uploading = true;
       var file = uploader.queue[uploader.queue.length-1];
       file.url = API_URL + "/api/floors/"+ $scope.floorId +".json"
       uploader.uploadItem(file);
@@ -55,7 +55,7 @@ function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
         if ($scope.floorId){
           $scope.loading = true;
           Floor.get($scope.floorId).success(function(floor){
-            var name = floor.campus_name + ", " + floor.building_name + ", " + floor.number + "º ANDAR"
+            var name = floor.campus_name + ", " + floor.building_name + ", " + floor.number + "º ANDAR";
 
             $scope.loading = false;
 
@@ -63,7 +63,8 @@ function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
               $scope.hasMap = true;
 
               var bounds = L.latLngBounds(floor.map_bounds);//workaround
-              leafletData.getMap("map").then(function (map){
+
+              leafletData.getMap().then(function(map){
                 map.setMaxBounds(bounds);
               });
 
@@ -77,31 +78,33 @@ function SearchController($scope, $stateParams, Ap, Floor, $state, $stateParams,
                    noWrap: true,
                    attribution: name
                  }
-          };
+               };
 
           Ap.query({floor_id: $scope.floorId}, function(aps){
-            var markers = aps.map(function(ap,index){
-                return {
-                  lat: ap.latitude,
-                  lng: ap.longitude,
-                  message: ap.name + " - " + ap.syslocation,
-                  focus: true,
-                  draggable: true,
-                  icon: {
-                    iconUrl:  "https://wifi-uff-location.herokuapp.com/images/default_icon.png",
-                    iconSize: [25, 41], // size of the icon
-                  }
-            }});
-            $scope.markers = markers;
+             aps.forEach(function(ap){
+                  var marker = {
+                    lat: ap.latitude,
+                    lng: ap.longitude,
+                    message: ap.name + " - " + ap.syslocation,
+                    focus: true,
+                    draggable: true
+                  };
+
+                  SNMPStatus.get(ap.id).success(function(data){
+                    $scope.markers[ap.id] = marker;
+                    $scope.markers[ap.id].icon = Marker.getIcon(data.channel.value, data.power.value);
+                  }).error(function(){
+                    $scope.markers[ap.id] = marker;  
+                  });
+            });
         });
 
-        }}).error(function(){
-          $scope.loading = false;
-          $scope.hasMap = false;
-        });
       }else{
+        $scope.loading = false;
         $scope.hasMap = false;
-      }
-    };
-    $scope.loadMap();
+      };
+    });
+  };
+};
+  $scope.loadMap();
 });
