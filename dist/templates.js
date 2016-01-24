@@ -159,7 +159,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  <h2 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-5 fa-spin\"></i></h2>\n" +
     "</div>\n" +
     "<div class=\"row\" ng-if=\"!loading && hasMap\">\n" +
-    "  <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
+    "  <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" legend=\"legend\" defaults=\"defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
     "</div>\n" +
     "<div class=\"row\" ng-if=\"!loading && hasMap\">\n" +
     "    <div class=\"btn-group\" role=\"group\">\n" +
@@ -198,8 +198,16 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "<form class=\"form-horizontal\">\n" +
     "  <div class=\"row\">\n" +
     "  <div class=\"form-group\">\n" +
-    "    <label>Floor ID: </label>\n" +
-    "    <input class=\"form-control\" type=\"text\" ng-model=\"floorId\" ng-change=\"loadMap()\"/>\n" +
+    "    <label>Building: </label>\n" +
+    "    <input type=\"text\" class=\"form-control\"\n" +
+    "    ng-model=\"location\"\n" +
+    "    uib-typeahead=\"building.name for building in typeaheadBuilding($viewValue)\"\n" +
+    "    typeahead-on-select=\"typeaheadSelected($item, $model, $label)\" class=\"form-control\">\n" +
+    "    <label>Floor Number: </label>\n" +
+    "    <select class=\"form-control\" ng-model=\"floorId\" ng-change=\"loadMap(floorId)\">\n" +
+    "      <option ng-repeat=\"floor in floors\" value=\"{{floor.id}}\">{{floor.number}}</option>\n" +
+    "    </select>\n" +
+    "\n" +
     "  </div>\n" +
     "</div>\n" +
     "</form>\n" +

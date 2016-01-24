@@ -91,7 +91,8 @@ module.exports = function (grunt) {
                     "node_modules/bootstrap/dist/css/bootstrap.min.css",
                     "node_modules/angular-bootstrap/dist/ui-bootstrap-csp.css",
                     "node_modules/font-awesome/css/font-awesome.min.css",
-                    "node_modules/leaflet/dist/leaflet.css"
+                    "node_modules/leaflet/dist/leaflet.css",
+                    "styles/main.css"
                 ],
                 dest: "dist/styles.css"
             }
