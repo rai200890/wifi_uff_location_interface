@@ -100,7 +100,8 @@ module.exports = function (grunt) {
             server: {
                 options: {
                     keepalive: true,
-                    port: process.env.PORT || 5000,
+                    hostname: grunt.option('hostname') || '0.0.0.0',
+                    port: grunt.option('port') || 5000,
                     /* Support `$locationProvider.html5Mode(true);`
                      * Requires grunt 0.9.0 or higher
                      * Otherwise you will see this error:
@@ -117,7 +118,7 @@ module.exports = function (grunt) {
                     }
                 }
             }
-        }
+        }  
     });
     grunt.loadNpmTasks('grunt-concat-css');
     grunt.loadNpmTasks('grunt-contrib-concat');
