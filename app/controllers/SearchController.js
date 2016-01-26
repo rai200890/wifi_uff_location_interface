@@ -14,15 +14,14 @@ function SearchController($scope, $stateParams, $state, $stateParams,
     $scope.defaults = {maxZoom: 1, minZoom: -2, zoomControl: true, crs: 'Simple'};
     $scope.events = {
         map: {
-        //    enable: ['click', 'drag', 'blur', 'touchstart'],
-        //    logic: 'emit'
-        //}
-        //,
-        //markers: {
-        //    enable: ['click','drag'],
-        //    logic: 'emit'
+            enable: ['click', 'drag', 'blur', 'touchstart'],
+            logic: 'emit'
+        },
+        marker: {
+            enable: ['click','drag'],
+            logic: 'emit'
         }
-    };
+      };
 
     $scope.legend = null;
 
@@ -68,6 +67,10 @@ function SearchController($scope, $stateParams, $state, $stateParams,
       uploader.addToQueue(file);
     };
 
+    $scope.$on('leafletDirectiveMarker.click', function (e, args) {
+        console.log(args);
+    });
+
     $scope.loadMap = function(floorId){
         if (floorId){
           $scope.loading = true;
@@ -86,7 +89,7 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
               var bounds = L.latLngBounds(floor.map_bounds);//workaround
 
-              leafletData.getMap("map").then(function (map){
+              leafletData.getMap().then(function (map){
                 map.setMaxBounds(bounds);
               });
 
@@ -105,10 +108,19 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
           Ap.query({floor_id: $scope.floorId}, function(aps){
              aps.forEach(function(ap){
+                  var message = "<p>"+ ap.name + " - " + ap.syslocation+"</p>";
                   var marker = {
                     lat: ap.latitude,
-                    lng: ap.longitude,
-                    message: ap.name + " - " + ap.syslocation,
+                    lng: -ap.longitude,
+                    message: message,
+                    //compileMessage: true,
+                    label: {
+                      message: message,
+                      options: {
+                        direction: "auto",
+                        noHide: true
+                      }
+                    },
                     focus: true,
                     draggable: true
                   };

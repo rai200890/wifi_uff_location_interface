@@ -8,8 +8,7 @@
     <label>Building: </label>
     <input type="text" class="form-control"
     ng-model="location"
-    uib-typeahead="building.name for building in typeaheadBuilding($viewValue)"
-    typeahead-on-select="typeaheadSelected($item, $model, $label)" class="form-control">
+    uib-typeahead="building.name for building in typeaheadBuilding($viewValue)" typeahead-on-select="typeaheadSelected($item, $model, $label)" class="form-control">
     <label>Floor Number: </label>
     <select class="form-control" ng-model="floorId" ng-change="loadMap(floorId)">
       <option ng-repeat="floor in floors" value="{{floor.id}}">{{floor.number}}</option>

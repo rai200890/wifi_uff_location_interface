@@ -41,6 +41,7 @@ module.exports = function (grunt) {
                     "node_modules/jquery/dist/jquery.min.js",
                     "node_modules/bootstrap/dist/js/bootstrap.min.js",
                     "node_modules/leaflet/dist/leaflet.js",
+                    "node_modules/leaflet-label/dist/leaflet.label.js",
                     "node_modules/angular/angular.min.js",
 		                "node_modules/angular-simple-logger/dist/angular-simple-logger.min.js",
                     "node_modules/ui-leaflet/dist/ui-leaflet.min.js",
@@ -68,6 +69,7 @@ module.exports = function (grunt) {
                 "node_modules/angular/angular.min.js",
                 "node_modules/angular-simple-logger/dist/angular-simple-logger.min.js",
                 "node_modules/ui-leaflet/dist/ui-leaflet.min.js",
+                "node_modules/leaflet-label/dist/leaflet.label.js",
                 "node_modules/angular-smart-table/dist/smart-table.min.js",
                 "node_modules/angular-resource/angular-resource.min.js",
                 "node_modules/angular-route/angular-route.min.js",
@@ -92,6 +94,7 @@ module.exports = function (grunt) {
                     "node_modules/angular-bootstrap/dist/ui-bootstrap-csp.css",
                     "node_modules/font-awesome/css/font-awesome.min.css",
                     "node_modules/leaflet/dist/leaflet.css",
+                    "node_modules/leaflet-label/dist/leaflet.label.css",
                     "styles/main.css"
                 ],
                 dest: "dist/styles.css"

@@ -11,16 +11,14 @@ angular.module('wifiUffLocation').service("Marker",
   self.getIcon = function(channel, power){
     var icon = {
           iconUrl: BASE_URL + CHANNEL_ICONS.other,
-          iconSize: [100, 100]
+          iconSize: [100, 100],
+          opacity: 0.7
         };
     if ([1,6,11].indexOf(channel)){
         icon.iconUrl = BASE_URL + CHANNEL_ICONS[channel];
         icon.iconSize[0] = 50*power*0.15;
         icon.iconSize[1] = 50*power*0.15;
     };
-    //icon.iconUrl = BASE_URL + "/images/circle-icon-orange.png";
-    //icon.iconSize[0] = 50*power*0.1;
-    //icon.iconSize[1] = 50*power*0.1;
     return icon;
   };
 }]);
