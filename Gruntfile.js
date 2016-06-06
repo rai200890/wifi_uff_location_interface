@@ -122,7 +122,7 @@ module.exports = function (grunt) {
                     }
                 }
             }
-        }  
+        }
     });
     grunt.loadNpmTasks('grunt-concat-css');
     grunt.loadNpmTasks('grunt-contrib-concat');

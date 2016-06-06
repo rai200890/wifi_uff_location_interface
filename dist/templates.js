@@ -18,7 +18,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "        <th st-sort='name'>Name</th>\n" +
     "        <th st-sort=\"ip\">IP</th>\n" +
     "        <th st-sort='campus_name'>Campus</th>\n" +
-    "        <th st-sort='building_name'>Building</th>\n" +
+    "        <th st-sort='department_name'>Building</th>\n" +
     "        <th>Location</th>\n" +
     "        <th st-sort='validated'>Validated</th>\n" +
     "        <th>Options</th>\n" +
@@ -28,8 +28,8 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <tr ng-repeat=\"ap in displayedAps\">\n" +
     "        <td>{{ap.name}}</td>\n" +
     "        <td>{{ap.ip}}</td>\n" +
-    "        <td tooltip-append-to-body=\"true\" tooltip=\"{{ap.location.building_name + ',' + ap.location.name}}\" >{{ap.location.campus_name}}</td>\n" +
-    "        <td>{{ap.location.building_name}}</td>\n" +
+    "        <td tooltip-append-to-body=\"true\" tooltip=\"{{ap.location.department_name + ',' + ap.location.name}}\" >{{ap.location.campus_name}}</td>\n" +
+    "        <td>{{ap.location.department_name}}</td>\n" +
     "        <td>{{ap.location.name}}</td>\n" +
     "        <td>\n" +
     "            <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
@@ -40,7 +40,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "        </td>\n" +
     "    </tr>\n" +
     "    </tbody>\n" +
-    "</table>"
+    "</table>\n"
   );
 
 
@@ -201,18 +201,14 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <label>Building: </label>\n" +
     "    <input type=\"text\" class=\"form-control\"\n" +
     "    ng-model=\"location\"\n" +
-    "    uib-typeahead=\"building.name for building in typeaheadBuilding($viewValue)\" typeahead-on-select=\"typeaheadSelected($item, $model, $label)\" class=\"form-control\">\n" +
-    "    <label>Floor Number: </label>\n" +
-    "    <select class=\"form-control\" ng-model=\"floorId\" ng-change=\"loadMap(floorId)\">\n" +
-    "      <option ng-repeat=\"floor in floors\" value=\"{{floor.id}}\">{{floor.number}}</option>\n" +
-    "    </select>\n" +
-    "\n" +
+    "    uib-typeahead=\"department.name for department in typeaheadDepartment($viewValue)\"\n" +
+    "    typeahead-on-select=\"typeaheadSelected($item, $model, $label)\" class=\"form-control\">\n" +
     "  </div>\n" +
     "</div>\n" +
     "</form>\n" +
     "</div>\n" +
-    "<div ng-show=\"floorId && !hasMap && !loading \" ng-include=\"'map/upload.html'\"></div>\n" +
-    "<div ng-show=\"floorId && (loading || hasMap)\" ng-include=\"'map/show.html'\"></div>\n"
+    "<div ng-show=\"department.id && !hasMap && !loading \" ng-include=\"'map/upload.html'\"></div>\n" +
+    "<div ng-show=\"department.id && (loading || hasMap)\" ng-include=\"'map/show.html'\"></div>\n"
   );
 
 }]);

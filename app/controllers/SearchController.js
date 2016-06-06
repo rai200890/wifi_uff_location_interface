@@ -1,13 +1,12 @@
 angular.module('wifiUffLocation').controller("SearchController",
 function SearchController($scope, $stateParams, $state, $stateParams,
-   leafletData, FileUploader, API_URL, Ap, Building, Floor, Marker, SNMPStatus){
+   leafletData, FileUploader, API_URL, Ap, Department, Marker, SNMPStatus){
 
     var uploader = $scope.uploader = new FileUploader({method: "PUT"});
 
     $scope.hasMap = null;
     $scope.loading = false;
     $scope.uploading = false;
-    $scope.floorId = $stateParams.floor_id;
     $scope.layers = {baselayers: {map: {}}};
     $scope.markers = {};
     $scope.center = {lat: 0, lng: 0, zoom: 0};
@@ -27,18 +26,19 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
     $scope.typeaheadNoResults = false;
 
-    $scope.building = null;
-    $scope.floors = [];
+    $scope.departmentId = $stateParams.department_id;
+    $scope.department = null;
 
-    $scope.typeaheadSelected = function($item, $model, $label) {
-      Floor.query($item.id).success(function(data){
-        $scope.floors = data;
-      });
+    $scope.typeaheadDepartment = function(department){
+      return Department.typeahead(department);
     };
 
-    $scope.typeaheadBuilding = function(building){
-      return Building.typeahead(building);
+    $scope.typeaheadSelected = function(department){
+      $scope.department = department;
+      $scope.departmentId = department.id;
+      $scope.loadMap(department.id);
     };
+
 
     $scope.saveLocations = function(){
 
@@ -62,7 +62,7 @@ function SearchController($scope, $stateParams, $state, $stateParams,
     $scope.upload = function(){
       $scope.uploading = true;
       var file = uploader.queue[uploader.queue.length-1];
-      file.url = API_URL + "/api/floors/"+ $scope.floorId +".json";
+      file.url = API_URL + "/api/departments/"+ $scope.departmentId +".json";
       uploader.uploadItem(file);
       uploader.addToQueue(file);
     };
@@ -71,14 +71,14 @@ function SearchController($scope, $stateParams, $state, $stateParams,
         console.log(args);
     });
 
-    $scope.loadMap = function(floorId){
-        if (floorId){
+    $scope.loadMap = function(departmentId){
+        if (departmentId){
           $scope.loading = true;
 
-          Floor.get($scope.floorId).success(function(floor){
+          Department.get(departmentId).success(function(department){
             $scope.loading = false;
 
-            if (floor.map_url) {
+            if (department.map_url) {
 
               $scope.hasMap = true;
 
@@ -87,17 +87,17 @@ function SearchController($scope, $stateParams, $state, $stateParams,
                    labels: [ 'Canal 1', 'Canal 6', 'Canal 11', 'Outros' ]
                };
 
-              var bounds = L.latLngBounds(floor.map_bounds);//workaround
+              var bounds = L.latLngBounds(department.map_bounds);//workaround
 
               leafletData.getMap().then(function (map){
                 map.setMaxBounds(bounds);
               });
 
-              var name = floor.campus_name + ", " + floor.building_name + ", " + floor.number + "º ANDAR";
+              var name = department.campus_name + ", " + department.building_name;
               $scope.layers.baselayers.map = {
                  name: name,
                  type: 'imageOverlay',
-                 url: floor.map_url,
+                 url: department.map_url,
                  bounds: bounds,
                  layerParams: {
                    showOnSelector: false,
@@ -106,7 +106,7 @@ function SearchController($scope, $stateParams, $state, $stateParams,
                  }
                };
 
-          Ap.query({floor_id: $scope.floorId}, function(aps){
+          Ap.query($scope.departmentId, function(aps){
              aps.forEach(function(ap){
                   var message = "<p>"+ ap.name + " - " + ap.syslocation+"</p>";
                   var marker = {
@@ -141,5 +141,5 @@ function SearchController($scope, $stateParams, $state, $stateParams,
     });
   };
 };
-  $scope.loadMap($scope.floorId);
+  $scope.loadMap($scope.departmentId);
 });
