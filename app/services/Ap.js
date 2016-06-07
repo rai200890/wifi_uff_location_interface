@@ -3,7 +3,7 @@ angular.module('wifiUffLocation').service("Ap", function Ap($http,  API_URL){
      var self = this;
 
      self.get = function(id) {
-      var url = API_URL+"/api/aps/"+ id +".json";
+      var url = API_URL + "/api/aps/" + id + ".json";
       return $http({
         method: "get",
         url: url
@@ -13,7 +13,7 @@ angular.module('wifiUffLocation').service("Ap", function Ap($http,  API_URL){
     self.query = function(department_id){
       var url = API_URL + "/api/aps.json";
       if (department_id){
-        url = API_URL + "?department_id="+ department_id
+        url += "?department_id="+ department_id;
       }
       return $http({
         method: "get",

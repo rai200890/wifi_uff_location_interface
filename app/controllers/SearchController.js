@@ -35,7 +35,6 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
     $scope.typeaheadSelected = function(department){
       $scope.department = department;
-      $scope.departmentId = department.id;
       $scope.loadMap(department.id);
     };
 
@@ -50,12 +49,14 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
     uploader.onSuccessItem = function(fileItem, response, status, headers) {
       $scope.uploading = false;
+      console.log("fez upload com sucesso")
       $scope.success = "Map has been uploaded with success";
       $scope.loadMap($scope.floorId);
     };
 
     uploader.onErrorItem = function(fileItem, response, status, headers) {
       $scope.uploading = true;
+      console.log("fez upload com erro")
       $scope.errors = response.errors;
     };
 
@@ -77,9 +78,9 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
           Department.get(departmentId).success(function(department){
             $scope.loading = false;
+            $scope.department = department;
 
             if (department.map_url) {
-
               $scope.hasMap = true;
 
               $scope.legend = {
@@ -106,7 +107,7 @@ function SearchController($scope, $stateParams, $state, $stateParams,
                  }
                };
 
-          Ap.query($scope.departmentId, function(aps){
+          Ap.query(department.id).success(function(aps){
              aps.forEach(function(ap){
                   var message = "<p>"+ ap.name + " - " + ap.syslocation+"</p>";
                   var marker = {
@@ -141,5 +142,7 @@ function SearchController($scope, $stateParams, $state, $stateParams,
     });
   };
 };
-  $scope.loadMap($scope.departmentId);
+
+  $scope.loadMap($stateParams.department_id);
+
 });

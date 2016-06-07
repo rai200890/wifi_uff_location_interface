@@ -7,9 +7,10 @@
   <div class="form-group">
     <label>Building: </label>
     <input type="text" class="form-control"
-    ng-model="location"
+    ng-model="department"
     uib-typeahead="department.name for department in typeaheadDepartment($viewValue)"
     typeahead-on-select="typeaheadSelected($item, $model, $label)" class="form-control">
+
   </div>
 </div>
 </form>

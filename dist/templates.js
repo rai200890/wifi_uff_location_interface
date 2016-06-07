@@ -200,9 +200,10 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  <div class=\"form-group\">\n" +
     "    <label>Building: </label>\n" +
     "    <input type=\"text\" class=\"form-control\"\n" +
-    "    ng-model=\"location\"\n" +
+    "    ng-model=\"department\"\n" +
     "    uib-typeahead=\"department.name for department in typeaheadDepartment($viewValue)\"\n" +
     "    typeahead-on-select=\"typeaheadSelected($item, $model, $label)\" class=\"form-control\">\n" +
+    "\n" +
     "  </div>\n" +
     "</div>\n" +
     "</form>\n" +
