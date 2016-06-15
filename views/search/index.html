@@ -8,12 +8,12 @@
     <label>Building: </label>
     <input type="text" class="form-control"
     ng-model="department"
-    uib-typeahead="department.name for department in typeaheadDepartment($viewValue)"
-    typeahead-on-select="typeaheadSelected($item, $model, $label)" class="form-control">
-
+    uib-typeahead="d.name for d in typeaheadDepartment($viewValue)"
+    typeahead-on-select="typeaheadSelected($item)"
+     class="form-control">
   </div>
 </div>
 </form>
 </div>
-<div ng-show="department.id && !hasMap && !loading " ng-include="'map/upload.html'"></div>
-<div ng-show="department.id && (loading || hasMap)" ng-include="'map/show.html'"></div>
+<div ng-show="departmentID && !hasMap && !loading " ng-include="'map/upload.html'"></div>
+<div ng-show="departmentID && (loading || hasMap)" ng-include="'map/show.html'"></div>

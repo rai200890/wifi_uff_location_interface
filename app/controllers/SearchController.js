@@ -7,7 +7,7 @@ function SearchController($scope, $stateParams, $state, $stateParams,
     $scope.hasMap = null;
     $scope.loading = false;
     $scope.uploading = false;
-    $scope.layers = {baselayers: {map: {}}};
+    $scope.layers = {baselayers: {}, overlays: {}};
     $scope.markers = {};
     $scope.center = {lat: 0, lng: 0, zoom: 0};
     $scope.defaults = {maxZoom: 1, minZoom: -2, zoomControl: true, crs: 'Simple'};
@@ -26,18 +26,18 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
     $scope.typeaheadNoResults = false;
 
-    $scope.departmentId = $stateParams.department_id;
+    $scope.departmentID = $stateParams.department_id || null;
+
     $scope.department = null;
 
-    $scope.typeaheadDepartment = function(department){
-      return Department.typeahead(department);
+    $scope.typeaheadDepartment = function(value){
+      return Department.typeahead(value);
     };
 
     $scope.typeaheadSelected = function(department){
-      $scope.department = department;
+      $scope.departmentID = department.id;
       $scope.loadMap(department.id);
     };
-
 
     $scope.saveLocations = function(){
 
@@ -51,7 +51,7 @@ function SearchController($scope, $stateParams, $state, $stateParams,
       $scope.uploading = false;
       console.log("fez upload com sucesso")
       $scope.success = "Map has been uploaded with success";
-      $scope.loadMap($scope.floorId);
+      $scope.loadMap($scope.departmentID);
     };
 
     uploader.onErrorItem = function(fileItem, response, status, headers) {
@@ -63,7 +63,8 @@ function SearchController($scope, $stateParams, $state, $stateParams,
     $scope.upload = function(){
       $scope.uploading = true;
       var file = uploader.queue[uploader.queue.length-1];
-      file.url = API_URL + "/api/departments/"+ $scope.departmentId +".json";
+      console.log($scope.departmentID);
+      file.url = API_URL + "/api/departments/"+ $scope.departmentID +".json";
       uploader.uploadItem(file);
       uploader.addToQueue(file);
     };
@@ -72,13 +73,12 @@ function SearchController($scope, $stateParams, $state, $stateParams,
         console.log(args);
     });
 
-    $scope.loadMap = function(departmentId){
-        if (departmentId){
+    $scope.loadMap = function(departmentID){
+      if (departmentID != null){
           $scope.loading = true;
-
-          Department.get(departmentId).success(function(department){
+          Department.get(departmentID).success(function(response){
+            var department = response;
             $scope.loading = false;
-            $scope.department = department;
 
             if (department.map_url) {
               $scope.hasMap = true;
@@ -90,11 +90,11 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
               var bounds = L.latLngBounds(department.map_bounds);//workaround
 
-              leafletData.getMap().then(function (map){
+              leafletData.getMap().then(function(map){
                 map.setMaxBounds(bounds);
               });
 
-              var name = department.campus_name + ", " + department.building_name;
+              var name = department.campus_name + ", " + department.department_name;
               $scope.layers.baselayers.map = {
                  name: name,
                  type: 'imageOverlay',
@@ -109,12 +109,13 @@ function SearchController($scope, $stateParams, $state, $stateParams,
 
           Ap.query(department.id).success(function(aps){
              aps.forEach(function(ap){
-                  var message = "<p>"+ ap.name + " - " + ap.syslocation+"</p>";
+                  var message = "<p>"+ ap.name + " - " + ap.syslocation + "</p>";
                   var marker = {
                     lat: ap.latitude,
                     lng: -ap.longitude,
                     message: message,
                     //compileMessage: true,
+                    layer: ap.name,
                     label: {
                       message: message,
                       options: {
@@ -126,12 +127,19 @@ function SearchController($scope, $stateParams, $state, $stateParams,
                     draggable: true
                   };
 
+                  $scope.layers.overlays[ap.name] = {
+                    name: ap.name,
+                    type: 'group',
+                    visible: true
+                  }
+
                   SNMPStatus.get(ap.id).success(function(data){
-                    $scope.markers[ap.id] = marker;
-                    $scope.markers[ap.id].icon = Marker.getIcon(data.channel.value, data.power.value);
+                    $scope.markers[ap.name] = marker;
+                    $scope.markers[ap.name].icon = Marker.getIcon(data.channel.value, data.power.value);
                   }).error(function(){
-                    $scope.markers[ap.id] = marker;
+                    $scope.markers[ap.name] = marker;
                   });
+
             });
         });
 
@@ -143,6 +151,6 @@ function SearchController($scope, $stateParams, $state, $stateParams,
   };
 };
 
-  $scope.loadMap($stateParams.department_id);
+$scope.loadMap($scope.departmentId);
 
 });
