@@ -4,8 +4,8 @@
   "description": "",
   "main": "Gruntfile.js",
   "engines": {
-    "node": "~5.4.1",
-    "npm": "~3.5.3"
+    "node": "5.4.1",
+    "npm": "3.3.12"
   },
   "dependencies": {
     "angular": "^1.4.8",
