@@ -7,16 +7,13 @@
   <div class="form-group">
     <label>Building: </label>
     <input type="text" class="form-control"
-    ng-model="location"
-    uib-typeahead="building.name for building in typeaheadBuilding($viewValue)" typeahead-on-select="typeaheadSelected($item, $model, $label)" class="form-control">
-    <label>Floor Number: </label>
-    <select class="form-control" ng-model="floorId" ng-change="loadMap(floorId)">
-      <option ng-repeat="floor in floors" value="{{floor.id}}">{{floor.number}}</option>
-    </select>
-
+    ng-model="department"
+    uib-typeahead="d.name for d in typeaheadDepartment($viewValue)"
+    typeahead-on-select="typeaheadSelected($item)"
+     class="form-control">
   </div>
 </div>
 </form>
 </div>
-<div ng-show="floorId && !hasMap && !loading " ng-include="'map/upload.html'"></div>
-<div ng-show="floorId && (loading || hasMap)" ng-include="'map/show.html'"></div>
+<div ng-show="departmentID && !hasMap && !loading " ng-include="'map/upload.html'"></div>
+<div ng-show="departmentID && (loading || hasMap)" ng-include="'map/show.html'"></div>

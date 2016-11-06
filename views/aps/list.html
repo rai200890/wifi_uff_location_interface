@@ -9,7 +9,7 @@
         <th st-sort='name'>Name</th>
         <th st-sort="ip">IP</th>
         <th st-sort='campus_name'>Campus</th>
-        <th st-sort='building_name'>Building</th>
+        <th st-sort='department_name'>Building</th>
         <th>Location</th>
         <th st-sort='validated'>Validated</th>
         <th>Options</th>
@@ -19,8 +19,8 @@
     <tr ng-repeat="ap in displayedAps">
         <td>{{ap.name}}</td>
         <td>{{ap.ip}}</td>
-        <td tooltip-append-to-body="true" tooltip="{{ap.location.building_name + ',' + ap.location.name}}" >{{ap.location.campus_name}}</td>
-        <td>{{ap.location.building_name}}</td>
+        <td tooltip-append-to-body="true" tooltip="{{ap.location.department_name + ',' + ap.location.name}}" >{{ap.location.campus_name}}</td>
+        <td>{{ap.location.department_name}}</td>
         <td>{{ap.location.name}}</td>
         <td>
             <span class="label label-success" ng-if='ap.validated'><i class="fa fa-thumbs-o-up"></i></span>

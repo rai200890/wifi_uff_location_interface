@@ -22,7 +22,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider',
                 templateUrl: "aps/show.html",
                 controller: 'ShowApController'
             }).state('root.search', {
-                url: "/search?campus_id&building_id&floor_id",
+                url: "/search?department_id",
                 controller: 'SearchController',
                 templateUrl: "search/index.html"
             }).state('root.db_uploader', {

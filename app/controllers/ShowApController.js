@@ -101,7 +101,7 @@ function ShowApController($scope, $stateParams, Ap, SNMPStatus, $state, leafletB
 
     $scope.snmp_status = null;
     $scope.loading = true;
-
+    
     Ap.get({apId: $stateParams.ap_id}, function(data){
         $scope.ap = data;
 
