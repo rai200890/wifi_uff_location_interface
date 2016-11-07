@@ -125,11 +125,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-express-runner');
-
 
   grunt.registerTask('build:production', ['bundle assets in production'], ['ngtemplates', 'concat:production', 'concat_css', 'copy']);
   grunt.registerTask('build:development', ['bundle assets in development'], ['ngtemplates', 'concat:development', 'concat_css', 'copy']);
