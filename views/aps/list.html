@@ -27,7 +27,7 @@
             <span class="label label-danger" ng-if='!ap.validated'><i class="fa fa-thumbs-o-down"></i></span>
         </td>
         <td>
-            <button class="btn btn-default" ui-sref="root.aps.show({ap_id: ap.id})"><i class="fa fa-search-plus"></i></button>
+            <button class="btn btn-default" ui-sref="root.search({department_id: ap.location.department_id})"><i class="fa fa-search-plus"></i></button>
         </td>
     </tr>
     </tbody>

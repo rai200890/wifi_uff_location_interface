@@ -1,6 +1,15 @@
 angular.module('wifiUffLocation').run(['$templateCache', function($templateCache) {
   'use strict';
 
+  $templateCache.put('alerts.html',
+    "<div uib-alert ng-repeat=\"item in bmItems\" ng-class=\"'alert-' + item.type\" close=\"close($index)\">\n" +
+    "    <div class=\"row\">\n" +
+    "        <p ng-repeat=\"message in item.messages\" class=\"text-center\">{{message}}</p>\n" +
+    "    </div>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('aps/index.html',
     "<div ui-view=\"\"></div>"
   );
@@ -36,7 +45,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "            <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
     "        </td>\n" +
     "        <td>\n" +
-    "            <button class=\"btn btn-default\" ui-sref=\"root.aps.show({ap_id: ap.id})\"><i class=\"fa fa-search-plus\"></i></button>\n" +
+    "            <button class=\"btn btn-default\" ui-sref=\"root.search({department_id: ap.location.department_id})\"><i class=\"fa fa-search-plus\"></i></button>\n" +
     "        </td>\n" +
     "    </tr>\n" +
     "    </tbody>\n" +
@@ -148,6 +157,39 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "<footer class=\"container\">\n" +
     "    <h5 class=\"text-center\">Footer</h5>\n" +
     "</footer>\n"
+  );
+
+
+  $templateCache.put('login.html',
+    "<div class=\"container\">\n" +
+    "    <div class=\"row\">\n" +
+    "        <bm-alerts bm-items=\"ctrl.alerts\"></bm-alerts>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"panel panel-primary\">\n" +
+    "            <div class=\"panel-heading\">\n" +
+    "                <h3 class=\"panel-title\">Login</h3>\n" +
+    "            </div>\n" +
+    "            <div class=\"panel-body\">\n" +
+    "                <div class=\"container-fluid\">\n" +
+    "                    <div class=\"row\">\n" +
+    "                        <form novalidate name=\"login\">\n" +
+    "                            <div class=\"form-group\">\n" +
+    "                                <label for=\"username\">Username</label>\n" +
+    "                                <input ng-model=\"ctrl.credentials.username\" ng-required=\"true\" name=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n" +
+    "                            </div>\n" +
+    "                            <div class=\"form-group\">\n" +
+    "                                <label for=\"password\">Password</label>\n" +
+    "                                <input ng-model=\"ctrl.credentials.password\" ng-required=\"true\" name=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n" +
+    "                            </div>\n" +
+    "                            <button ng-click=\"ctrl.login()\" ng-disabled=\"ctrl.loading\" type=\"submit\" class=\"btn btn-primary\">Login <span ng-show=\"ctrl.loading\" class=\"glyphicon glyphicon-repeat fast-right-spinner\"></span></button>\n" +
+    "                        </form>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n"
   );
 
 

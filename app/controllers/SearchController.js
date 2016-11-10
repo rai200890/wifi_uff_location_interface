@@ -1,9 +1,13 @@
-angular.module('wifiUffLocation').controller("SearchController",
-  function SearchController($scope, $stateParams, $state, $stateParams,
-    leafletData, FileUploader, API_URL, Ap, Department, Marker, SNMPStatus) {
+angular.module('wifiUffLocation').controller("SearchController", ["$scope", "$stateParams", "$state", "$stateParams",
+  "leafletData", "FileUploader", "API_URL", "Ap", "Department", "Marker", "SNMPStatus", "Auth",
+  function($scope, $stateParams, $state, $stateParams,
+    leafletData, FileUploader, API_URL, Ap, Department, Marker, SNMPStatus, Auth) {
 
     var uploader = $scope.uploader = new FileUploader({
-      method: "PUT"
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer " + Auth.getToken()
+      }
     });
 
     $scope.hasMap = null;
@@ -17,7 +21,7 @@ angular.module('wifiUffLocation').controller("SearchController",
     $scope.center = {
       lat: 0,
       lng: 0,
-      zoom: 0
+      zoom: -2
     };
     $scope.defaults = {
       maxZoom: 1,
@@ -159,4 +163,5 @@ angular.module('wifiUffLocation').controller("SearchController",
     };
 
     $scope.loadMap($scope.departmentId);
-  });
+  }
+]);
