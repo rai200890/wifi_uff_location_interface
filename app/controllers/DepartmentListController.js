@@ -1,4 +1,4 @@
-angular.module('wifiUffLocation').controller("SearchController", ["$scope", "$stateParams", "$state", "$stateParams",
+angular.module('wifiUffLocation').controller("DepartmentListController", ["$scope", "$stateParams", "$state", "$stateParams",
   "leafletData", "FileUploader", "API_URL", "Ap", "Department", "Marker", "SNMPStatus", "Auth",
   function($scope, $stateParams, $state, $stateParams,
     leafletData, FileUploader, API_URL, Ap, Department, Marker, SNMPStatus, Auth) {

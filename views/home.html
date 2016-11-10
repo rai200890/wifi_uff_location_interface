@@ -5,14 +5,16 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a ui-sref=".aps.list">APs</a></li>
-                <li><a ui-sref=".search">Search</a></li>
-                <li><a ui-sref=".db_uploader">DBUploader</a></li>
+                <li><a ui-sref=".ap_list">APs</a></li>
+                <li><a ui-sref=".department_list">Departments</a></li>
+                <li><a ui-sref=".importer">Importer</a></li>
             </ul>
         </div>
     </div>
 </nav>
-<div class="container" ui-view></div>
+<div class="container-fluid">
+  <ui-view></ui-view>
+</div>
 <footer class="container">
     <h5 class="text-center">Footer</h5>
 </footer>

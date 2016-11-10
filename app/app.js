@@ -1,6 +1,5 @@
-var app = angular.module('wifiUffLocation', ['smart-table',
-  'ui.bootstrap', 'ui-leaflet', 'ngResource',
-  'ngRoute', 'ui.router', 'angularFileUpload', 'nemLogging', 'angular-jwt', 'LocalStorageModule'
+var app = angular.module('wifiUffLocation', ['smart-table', 'ui.bootstrap', 'ui-leaflet', 'ngRoute',
+'ui.router', 'angularFileUpload', 'nemLogging', 'angular-jwt', 'LocalStorageModule'
 ]);
 
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'localStorageServiceProvider', 'jwtOptionsProvider', 'WHITELISTED_DOMAINS', '$httpProvider',
@@ -30,32 +29,24 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'localS
         data: {
           requiresLogin: true
         }
-      }).state('root.aps', {
+      }).state('root.ap_list', {
         url: "/aps",
-        abstract: true,
-        templateUrl: 'aps/index.html',
+        templateUrl: "aps/index.html",
+        controller: 'ApListController',
         data: {
           requiresLogin: true
         }
-      })
-      .state('root.aps.list', {
-        url: "",
-        templateUrl: "aps/list.html",
-        controller: 'ListApsController',
+      }).state('root.department_list', {
+        url: "/departments?department_id",
+        controller: 'DepartmentListController',
+        templateUrl: "departments/index.html",
         data: {
           requiresLogin: true
         }
-      }).state('root.search', {
-        url: "/search?department_id",
-        controller: 'SearchController',
-        templateUrl: "search/index.html",
-        data: {
-          requiresLogin: true
-        }
-      }).state('root.db_uploader', {
-        url: "/db_uploader",
-        controller: 'DBUploaderController',
-        templateUrl: "db_uploader/index.html",
+      }).state('root.importer', {
+        url: "/importer",
+        controller: 'ImporterController',
+        templateUrl: "importer/new.html",
         data: {
           requiresLogin: true
         }

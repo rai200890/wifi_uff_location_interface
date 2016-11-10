@@ -7,7 +7,7 @@ angular.module('wifiUffLocation').controller("LoginController", ["Auth", "$state
   ctrl.login = function() {
     ctrl.loading = true;
     Auth.login(ctrl.credentials).then(function(response) {
-      $state.go('root.aps.list');
+      $state.go('root.ap_list');
     }).catch(function(response, statusCode) {
       ctrl.alerts = [{
         type: "danger",

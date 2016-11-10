@@ -1,4 +1,4 @@
-angular.module('wifiUffLocation').controller('DBUploaderController', ['$scope', 'FileUploader', 'API_URL', 'Auth', function($scope, FileUploader, API_URL, Auth) {
+angular.module('wifiUffLocation').controller('ImporterController', ['$scope', 'FileUploader', 'API_URL', 'Auth', function($scope, FileUploader, API_URL, Auth) {
 
   var uploader = $scope.uploader = new FileUploader({
     url: API_URL + "/api/db_importer.json",

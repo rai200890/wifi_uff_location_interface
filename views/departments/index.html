@@ -1,0 +1,15 @@
+<div class="row">
+  <h2 class="text-center">Locations</h2>
+</div>
+<div class="row">
+  <form class="form-horizontal">
+    <div class="row">
+      <div class="form-group">
+        <label>Department</label>
+        <input type="text" class="form-control" ng-model="department" uib-typeahead="d.name for d in typeaheadDepartment($viewValue)" typeahead-on-select="typeaheadSelected($item)" class="form-control">
+      </div>
+    </div>
+  </form>
+</div>
+<div ng-show="departmentID && !hasMap && !loading " ng-include="'map/upload.html'"></div>
+<div ng-show="departmentID && (loading || hasMap)" ng-include="'map/show.html'"></div>
