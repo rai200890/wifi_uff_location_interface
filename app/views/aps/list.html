@@ -1,0 +1,36 @@
+<h2 class="text-center">Aps</h2>
+
+<table st-table="displayedAps" st-safe-src="aps" class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th colspan="7">
+        <input st-search="" type="search" class="form-control" placeholder="Busque..." />
+      </th>
+    </tr>
+    <tr>
+      <th st-sort='name'>Name</th>
+      <th st-sort="ip">IP</th>
+      <th st-sort='campus_name'>Campus</th>
+      <th st-sort='department_name'>Building</th>
+      <th>Location</th>
+      <th st-sort='validated'>Validated</th>
+      <th>Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="ap in displayedAps">
+      <td>{{ap.name}}</td>
+      <td>{{ap.ip}}</td>
+      <td tooltip-append-to-body="true" tooltip="{{ap.location.department_name + ',' + ap.location.name}}">{{ap.location.campus_name}}</td>
+      <td>{{ap.location.department_name}}</td>
+      <td>{{ap.location.name}}</td>
+      <td>
+        <span class="label label-success" ng-if='ap.validated'><i class="fa fa-thumbs-o-up"></i></span>
+        <span class="label label-danger" ng-if='!ap.validated'><i class="fa fa-thumbs-o-down"></i></span>
+      </td>
+      <td>
+        <button class="btn btn-default" ui-sref="root.aps.show({ap_id: ap.id})"><i class="fa fa-search-plus"></i></button>
+      </td>
+    </tr>
+  </tbody>
+</table>

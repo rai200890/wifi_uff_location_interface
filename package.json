@@ -4,8 +4,8 @@
   "description": "",
   "main": "Gruntfile.js",
   "engines": {
-    "node": "~5.4.1",
-    "npm": "~3.5.3"
+    "node": "^5.4.1",
+    "npm": "^3.5.3"
   },
   "dependencies": {
     "angular": "^1.4.8",
@@ -17,16 +17,8 @@
     "angular-ui-bootstrap": "^1.0.3",
     "angular-ui-router": "^0.2.15",
     "bootstrap": "^3.3.6",
-    "connect-modrewrite": "^0.8.2",
+    "express": "^4.14.0",
     "font-awesome": "^4.4.0",
-    "grunt": "0.4.5",
-    "grunt-angular-templates": "^1.0.2",
-    "grunt-cli": "0.1.13",
-    "grunt-concat-css": "^0.3.1",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-connect": "^0.11.2",
-    "grunt-contrib-uglify": "^0.11.0",
-    "grunt-contrib-watch": "^0.6.1",
     "jquery": "^2.1.4",
     "jquery-ui": "^1.10.5",
     "leaflet": "^0.7.3",
@@ -35,8 +27,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "node_modules/grunt-cli/bin/grunt build:production",
-    "start": "node_modules/grunt-cli/bin/grunt connect"
+    "postinstall": "./node_modules/.bin/grunt build:production",
+    "start": "./node_modules/.bin/grunt expressrunner"
   },
   "repository": {
     "type": "git",
@@ -47,5 +39,17 @@
   "bugs": {
     "url": "https://github.com/rai200890/wifi_uff_location_interface/issues"
   },
-  "homepage": "https://github.com/rai200890/wifi_uff_location_interface#readme"
+  "homepage": "https://github.com/rai200890/wifi_uff_location_interface#readme",
+  "devDependencies": {
+    "connect-modrewrite": "^0.8.2",
+    "grunt": "0.4.5",
+    "grunt-angular-templates": "^1.0.2",
+    "grunt-cli": "0.1.13",
+    "grunt-concat-css": "^0.3.1",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-express-runner": "^0.2.1"
+  }
 }

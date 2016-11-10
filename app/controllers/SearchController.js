@@ -17,7 +17,7 @@ angular.module('wifiUffLocation').controller("SearchController",
     $scope.center = {
       lat: 0,
       lng: 0,
-      zoom: 0
+      zoom: -2
     };
     $scope.defaults = {
       maxZoom: 1,
