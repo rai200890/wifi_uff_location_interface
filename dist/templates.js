@@ -55,78 +55,6 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   );
 
 
-  $templateCache.put('aps/show.html',
-    "<div class=\"row\">\n" +
-    "    <div class=\"col-xs-6\">\n" +
-    "        <fieldset>\n" +
-    "            <legend>Info</legend>\n" +
-    "            <dl class=\"dl-horizontal\">\n" +
-    "                <dt>ID</dt>\n" +
-    "                <dd>{{ap.id}}</dd>\n" +
-    "                <dt>Name</dt>\n" +
-    "                <dd>{{ap.name}}</dd>\n" +
-    "                <dt>IP</dt>\n" +
-    "                <dd>{{ap.ip}}</dd>\n" +
-    "                <dt>Switch IP</dt>\n" +
-    "                <dd>{{ap.switch_ip || '-'}}</dd>\n" +
-    "                <dt>Campus</dt>\n" +
-    "                <dd>{{ap.location.campus_name}}</dd>\n" +
-    "                <dt>Building</dt>\n" +
-    "                <dd>{{ap.location.building_name}}</dd>\n" +
-    "                <dt>Floor</dt>\n" +
-    "                <dd>{{ap.location.floor_number || '-'}}</dd>\n" +
-    "                <dt>Location</dt>\n" +
-    "                <dd>{{ap.location.name || '-'}}</dd>\n" +
-    "                <dt>Validated</dt>\n" +
-    "                <dd>\n" +
-    "                    <span class=\"label label-success\" ng-if='ap.validated'><i class=\"fa fa-thumbs-o-up\"></i></span>\n" +
-    "                    <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
-    "                </dd>\n" +
-    "                <dt>Status</dt>\n" +
-    "                <dd>{{ap.ap_status.name || '-'}}</dd>\n" +
-    "                <dt>Model</dt>\n" +
-    "                <dd>{{ap.ap_model.name || '-'}}</dd>\n" +
-    "                <dt>Control Region</dt>\n" +
-    "                <dd>{{ap.control_region.name || '-'}}</dd>\n" +
-    "                <dt>Real Latitude</dt>\n" +
-    "                <dd>{{ap.latitude}}</dd>\n" +
-    "                <dt>Real Longitude</dt>\n" +
-    "                <dd>{{ap.longitude}}</dd>\n" +
-    "                <dt>Latitude</dt>\n" +
-    "                <dd>{{ap.lat}}</dd>\n" +
-    "                <dt>Longitude</dt>\n" +
-    "                <dd>{{ap.lng}}</dd>\n" +
-    "            </dl>\n" +
-    "        </fieldset>\n" +
-    "        <fieldset>\n" +
-    "            <legend>SNMP Status  <button class=\"btn btn-primary btn-xs\" ng-click=\"reloadSNMPStatus()\"><i class=\"fa fa-refresh\"></i></button></legend>\n" +
-    "            <dl ng-show=\"snmp_status && !loading\" class=\"dl-horizontal\">\n" +
-    "                <dt>SysLocation</dt>\n" +
-    "                <dd>{{snmp_status.syslocation.value}}</dd>\n" +
-    "                <dt>Channel</dt>\n" +
-    "                <dd>{{snmp_status.channel.value}}</dd>\n" +
-    "                <dt>Power</dt>\n" +
-    "                <dd>{{snmp_status.power.value}}</dd>\n" +
-    "            </dl>\n" +
-    "        </fieldset>\n" +
-    "        <h4 class=\"text-center\" ng-show=\"loading\">Loading</h4>\n" +
-    "        <h4 class=\"text-center\" ng-show=\"!snmp_status && !loading\">Unavaliable</h4>\n" +
-    "    </div>\n" +
-    "    <div class=\"col-xs-6\">\n" +
-    "        <fieldset>\n" +
-    "            <legend>Location</legend>\n" +
-    "            <leaflet id=\"map\" ng-if=\"hasLocation\" center=\"center\" maxbounds=\"maxBounds\" layers=\"layers\" markers=\"markers\" defaults=\"defaults\"  width=\"600px\" height=\"400px\"></leaflet>\n" +
-    "            <div class=\"btn-group\" role=\"group\">\n" +
-    "                <button type=\"button\" ng-click=\"restoreLocation()\" class=\"btn btn-default\">Restore</button>\n" +
-    "                <button type=\"button\" ng-click=\"saveLocation()\" class=\"btn btn-primary\">Save</button>\n" +
-    "            </div>\n" +
-    "            <label>Current Zoom Level: </label><span>{{center.zoom}}</span>\n" +
-    "        </fieldset>\n" +
-    "    </div>\n" +
-    "</div>\n"
-  );
-
-
   $templateCache.put('departments/index.html',
     "<div class=\"row\">\n" +
     "  <h2 class=\"text-center\">Locations</h2>\n" +
@@ -152,7 +80,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "        <div class=\"navbar-header\">\n" +
     "            <a class=\"navbar-brand\" ui-sref=\".aps.list\">Wifi-Uff Location</a>\n" +
     "        </div>\n" +
-    "        <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n" +
+    "        <div class=\"collapse navbar-collapse\">\n" +
     "            <ul class=\"nav navbar-nav\">\n" +
     "                <li><a ui-sref=\".ap_list\">APs</a></li>\n" +
     "                <li><a ui-sref=\".department_list\">Departments</a></li>\n" +
@@ -236,22 +164,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('map/upload.html',
-    "<class=\"row\">\n" +
-    "  <form class=\"form-horizontal\">\n" +
-    "    <div class=\"row\">\n" +
-    "      <div class=\"form-group\">\n" +
-    "        <label>This floor has no map yet, please upload one</label>\n" +
-    "        <input type=\"file\" nv-file-select uploader=\"uploader\" class=\"btn btn-default form-control\" options=\"\"/>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"row\">\n" +
-    "      <div class=\"form-group\">\n" +
-    "        <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-hide=\"uploading\"> Send </button>\n" +
-    "        <button ng-click=\"upload()\" type=\"submit\" class=\"btn btn-primary\" ng-show=\"uploading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\" ></i></button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "</form>\n" +
-    "</div>\n"
+    ""
   );
 
 }]);

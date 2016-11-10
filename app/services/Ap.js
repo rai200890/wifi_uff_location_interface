@@ -1,5 +1,4 @@
 angular.module('wifiUffLocation').service("Ap", ["$http", "API_URL", function($http, API_URL) {
-
   var self = this;
 
   self.get = function(id) {
