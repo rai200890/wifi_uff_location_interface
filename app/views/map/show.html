@@ -3,14 +3,50 @@
 </div>
 <div class="row" ng-if="!ctrl.loading && ctrl.hasMap">
   <div class="col-md-4">
+    <div class="panel panel-primary" ng-if="ctrl.selectedAp">
+      <div class="panel-heading">
+        <h3 class="panel-title">Ap Details</h3>
+      </div>
+      <div class="panel-body">
+        <dl name="apDetails" class="dl-horizontal">
+          <dt>Name</dt>
+          <dd>{{ctrl.selectedAp.name}}</dd>
+          <dt>IP</dt>
+          <dd>{{ctrl.selectedAp.ip}}</dd>
+          <dt>Validated</dt>
+          <dd>{{ctrl.selectedAp.validated}}</dd>
+          <dt>Real latitude</dt>
+          <dd>{{ctrl.selectedAp.real_latitude}}</dd>
+          <dt>Real longitude</dt>
+          <dd>{{ctrl.selectedAp.real_longitude}}</dd>
+          <dt>Map latitude</dt>
+          <dd>{{ctrl.selectedAp.map_latitude}}</dd>
+          <dt>Map longitude</dt>
+          <dd>{{ctrl.selectedAp.map_longitude}}</dd>
+        </dl>
+      </div>
+    </div>
   </div>
   <div class="col-md-8">
-    <leaflet id="map" center="ctrl.center" layers="ctrl.layers" markers="ctrl.markers" event-broadcast="ctrl.events" legend="ctrl.legend" defaults="ctrl.defaults" width="100%" height="500px"></leaflet>
+    <div class="row">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Unmarked Aps</h3>
+        </div>
+        <div class="panel-body">
+          <select ng-options="ap.name for ap in ctrl.aps track by ap.id">
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <leaflet id="map" center="ctrl.center" layers="ctrl.layers" markers="ctrl.markers" event-broadcast="ctrl.events" legend="ctrl.legend" defaults="ctrl.defaults" width="100%" height="500px"></leaflet>
+    </div>
+    <div class="row">
+      <div class="btn-group" role="group">
+        <button type="button" ng-click="ctrl.restoreLocations()" class="btn btn-default">Restore</button>
+        <button type="button" ng-click="ctrl.saveLocations()" class="btn btn-primary">Save</button>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row" ng-if="!ctrl.loading && ctrl.hasMap">
-    <div class="btn-group" role="group">
-     <button type="button" ng-click="ctrl.restoreLocations()" class="btn btn-default">Restore</button>
-     <button type="button" ng-click="ctrl.saveLocations()" class="btn btn-primary">Save</button>
-   </div>
 </div>

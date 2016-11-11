@@ -4,13 +4,13 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: [
-          './node_modules/**/**.*',
-          './app/directives/**.js',
-          './app/controllers/**.js',
-          './app/services/**.js',
-          './app/**.js',
-          './app/views/**.html',
-          './app/views/**/**.html'
+          'node_modules/**/**.*',
+          'app/directives/**.js',
+          'app/controllers/**.js',
+          'app/services/**.js',
+          'app/**.js',
+          'app/views/**.html',
+          'app/views/**/**.html'
         ],
         tasks: ['build:development'],
         options: {

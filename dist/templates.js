@@ -182,16 +182,52 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "</div>\n" +
     "<div class=\"row\" ng-if=\"!ctrl.loading && ctrl.hasMap\">\n" +
     "  <div class=\"col-md-4\">\n" +
+    "    <div class=\"panel panel-primary\" ng-if=\"ctrl.selectedAp\">\n" +
+    "      <div class=\"panel-heading\">\n" +
+    "        <h3 class=\"panel-title\">Ap Details</h3>\n" +
+    "      </div>\n" +
+    "      <div class=\"panel-body\">\n" +
+    "        <dl name=\"apDetails\" class=\"dl-horizontal\">\n" +
+    "          <dt>Name</dt>\n" +
+    "          <dd>{{ctrl.selectedAp.name}}</dd>\n" +
+    "          <dt>IP</dt>\n" +
+    "          <dd>{{ctrl.selectedAp.ip}}</dd>\n" +
+    "          <dt>Validated</dt>\n" +
+    "          <dd>{{ctrl.selectedAp.validated}}</dd>\n" +
+    "          <dt>Real latitude</dt>\n" +
+    "          <dd>{{ctrl.selectedAp.real_latitude}}</dd>\n" +
+    "          <dt>Real longitude</dt>\n" +
+    "          <dd>{{ctrl.selectedAp.real_longitude}}</dd>\n" +
+    "          <dt>Map latitude</dt>\n" +
+    "          <dd>{{ctrl.selectedAp.map_latitude}}</dd>\n" +
+    "          <dt>Map longitude</dt>\n" +
+    "          <dd>{{ctrl.selectedAp.map_longitude}}</dd>\n" +
+    "        </dl>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
     "  </div>\n" +
     "  <div class=\"col-md-8\">\n" +
-    "    <leaflet id=\"map\" center=\"ctrl.center\" layers=\"ctrl.layers\" markers=\"ctrl.markers\" event-broadcast=\"ctrl.events\" legend=\"ctrl.legend\" defaults=\"ctrl.defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
+    "    <div class=\"row\">\n" +
+    "      <div class=\"panel panel-primary\">\n" +
+    "        <div class=\"panel-heading\">\n" +
+    "          <h3 class=\"panel-title\">Unmarked Aps</h3>\n" +
+    "        </div>\n" +
+    "        <div class=\"panel-body\">\n" +
+    "          <select ng-options=\"ap.name for ap in ctrl.aps track by ap.id\">\n" +
+    "          </select>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "      <leaflet id=\"map\" center=\"ctrl.center\" layers=\"ctrl.layers\" markers=\"ctrl.markers\" event-broadcast=\"ctrl.events\" legend=\"ctrl.legend\" defaults=\"ctrl.defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "      <div class=\"btn-group\" role=\"group\">\n" +
+    "        <button type=\"button\" ng-click=\"ctrl.restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
+    "        <button type=\"button\" ng-click=\"ctrl.saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
     "  </div>\n" +
-    "</div>\n" +
-    "<div class=\"row\" ng-if=\"!ctrl.loading && ctrl.hasMap\">\n" +
-    "    <div class=\"btn-group\" role=\"group\">\n" +
-    "     <button type=\"button\" ng-click=\"ctrl.restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
-    "     <button type=\"button\" ng-click=\"ctrl.saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
-    "   </div>\n" +
     "</div>\n"
   );
 

@@ -40,14 +40,11 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
         logic: 'emit'
       }
     };
-
     ctrl.legend = null;
-
     ctrl.typeaheadNoResults = false;
-
-    ctrl.departmentID = $stateParams.department_id || null;
-
+    ctrl.departmentID = $stateParams.department_id;
     ctrl.department = null;
+    ctrl.selectedAp = null;
 
     ctrl.typeaheadDepartment = function(value) {
       return Department.typeahead(value);
@@ -55,7 +52,11 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
 
     ctrl.typeaheadSelected = function(department) {
       ctrl.departmentID = department.id;
-      ctrl.loadMap(department.id);
+      $state.go("root.department_list", {
+        department_id: department.id
+      }, {
+        notify: true
+      });
     };
 
     ctrl.saveLocations = function() {
@@ -68,7 +69,11 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
 
     ctrl.uploader.onSuccessItem = function(fileItem, response, status, headers) {
       ctrl.uploading = false;
-      ctrl.loadMap(ctrl.departmentID);
+      $state.go("root.department_list", {
+        department_id: ctrl.departmentID
+      }, {
+        notify: true
+      });
     };
 
     ctrl.uploader.onErrorItem = function(fileItem, response, status, headers) {
@@ -87,11 +92,19 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
       ctrl.uploader.addToQueue(file);
     };
 
+    $scope.$on('leafletDirectiveMarker.map.click', function(event, args) {
+      Ap.get(args.modelName).success(function(data) {
+        console.log(data);
+        ctrl.selectedAp = data;
+      });
+  });
+
     ctrl.loadMap = function(departmentID) {
       if (departmentID != null) {
         ctrl.loading = true;
         Department.get(departmentID).success(function(response) {
           var department = response;
+
           ctrl.loading = false;
 
           if (department.map_url) {
@@ -102,13 +115,11 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
               labels: ['Canal 1', 'Canal 6', 'Canal 11', 'Outros']
             };
 
-            var name = department.campus_name + ", " + department.department_name;
+            var name = department.name + ", " + department.campus_name;
+
+            ctrl.department = name;
 
             var bounds = L.latLngBounds(department.map_bounds); //workaround
-
-            leafletData.getMap().then(function(map) {
-              map.setMaxBounds(bounds);
-            });
 
             ctrl.layers.baselayers.map = {
               name: name,
@@ -123,7 +134,10 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
             };
 
             Ap.query(department.id).success(function(aps) {
+              ctrl.aps = aps;
+
               aps.forEach(function(ap) {
+
                 var message = "<p>" + ap.name + " - " + ap.syslocation + "</p>";
                 var marker = {
                   lat: ap.latitude,
@@ -134,7 +148,7 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
                     message: message,
                     options: {
                       direction: "auto",
-                      noHide: true
+                      noHide: false
                     }
                   },
                   focus: true,
@@ -148,10 +162,10 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
                 }
 
                 SNMPStatus.get(ap.id).success(function(data) {
-                  ctrl.markers[ap.name] = marker;
-                  ctrl.markers[ap.name].icon = Marker.getIcon(data.channel.value, data.power.value);
+                  ctrl.markers[ap.id] = marker;
+                  ctrl.markers[ap.id].icon = Marker.getIcon(data.channel.value, data.power.value);
                 }).error(function() {
-                  ctrl.markers[ap.name] = marker;
+                  ctrl.markers[ap.id] = marker;
                 });
 
               });
@@ -160,11 +174,11 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
             ctrl.loading = false;
             ctrl.hasMap = false;
           };
-
+        }).error(function() {
+          console.error('department id not found');
         });
       };
     };
-
-    ctrl.loadMap(ctrl.departmentId);
+    ctrl.loadMap(ctrl.departmentID);
   }
 ]);
