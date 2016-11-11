@@ -1,39 +1,39 @@
 angular.module('wifiUffLocation').controller('ImporterController', ['$scope', 'FileUploader', 'API_URL', 'Auth', function($scope, FileUploader, API_URL, Auth) {
+  var ctrl = this;
 
-  var uploader = $scope.uploader = new FileUploader({
+  ctrl.alerts = [];
+
+  ctrl.uploader = new FileUploader({
     url: API_URL + "/api/db_importer.json",
-    headers: {"Authorization": "Bearer " + Auth.getToken()}
+    headers: {
+      "Authorization": "Bearer " + Auth.getToken()
+    }
   });
 
-  $scope.alerts = [];
-  $scope.loading = false;
-  $scope.errors = null;
-  $scope.success = null;
+  ctrl.loading = false;
+  ctrl.errors = null;
+  ctrl.success = null;
 
-  $scope.closeAlert = function(index) {
-    $scope.alerts.splice(index, 1);
-  };
-
-  uploader.onSuccessItem = function(fileItem, response, status, headers) {
-    $scope.loading = false;
-    $scope.alerts.push({
-      message: response.success,
+  ctrl.uploader.onSuccessItem = function(fileItem, response, status, headers) {
+    ctrl.loading = false;
+    ctrl.alerts = [{
+      messages: ['Database updated with success!'],
       type: "success"
-    });
+    }];
   };
 
-  uploader.onErrorItem = function(fileItem, response, status, headers) {
-    $scope.loading = false;
-    $scope.alerts.push({
-      message: response.errors,
+  ctrl.uploader.onErrorItem = function(fileItem, response, status, headers) {
+    ctrl.loading = false;
+    ctrl.alerts = [{
+      messages: ['Invalid input file!'],
       type: "danger"
-    });
+    }];
   };
 
-  $scope.upload = function() {
-    $scope.loading = true;
-    var file = uploader.queue[uploader.queue.length - 1];
-    uploader.uploadItem(file);
-    uploader.addToQueue(file);
+  ctrl.upload = function() {
+    ctrl.loading = true;
+    var file = ctrl.uploader.queue[ctrl.uploader.queue.length - 1];
+    ctrl.uploader.uploadItem(file);
+    ctrl.uploader.addToQueue(file);
   };
 }]);

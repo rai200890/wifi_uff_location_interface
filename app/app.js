@@ -33,12 +33,14 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'localS
         url: "/aps",
         templateUrl: "aps/index.html",
         controller: 'ApListController',
+        controllerAs: 'ctrl',
         data: {
           requiresLogin: true
         }
       }).state('root.department_list', {
         url: "/departments?department_id",
         controller: 'DepartmentListController',
+        controllerAs: 'ctrl',
         templateUrl: "departments/index.html",
         data: {
           requiresLogin: true
@@ -47,6 +49,7 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'localS
         url: "/importer",
         controller: 'ImporterController',
         templateUrl: "importer/new.html",
+        controllerAs: 'ctrl',
         data: {
           requiresLogin: true
         }

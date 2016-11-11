@@ -11,7 +11,7 @@ angular.module('wifiUffLocation').controller("LoginController", ["Auth", "$state
     }).catch(function(response, statusCode) {
       ctrl.alerts = [{
         type: "danger",
-        messages: response.data.errors
+        messages: ['Invalid username/password!']
       }];
     }).finally(function() {
       ctrl.loading = false;

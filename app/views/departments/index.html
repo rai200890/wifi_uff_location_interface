@@ -1,15 +1,22 @@
-<div class="row">
-  <h2 class="text-center">Locations</h2>
-</div>
-<div class="row">
-  <form class="form-horizontal">
-    <div class="row">
-      <div class="form-group">
-        <label>Department</label>
-        <input type="text" class="form-control" ng-model="department" uib-typeahead="d.name for d in typeaheadDepartment($viewValue)" typeahead-on-select="typeaheadSelected($item)" class="form-control">
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h2 class="panel-title">Department</h2>
+  </div>
+  <div class="panel-body">
+    <div class="container">
+      <div class="row">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="department" class="col-xs-2 control-label">Department</label>
+            <div class="col-xs-9">
+              <input name="department" type="text" class="form-control" ng-model="ctrl.department" uib-typeahead="d.name for d in ctrl.typeaheadDepartment($viewValue)" typeahead-on-select="ctrl.typeaheadSelected($item)" class="form-control">
+            </div>
+          </div>
+        </form>
       </div>
+      <div ng-show="ctrl.departmentID && !ctrl.hasMap && !ctrl.loading " ng-include="'map/upload.html'"></div>
+      <div ng-show="ctrl.departmentID && (ctrl.loading || ctrl.hasMap)" ng-include="'map/show.html'"></div>
     </div>
-  </form>
+  </div>
 </div>
-<div ng-show="departmentID && !hasMap && !loading " ng-include="'map/upload.html'"></div>
-<div ng-show="departmentID && (loading || hasMap)" ng-include="'map/show.html'"></div>
+</div>

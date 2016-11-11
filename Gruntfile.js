@@ -5,6 +5,7 @@ module.exports = function(grunt) {
       scripts: {
         files: [
           './node_modules/**/**.*',
+          './app/directives/**.js',
           './app/controllers/**.js',
           './app/services/**.js',
           './app/**.js',
@@ -55,6 +56,7 @@ module.exports = function(grunt) {
           "node_modules/angular-local-storage/dist/angular-local-storage.js",
           'app/app.js',
           'config/development.js',
+          'app/directives/**.js',
           'app/services/**.js',
           'app/controllers/**.js',
           'dist/templates.js'
@@ -82,6 +84,7 @@ module.exports = function(grunt) {
           "node_modules/angular-local-storage/dist/angular-local-storage.js",
           'app/app.js',
           'config/production.js',
+          'app/directives/**.js',
           'app/services/**.js',
           'app/controllers/**.js',
           'dist/templates.js'

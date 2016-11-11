@@ -2,34 +2,35 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
   "leafletData", "FileUploader", "API_URL", "Ap", "Department", "Marker", "SNMPStatus", "Auth",
   function($scope, $stateParams, $state, $stateParams,
     leafletData, FileUploader, API_URL, Ap, Department, Marker, SNMPStatus, Auth) {
+    var ctrl = this;
 
-    var uploader = $scope.uploader = new FileUploader({
+    ctrl.uploader = new FileUploader({
       method: "PUT",
       headers: {
         "Authorization": "Bearer " + Auth.getToken()
       }
     });
-
-    $scope.hasMap = null;
-    $scope.loading = false;
-    $scope.uploading = false;
-    $scope.layers = {
+    ctrl.alerts = [];
+    ctrl.hasMap = null;
+    ctrl.loading = false;
+    ctrl.uploading = false;
+    ctrl.layers = {
       baselayers: {},
       overlays: {}
     };
-    $scope.markers = {};
-    $scope.center = {
+    ctrl.markers = {};
+    ctrl.center = {
       lat: 0,
       lng: 0,
       zoom: -2
     };
-    $scope.defaults = {
+    ctrl.defaults = {
       maxZoom: 1,
       minZoom: -2,
       zoomControl: true,
       crs: 'Simple'
     };
-    $scope.events = {
+    ctrl.events = {
       map: {
         enable: ['click', 'drag', 'blur', 'touchstart', 'mouseover'],
         logic: 'emit'
@@ -40,61 +41,63 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
       }
     };
 
-    $scope.legend = null;
+    ctrl.legend = null;
 
-    $scope.typeaheadNoResults = false;
+    ctrl.typeaheadNoResults = false;
 
-    $scope.departmentID = $stateParams.department_id || null;
+    ctrl.departmentID = $stateParams.department_id || null;
 
-    $scope.department = null;
+    ctrl.department = null;
 
-    $scope.typeaheadDepartment = function(value) {
+    ctrl.typeaheadDepartment = function(value) {
       return Department.typeahead(value);
     };
 
-    $scope.typeaheadSelected = function(department) {
-      $scope.departmentID = department.id;
-      $scope.loadMap(department.id);
+    ctrl.typeaheadSelected = function(department) {
+      ctrl.departmentID = department.id;
+      ctrl.loadMap(department.id);
     };
 
-    $scope.saveLocations = function() {
-
-    };
-
-    $scope.restoreLocations = function() {
+    ctrl.saveLocations = function() {
 
     };
 
-    uploader.onSuccessItem = function(fileItem, response, status, headers) {
-      $scope.uploading = false;
-      $scope.success = "Map has been uploaded with success";
-      $scope.loadMap($scope.departmentID);
+    ctrl.restoreLocations = function() {
+
     };
 
-    uploader.onErrorItem = function(fileItem, response, status, headers) {
-      $scope.uploading = true;
-      $scope.errors = response.errors;
+    ctrl.uploader.onSuccessItem = function(fileItem, response, status, headers) {
+      ctrl.uploading = false;
+      ctrl.loadMap(ctrl.departmentID);
     };
 
-    $scope.upload = function() {
-      $scope.uploading = true;
-      var file = uploader.queue[uploader.queue.length - 1];
-      file.url = API_URL + "/api/departments/" + $scope.departmentID + ".json";
-      uploader.uploadItem(file);
-      uploader.addToQueue(file);
+    ctrl.uploader.onErrorItem = function(fileItem, response, status, headers) {
+      ctrl.uploading = true;
+      ctrl.alerts = [{
+        type: "danger",
+        messages: response.errors
+      }];
     };
 
-    $scope.loadMap = function(departmentID) {
+    ctrl.upload = function() {
+      ctrl.uploading = true;
+      var file = ctrl.uploader.queue[ctrl.uploader.queue.length - 1];
+      file.url = API_URL + "/api/departments/" + ctrl.departmentID + ".json";
+      ctrl.uploader.uploadItem(file);
+      ctrl.uploader.addToQueue(file);
+    };
+
+    ctrl.loadMap = function(departmentID) {
       if (departmentID != null) {
-        $scope.loading = true;
+        ctrl.loading = true;
         Department.get(departmentID).success(function(response) {
           var department = response;
-          $scope.loading = false;
+          ctrl.loading = false;
 
           if (department.map_url) {
-            $scope.hasMap = true;
+            ctrl.hasMap = true;
 
-            $scope.legend = {
+            ctrl.legend = {
               colors: ['#008000', '#800080', '#FF0000', '#0000FF'],
               labels: ['Canal 1', 'Canal 6', 'Canal 11', 'Outros']
             };
@@ -107,7 +110,7 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
               map.setMaxBounds(bounds);
             });
 
-            $scope.layers.baselayers.map = {
+            ctrl.layers.baselayers.map = {
               name: name,
               type: 'imageOverlay',
               url: department.map_url,
@@ -138,30 +141,30 @@ angular.module('wifiUffLocation').controller("DepartmentListController", ["$scop
                   draggable: true
                 };
 
-                $scope.layers.overlays[ap.name] = {
+                ctrl.layers.overlays[ap.name] = {
                   name: ap.name,
                   type: 'group',
                   visible: true
                 }
 
                 SNMPStatus.get(ap.id).success(function(data) {
-                  $scope.markers[ap.name] = marker;
-                  $scope.markers[ap.name].icon = Marker.getIcon(data.channel.value, data.power.value);
+                  ctrl.markers[ap.name] = marker;
+                  ctrl.markers[ap.name].icon = Marker.getIcon(data.channel.value, data.power.value);
                 }).error(function() {
-                  $scope.markers[ap.name] = marker;
+                  ctrl.markers[ap.name] = marker;
                 });
 
               });
             });
           } else {
-            $scope.loading = false;
-            $scope.hasMap = false;
+            ctrl.loading = false;
+            ctrl.hasMap = false;
           };
 
         });
       };
     };
 
-    $scope.loadMap($scope.departmentId);
+    ctrl.loadMap(ctrl.departmentId);
   }
 ]);
