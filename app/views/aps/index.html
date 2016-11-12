@@ -5,7 +5,7 @@
   <div class="panel-body">
     <div class="row">
       <div class="table-responsive">
-        <table st-table="displayedAps" st-safe-src="aps" class="table table-hover table-striped">
+        <table st-table="ctrl.displayedAps" st-safe-src="ctrl.aps" class="table table-hover table-striped">
           <thead>
             <tr>
               <th colspan="7">
@@ -30,7 +30,7 @@
           </thead>
           <tbody>
 
-            <tr ng-repeat="ap in displayedAps">
+            <tr ng-repeat="ap in ctrl.displayedAps">
               <td>{{ap.name}}</td>
               <td>{{ap.ip}}</td>
               <td tooltip-append-to-body="true" tooltip="{{ap.location.department_name + ',' + ap.location.name}}">{{ap.location.campus_name}}</td>

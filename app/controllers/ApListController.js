@@ -1,7 +1,8 @@
-angular.module('wifiUffLocation').controller("ApListController", ["$scope", "Ap", function($scope, Ap) {
-  $scope.aps = [];
+angular.module('wifiUffLocation').controller("ApListController", ["Ap", function(Ap) {
+  var ctrl = this;
+  ctrl.aps = [];
   Ap.query().success(function(data) {
-    $scope.aps = data;
+    ctrl.aps = data;
   });
-  $scope.displayedAps = [].concat($scope.aps);
+  ctrl.displayedAps = [].concat(ctrl.aps);
 }]);

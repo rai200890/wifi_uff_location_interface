@@ -18,7 +18,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  <div class=\"panel-body\">\n" +
     "    <div class=\"row\">\n" +
     "      <div class=\"table-responsive\">\n" +
-    "        <table st-table=\"displayedAps\" st-safe-src=\"aps\" class=\"table table-hover table-striped\">\n" +
+    "        <table st-table=\"ctrl.displayedAps\" st-safe-src=\"ctrl.aps\" class=\"table table-hover table-striped\">\n" +
     "          <thead>\n" +
     "            <tr>\n" +
     "              <th colspan=\"7\">\n" +
@@ -43,7 +43,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "          </thead>\n" +
     "          <tbody>\n" +
     "\n" +
-    "            <tr ng-repeat=\"ap in displayedAps\">\n" +
+    "            <tr ng-repeat=\"ap in ctrl.displayedAps\">\n" +
     "              <td>{{ap.name}}</td>\n" +
     "              <td>{{ap.ip}}</td>\n" +
     "              <td tooltip-append-to-body=\"true\" tooltip=\"{{ap.location.department_name + ',' + ap.location.name}}\">{{ap.location.campus_name}}</td>\n" +
@@ -74,11 +74,15 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  <div class=\"panel-body\">\n" +
     "    <div class=\"container\">\n" +
     "      <div class=\"row\">\n" +
-    "        <form class=\"form-horizontal\">\n" +
+    "        <form class=\"form-horizontal\" autocomplete=\"off\">\n" +
     "          <div class=\"form-group\">\n" +
     "            <label for=\"department\" class=\"col-xs-2 control-label\">Department</label>\n" +
     "            <div class=\"col-xs-9\">\n" +
-    "              <input name=\"department\" type=\"text\" class=\"form-control\" ng-model=\"ctrl.department\" uib-typeahead=\"d.name for d in ctrl.typeaheadDepartment($viewValue)\" typeahead-on-select=\"ctrl.typeaheadSelected($item)\" class=\"form-control\">\n" +
+    "              <input name=\"department\" type=\"text\" class=\"form-control\" ng-model=\"ctrl.department\"\n" +
+    "                uib-typeahead=\"d.name for d in ctrl.typeaheadDepartment($viewValue)\"\n" +
+    "                typeahead-on-select=\"ctrl.typeaheadSelected($item)\"\n" +
+    "                typeahead-show-hint=\"false\" typeahead-wait-ms=\"500\"\n" +
+    "                class=\"form-control\">\n" +
     "            </div>\n" +
     "          </div>\n" +
     "        </form>\n" +
@@ -213,11 +217,12 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "          <h3 class=\"panel-title\">Unmarked Aps</h3>\n" +
     "        </div>\n" +
     "        <div class=\"panel-body\">\n" +
-    "          <select ng-options=\"ap.name for ap in ctrl.aps track by ap.id\">\n" +
-    "          </select>\n" +
+    "          <form class=\"form-inline\">\n" +
+    "          <select ng-show =\"ctrl.unmarkedAps.length > 0\" ng-model=\"ctrl.unmarkedAp\" class=\"form-control\" ng-options=\"ap.name for ap in ctrl.unmarkedAps\"></select>\n" +
+    "            <button type=\"button\" ng-click=\"ctrl.addMarker(ctrl.unmarkedAp)\" class=\"btn btn-primary btn-mini\"><i class=\"fa fa-plus\" aria-hidden=\"true\"></i></button>\n" +
+    "          </div>\n" +
     "        </div>\n" +
     "      </div>\n" +
-    "    </div>\n" +
     "    <div class=\"row\">\n" +
     "      <leaflet id=\"map\" center=\"ctrl.center\" layers=\"ctrl.layers\" markers=\"ctrl.markers\" event-broadcast=\"ctrl.events\" legend=\"ctrl.legend\" defaults=\"ctrl.defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
     "    </div>\n" +

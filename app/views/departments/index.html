@@ -5,11 +5,15 @@
   <div class="panel-body">
     <div class="container">
       <div class="row">
-        <form class="form-horizontal">
+        <form class="form-horizontal" autocomplete="off">
           <div class="form-group">
             <label for="department" class="col-xs-2 control-label">Department</label>
             <div class="col-xs-9">
-              <input name="department" type="text" class="form-control" ng-model="ctrl.department" uib-typeahead="d.name for d in ctrl.typeaheadDepartment($viewValue)" typeahead-on-select="ctrl.typeaheadSelected($item)" class="form-control">
+              <input name="department" type="text" class="form-control" ng-model="ctrl.department"
+                uib-typeahead="d.name for d in ctrl.typeaheadDepartment($viewValue)"
+                typeahead-on-select="ctrl.typeaheadSelected($item)"
+                typeahead-show-hint="false" typeahead-wait-ms="500"
+                class="form-control">
             </div>
           </div>
         </form>
