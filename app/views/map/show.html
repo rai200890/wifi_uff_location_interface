@@ -1,14 +1,11 @@
-<div class="row" ng-if="ctrl.loading">
-  <h2 class="text-center">Loading<i class="fa fa-spinner fa-5 fa-spin"></i></h2>
-</div>
-<div class="row" ng-if="!ctrl.loading && ctrl.hasMap">
+<div class="row">
   <div class="col-md-4">
     <div class="panel panel-primary" ng-if="ctrl.selectedAp">
       <div class="panel-heading">
         <h3 class="panel-title">Ap Details</h3>
       </div>
       <div class="panel-body">
-        <dl name="apDetails" class="dl-horizontal">
+        <dl class="dl-horizontal">
           <dt>Name</dt>
           <dd>{{ctrl.selectedAp.name}}</dd>
           <dt>IP</dt>

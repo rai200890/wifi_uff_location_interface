@@ -68,30 +68,27 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
   $templateCache.put('departments/index.html',
     "<div class=\"panel panel-primary\">\n" +
-    "  <div class=\"panel-heading\">\n" +
-    "    <h2 class=\"panel-title\">Department</h2>\n" +
-    "  </div>\n" +
-    "  <div class=\"panel-body\">\n" +
-    "    <div class=\"container\">\n" +
-    "      <div class=\"row\">\n" +
-    "        <form class=\"form-horizontal\" autocomplete=\"off\">\n" +
-    "          <div class=\"form-group\">\n" +
-    "            <label for=\"department\" class=\"col-xs-2 control-label\">Department</label>\n" +
-    "            <div class=\"col-xs-9\">\n" +
-    "              <input name=\"department\" type=\"text\" class=\"form-control\" ng-model=\"ctrl.department\"\n" +
-    "                uib-typeahead=\"d.name for d in ctrl.typeaheadDepartment($viewValue)\"\n" +
-    "                typeahead-on-select=\"ctrl.typeaheadSelected($item)\"\n" +
-    "                typeahead-show-hint=\"false\" typeahead-wait-ms=\"500\"\n" +
-    "                class=\"form-control\">\n" +
-    "            </div>\n" +
-    "          </div>\n" +
-    "        </form>\n" +
-    "      </div>\n" +
-    "      <div ng-show=\"ctrl.departmentID && !ctrl.hasMap && !ctrl.loading \" ng-include=\"'map/upload.html'\"></div>\n" +
-    "      <div ng-show=\"ctrl.departmentID && (ctrl.loading || ctrl.hasMap)\" ng-include=\"'map/show.html'\"></div>\n" +
+    "    <div class=\"panel-heading\">\n" +
+    "        <h2 class=\"panel-title\">Department</h2>\n" +
     "    </div>\n" +
-    "  </div>\n" +
-    "</div>\n" +
+    "    <div class=\"panel-body\">\n" +
+    "        <div class=\"container\">\n" +
+    "            <div class=\"row\">\n" +
+    "                <form class=\"form-horizontal\" autocomplete=\"off\">\n" +
+    "                    <div class=\"form-group\">\n" +
+    "                        <label for=\"department\" class=\"col-xs-2 control-label\">Department</label>\n" +
+    "                        <div class=\"col-xs-9\">\n" +
+    "                            <input name=\"department\" type=\"text\" class=\"form-control\" ng-model=\"ctrl.department\" uib-typeahead=\"d as d.name for d in ctrl.typeaheadDepartment($viewValue)\" typeahead-on-select=\"ctrl.typeaheadSelected($item)\" typeahead-show-hint=\"false\" typeahead-wait-ms=\"500\"\n" +
+    "                                class=\"form-control\">\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </form>\n" +
+    "            </div>\n" +
+    "            <div class=\"row\">\n" +
+    "                <ui-view></ui-view>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
     "</div>\n"
   );
 
@@ -100,12 +97,12 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "<nav class=\"navbar navbar-default\">\n" +
     "  <div class=\"container-fluid\">\n" +
     "    <div class=\"navbar-header\">\n" +
-    "      <a class=\"navbar-brand\" ui-sref=\".aps.list\">Wifi-Uff Location</a>\n" +
+    "      <a class=\"navbar-brand\" ui-sref=\".aps\">Wifi-Uff Location</a>\n" +
     "    </div>\n" +
     "    <div class=\"collapse navbar-collapse\">\n" +
     "      <ul class=\"nav navbar-nav\">\n" +
-    "        <li><a ui-sref=\".ap_list\">APs</a></li>\n" +
-    "        <li><a ui-sref=\".department_list\">Departments</a></li>\n" +
+    "        <li><a ui-sref=\".aps\">APs</a></li>\n" +
+    "        <li><a ui-sref=\".departments\">Departments</a></li>\n" +
     "        <li><a ui-sref=\".importer\">Importer</a></li>\n" +
     "      </ul>\n" +
     "    </div>\n" +
@@ -181,17 +178,14 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('map/show.html',
-    "<div class=\"row\" ng-if=\"ctrl.loading\">\n" +
-    "  <h2 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-5 fa-spin\"></i></h2>\n" +
-    "</div>\n" +
-    "<div class=\"row\" ng-if=\"!ctrl.loading && ctrl.hasMap\">\n" +
+    "<div class=\"row\">\n" +
     "  <div class=\"col-md-4\">\n" +
     "    <div class=\"panel panel-primary\" ng-if=\"ctrl.selectedAp\">\n" +
     "      <div class=\"panel-heading\">\n" +
     "        <h3 class=\"panel-title\">Ap Details</h3>\n" +
     "      </div>\n" +
     "      <div class=\"panel-body\">\n" +
-    "        <dl name=\"apDetails\" class=\"dl-horizontal\">\n" +
+    "        <dl class=\"dl-horizontal\">\n" +
     "          <dt>Name</dt>\n" +
     "          <dd>{{ctrl.selectedAp.name}}</dd>\n" +
     "          <dt>IP</dt>\n" +
@@ -244,7 +238,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "<div class=\"row\">\n" +
     "  <form class=\"form-horizontal\">\n" +
     "    <div class=\"form-group\">\n" +
-    "      <label for=\"file\" class=\"control-label col-xs-2\">Upload</label>\n" +
+    "      <label for=\"file\" class=\"control-label col-xs-2\">Upload Map</label>\n" +
     "      <div class=\"col-xs-9\">\n" +
     "        <input name=\"file\" type=\"file\" nv-file-select uploader=\"ctrl.uploader\" class=\"form-control\" options=\"\" />\n" +
     "      </div>\n" +

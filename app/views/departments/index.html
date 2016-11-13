@@ -1,26 +1,23 @@
 <div class="panel panel-primary">
-  <div class="panel-heading">
-    <h2 class="panel-title">Department</h2>
-  </div>
-  <div class="panel-body">
-    <div class="container">
-      <div class="row">
-        <form class="form-horizontal" autocomplete="off">
-          <div class="form-group">
-            <label for="department" class="col-xs-2 control-label">Department</label>
-            <div class="col-xs-9">
-              <input name="department" type="text" class="form-control" ng-model="ctrl.department"
-                uib-typeahead="d.name for d in ctrl.typeaheadDepartment($viewValue)"
-                typeahead-on-select="ctrl.typeaheadSelected($item)"
-                typeahead-show-hint="false" typeahead-wait-ms="500"
-                class="form-control">
-            </div>
-          </div>
-        </form>
-      </div>
-      <div ng-show="ctrl.departmentID && !ctrl.hasMap && !ctrl.loading " ng-include="'map/upload.html'"></div>
-      <div ng-show="ctrl.departmentID && (ctrl.loading || ctrl.hasMap)" ng-include="'map/show.html'"></div>
+    <div class="panel-heading">
+        <h2 class="panel-title">Department</h2>
     </div>
-  </div>
-</div>
+    <div class="panel-body">
+        <div class="container">
+            <div class="row">
+                <form class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label for="department" class="col-xs-2 control-label">Department</label>
+                        <div class="col-xs-9">
+                            <input name="department" type="text" class="form-control" ng-model="ctrl.department" uib-typeahead="d as d.name for d in ctrl.typeaheadDepartment($viewValue)" typeahead-on-select="ctrl.typeaheadSelected($item)" typeahead-show-hint="false" typeahead-wait-ms="500"
+                                class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <ui-view></ui-view>
+            </div>
+        </div>
+    </div>
 </div>
