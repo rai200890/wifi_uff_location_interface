@@ -39,6 +39,9 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'localS
                 }
             }).state('root.departments', {
                 url: "/departments",
+                params: {
+                  department_id: null
+                },
                 controller: 'DepartmentSearchController',
                 controllerAs: 'ctrl',
                 templateUrl: "departments/index.html",

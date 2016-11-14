@@ -16,13 +16,25 @@ angular.module('wifiUffLocation').service("Department", ["$http", "API_URL", fun
     });
   };
 
+  self.put = function(aps) {
+      var url = API_URL + "/api/departments/" + department.id + ".json";
+      return $http({
+          method: "put",
+          url: url
+      }, {
+          "department": {"aps_attributes": aps}
+      });
+  };
+
   self.typeahead = function(name) {
     return self.query(name).then(function(response) {
       var departments = response.data;
       return departments.map(function(department) {
         return {
           id: department.id,
-          name: department.name + "," + department.campus_name
+          full_name: department.name + "," + department.campus_name,
+          name: department.name,
+          campus_name: department.campus_name
         };
       });
     });

@@ -54,7 +54,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <span class=\"label label-danger\" ng-if='!ap.validated'><i class=\"fa fa-thumbs-o-down\"></i></span>\n" +
     "              </td>\n" +
     "              <td>\n" +
-    "                <button class=\"btn btn-default\" ui-sref=\"root.department_list({department_id: ap.location.department_id})\"><i class=\"fa fa-search-plus\"></i></button>\n" +
+    "                <button class=\"btn btn-default\" ui-sref=\"root.departments.map({department_id: ap.location.department_id})\"><i class=\"fa fa-search-plus\"></i></button>\n" +
     "              </td>\n" +
     "            </tr>\n" +
     "          </tbody>\n" +
@@ -69,23 +69,27 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
   $templateCache.put('departments/index.html',
     "<div class=\"panel panel-primary\">\n" +
     "    <div class=\"panel-heading\">\n" +
-    "        <h2 class=\"panel-title\">Department</h2>\n" +
+    "        <h2 class=\"panel-title\">Department Map</h2>\n" +
     "    </div>\n" +
     "    <div class=\"panel-body\">\n" +
     "        <div class=\"container\">\n" +
-    "            <div class=\"row\">\n" +
+    "          <div class=\"row\" ng-if=\"ctrl.loading\">\n" +
+    "            <h3 class=\"text-center\">Loading</h3>\n" +
+    "          </div>\n" +
+    "          <div class=\"row\" ng-if=\"!ctrl.loading\">\n" +
     "                <form class=\"form-horizontal\" autocomplete=\"off\">\n" +
     "                    <div class=\"form-group\">\n" +
-    "                        <label for=\"department\" class=\"col-xs-2 control-label\">Department</label>\n" +
-    "                        <div class=\"col-xs-9\">\n" +
-    "                            <input name=\"department\" type=\"text\" class=\"form-control\" ng-model=\"ctrl.department\" uib-typeahead=\"d as d.name for d in ctrl.typeaheadDepartment($viewValue)\" typeahead-on-select=\"ctrl.typeaheadSelected($item)\" typeahead-show-hint=\"false\" typeahead-wait-ms=\"500\"\n" +
+    "                        <div class=\"col-md-12 col-xs-11\">\n" +
+    "                            <input name=\"department\" type=\"text\" class=\"form-control\" ng-model=\"ctrl.department\" uib-typeahead=\"d as d.full_name for d in ctrl.typeaheadDepartment($viewValue)\" typeahead-on-select=\"ctrl.typeaheadSelected($item)\" typeahead-show-hint=\"false\" typeahead-wait-ms=\"500\" placeholder=\"Search by department name,abbreviation or campus\"\n" +
     "                                class=\"form-control\">\n" +
     "                        </div>\n" +
     "                    </div>\n" +
     "                </form>\n" +
     "            </div>\n" +
-    "            <div class=\"row\">\n" +
-    "                <ui-view></ui-view>\n" +
+    "            <div class=\"row\" ng-if=\"!ctrl.loading\">\n" +
+    "                <div class=\"container\">\n" +
+    "                    <ui-view></ui-view>\n" +
+    "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -179,54 +183,24 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
   $templateCache.put('map/show.html',
     "<div class=\"row\">\n" +
-    "  <div class=\"col-md-4\">\n" +
-    "    <div class=\"panel panel-primary\" ng-if=\"ctrl.selectedAp\">\n" +
-    "      <div class=\"panel-heading\">\n" +
-    "        <h3 class=\"panel-title\">Ap Details</h3>\n" +
-    "      </div>\n" +
-    "      <div class=\"panel-body\">\n" +
-    "        <dl class=\"dl-horizontal\">\n" +
-    "          <dt>Name</dt>\n" +
-    "          <dd>{{ctrl.selectedAp.name}}</dd>\n" +
-    "          <dt>IP</dt>\n" +
-    "          <dd>{{ctrl.selectedAp.ip}}</dd>\n" +
-    "          <dt>Validated</dt>\n" +
-    "          <dd>{{ctrl.selectedAp.validated}}</dd>\n" +
-    "          <dt>Real latitude</dt>\n" +
-    "          <dd>{{ctrl.selectedAp.real_latitude}}</dd>\n" +
-    "          <dt>Real longitude</dt>\n" +
-    "          <dd>{{ctrl.selectedAp.real_longitude}}</dd>\n" +
-    "          <dt>Map latitude</dt>\n" +
-    "          <dd>{{ctrl.selectedAp.map_latitude}}</dd>\n" +
-    "          <dt>Map longitude</dt>\n" +
-    "          <dd>{{ctrl.selectedAp.map_longitude}}</dd>\n" +
-    "        </dl>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "  <div class=\"col-md-8\">\n" +
-    "    <div class=\"row\">\n" +
-    "      <div class=\"panel panel-primary\">\n" +
-    "        <div class=\"panel-heading\">\n" +
-    "          <h3 class=\"panel-title\">Unmarked Aps</h3>\n" +
+    "    <leaflet id=\"map\" center=\"ctrl.center\" layers=\"ctrl.layers\" markers=\"ctrl.markers\" event-broadcast=\"ctrl.events\" legend=\"ctrl.legend\" defaults=\"ctrl.defaults\" width=\"100%\" height=\"400px\"></leaflet>\n" +
+    "</div>\n" +
+    "<div class=\"row\">\n" +
+    "    <br/>\n" +
+    "</div>\n" +
+    "<div class=\"row\">\n" +
+    "    <button ng-if=\"!ctrl.editing\" type=\"button\" ng-click=\"ctrl.edit()\" class=\"btn btn-primary\"><i class=\"fa fa-pencil\"></i></button>\n" +
+    "    <form name=\"mark_aps\" class=\"form-inline\" ng-if=\"ctrl.editing\">\n" +
+    "        <label class=\"text-success\" ng-hide=\"ctrl.unmarkedAps.length\"> 0 APs left to add, please verify before save </label>\n" +
+    "        <select name=\"unmarked_ap\" ng-model=\"ctrl.unmarkedAp\" ng-required=\"true\" ng-show=\"ctrl.unmarkedAps.length > 0\" class=\"form-control\" ng-options=\"ap.name for ap in ctrl.unmarkedAps\">\n" +
+    "          <option value=\"\" disabled=\"\">Add Ap to Map</option>\n" +
+    "        </select>\n" +
+    "        <button type=\"button\" ng-click=\"ctrl.addApToMap(ctrl.unmarkedAp)\" ng-disabled=\"mark_aps.$invalid\" ng-show=\"ctrl.unmarkedAps.length > 0\" class=\"btn btn-primary btn-small\"><i class=\"fa fa-plus\"></i></button>\n" +
+    "        <div class=\"btn-group\" role=\"group\">\n" +
+    "            <button type=\"button\" ng-click=\"ctrl.cancel()\" class=\"btn btn-small btn-danger\"><i class=\"fa fa-times\"></i></button>\n" +
+    "            <button type=\"button\" ng-click=\"ctrl.save()\" class=\"btn btn-small btn-success\"><i class=\"fa fa-check\"></i></button>\n" +
     "        </div>\n" +
-    "        <div class=\"panel-body\">\n" +
-    "          <form class=\"form-inline\">\n" +
-    "          <select ng-show =\"ctrl.unmarkedAps.length > 0\" ng-model=\"ctrl.unmarkedAp\" class=\"form-control\" ng-options=\"ap.name for ap in ctrl.unmarkedAps\"></select>\n" +
-    "            <button type=\"button\" ng-click=\"ctrl.addMarker(ctrl.unmarkedAp)\" class=\"btn btn-primary btn-mini\"><i class=\"fa fa-plus\" aria-hidden=\"true\"></i></button>\n" +
-    "          </div>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    <div class=\"row\">\n" +
-    "      <leaflet id=\"map\" center=\"ctrl.center\" layers=\"ctrl.layers\" markers=\"ctrl.markers\" event-broadcast=\"ctrl.events\" legend=\"ctrl.legend\" defaults=\"ctrl.defaults\" width=\"100%\" height=\"500px\"></leaflet>\n" +
-    "    </div>\n" +
-    "    <div class=\"row\">\n" +
-    "      <div class=\"btn-group\" role=\"group\">\n" +
-    "        <button type=\"button\" ng-click=\"ctrl.restoreLocations()\" class=\"btn btn-default\">Restore</button>\n" +
-    "        <button type=\"button\" ng-click=\"ctrl.saveLocations()\" class=\"btn btn-primary\">Save</button>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
+    "    </form>\n" +
     "</div>\n"
   );
 
@@ -236,15 +210,15 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <bm-alerts bm-items=\"ctrl.alerts\"></bm-alerts>\n" +
     "</div>\n" +
     "<div class=\"row\">\n" +
-    "  <form class=\"form-horizontal\">\n" +
+    "  <form name=\"upload_map\" class=\"form-horizontal\">\n" +
     "    <div class=\"form-group\">\n" +
     "      <label for=\"file\" class=\"control-label col-xs-2\">Upload Map</label>\n" +
-    "      <div class=\"col-xs-9\">\n" +
-    "        <input name=\"file\" type=\"file\" nv-file-select uploader=\"ctrl.uploader\" class=\"form-control\" options=\"\" />\n" +
+    "      <div class=\"col-xs-10\">\n" +
+    "        <input name=\"file\" type=\"file\" ng-required=\"true\" nv-file-select uploader=\"ctrl.uploader\" class=\"form-control\" options=\"\" />\n" +
     "      </div>\n" +
     "    </div>\n" +
     "    <div class=\"form-group\">\n" +
-    "      <button ng-click=\"ctrl.upload()\" type=\"submit\" class=\"btn btn-primary\" ng-if=\"!ctrl.uploading\"> Send </button>\n" +
+    "      <button ng-disabled=\"ctrl.uploader.queue.length == 0\" ng-click=\"ctrl.upload()\" type=\"submit\" class=\"btn btn-primary\" ng-if=\"!ctrl.uploading\"> Send </button>\n" +
     "      <button type=\"submit\" class=\"btn btn-primary\" ng-if=\"ctrl.uploading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\"></i></button>\n" +
     "    </div>\n" +
     "  </form>\n" +

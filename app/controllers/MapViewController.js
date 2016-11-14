@@ -14,7 +14,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
             zoom: -3
         };
         ctrl.defaults = {
-            maxZoom: 1,
+            maxZoom: 3,
             minZoom: -3,
             zoomControl: true,
             crs: 'Simple',
@@ -28,38 +28,62 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
                 logic: 'emit'
             },
             marker: {
-                enable: ['click', 'drag', 'mouseover'],
+                enable: ['click', 'mouseover', 'drag'],
                 logic: 'emit'
             }
         };
         ctrl.legend = {};
-
         ctrl.typeaheadNoResults = false;
         ctrl.selectedAp = null;
         ctrl.unmarkedAps = [];
         ctrl.unmarkedAp = null;
 
-
-        ctrl.saveLocations = function() {
-
+        ctrl.edit = function() {
+            ctrl.legend = {};
+            angular.forEach(ctrl.markers, function(name, marker) {
+                marker.icon = null;
+                marker.draggable = true;
+            });
+            ctrl.editing = true;
         };
 
-        ctrl.restoreLocations = function() {
-
+        ctrl.save = function() {
+            ctrl.editing = false;
+            var aps = [];
+            angular.forEach(ctrl.markers, function(id, marker) {
+                aps.push({
+                    id: id,
+                    map_latitude: marker.lat,
+                    map_longitude: marker.lng
+                });
+            });
+            reloadAps($stateParams.department_id);
         };
 
-        ctrl.loadMap = function(departmentID) {
+        ctrl.cancel = function() {
+            ctrl.editing = false;
+            reloadAps($stateParams.department_id);
+        };
+
+        ctrl.addApToMap = function(ap) {
+            var marker = generateMarker(ap);
+            marker.draggable = true;
+
+            ctrl.layers.overlays[ap.name] = {
+                name: ap.name,
+                type: 'group',
+                visible: true
+            };
+            ctrl.markers[ap.id] = marker;
+
+            var index = ctrl.unmarkedAps.indexOf(ap);
+            ctrl.unmarkedAps.splice(index, 1);
+        };
+
+        var loadMap = function(departmentID) {
             Department.get(departmentID).success(function(department) {
-                ctrl.legend = {
-                    colors: ['#008000', '#800080', '#FF0000', '#0000FF'],
-                    labels: ['Canal 1', 'Canal 6', 'Canal 11', 'Outros'],
-                    legendData: null
-                };
-
                 var name = department.name + ", " + department.campus_name;
-
-                var bounds = L.latLngBounds(department.map_bounds); //workaround
-
+                var bounds = L.latLngBounds(department.map_bounds);
                 ctrl.layers.baselayers.map = {
                     name: name,
                     type: 'imageOverlay',
@@ -71,24 +95,35 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
                         attribution: name
                     }
                 };
+                reloadAps(departmentID);
+            });
+        };
 
-                Ap.query(department.id).success(function(aps) {
-                    aps.forEach(function(ap) {
-                        if (ap.map_latitude == null && ap.map_longitude == null) {
-                            ctrl.unmarkedAps.push(ap);
-                        } else {
-                            ctrl.addMarker(ap);
-                        };
-                    });
+        var reloadAps = function(departmentID) {
+            ctrl.legend = {
+                colors: ['#008000', '#800080', '#FF0000', '#0000FF'],
+                labels: ['Channel 1', 'Channel 6', 'Channel 11', 'Other channels'],
+                legendData: null
+            };
+            ctrl.unmarkedAps = [];
+            ctrl.markers = {};
+            ctrl.layers.overlays = {};
+            Ap.query(departmentID).success(function(aps) {
+                aps.forEach(function(ap) {
+                    if (ap.map_latitude == null && ap.map_longitude == null) {
+                        ctrl.unmarkedAps.push(ap);
+                    } else {
+                        ctrl.loadSNMPInfo(ap);
+                    };
                 });
             });
         };
 
-        ctrl.addMarker = function(ap) {
+        var generateMarker = function(ap) {
             var message = "<p>" + ap.name + " , " + ap.location.name + "</p>";
             var marker = {
-                lat: 0,
-                lng: 0,
+                lat: ap.real_latitude,
+                lng: ap.real_longitude,
                 layer: ap.name,
                 label: {
                     message: message,
@@ -97,9 +132,14 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
                         noHide: true
                     }
                 },
-                focus: true,
-                draggable: true
+                focus: true
             };
+            return marker
+        };
+
+        var loadSNMPInfo = function(ap) {
+            var marker = generateMarker(ap);
+            marker.draggable = false;
 
             ctrl.layers.overlays[ap.name] = {
                 name: ap.name,
@@ -113,19 +153,11 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
             }).error(function() {
                 ctrl.markers[ap.id] = marker;
             });
-
-            var index = ctrl.unmarkedAps.indexOf(ap);
-            ctrl.unmarkedAps.splice(index, 1);
         };
 
-        ctrl.loadMap($stateParams.department_id);
-
-        $scope.$on('leafletDirectiveMarker.map.click', function(event, args) {
-            Ap.get(args.modelName).success(function(ap) {
-                ap.map_latitude = args.model.lat;
-                ap.map_longitude = args.model.lng;
-                ctrl.selectedAp = ap;
-            });
-        });
+        var init = function() {
+            loadMap($stateParams.department_id);
+        };
+        init();
     }
 ]);
