@@ -24,11 +24,11 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
         };
         ctrl.events = {
             map: {
-                enable: ['click', 'drag', 'blur', 'touchstart', 'mouseover'],
+                enable: ['click', 'drag', 'dragend', 'blur', 'touchstart', 'mouseover'],
                 logic: 'emit'
             },
             marker: {
-                enable: ['click', 'mouseover', 'drag'],
+                enable: ['click', 'mouseover', 'drag', 'dragend'],
                 logic: 'emit'
             }
         };
@@ -40,7 +40,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
 
         ctrl.edit = function() {
             ctrl.legend = {};
-            angular.forEach(ctrl.markers, function(name, marker) {
+            angular.forEach(ctrl.markers, function(marker, name) {
                 marker.icon = null;
                 marker.draggable = true;
             });
@@ -50,14 +50,28 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
         ctrl.save = function() {
             ctrl.editing = false;
             var aps = [];
-            angular.forEach(ctrl.markers, function(id, marker) {
+            angular.forEach(ctrl.markers, function(marker, id) {
                 aps.push({
                     id: id,
                     map_latitude: marker.lat,
                     map_longitude: marker.lng
                 });
             });
-            reloadAps($stateParams.department_id);
+            Department.put($stateParams.department_id, aps)
+                .success(function() {
+                    ctrl.alerts = [{
+                        type: "success",
+                        messages: ["Ap's new configuration saved successfully!"]
+                    }];
+                })
+                .error(function(response) {
+                    ctrl.alerts = [{
+                        type: "danger",
+                        messages: response.errors
+                    }];
+                }).finally(function() {
+                    reloadAps($stateParams.department_id);
+                });
         };
 
         ctrl.cancel = function() {
@@ -113,7 +127,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
                     if (ap.map_latitude == null && ap.map_longitude == null) {
                         ctrl.unmarkedAps.push(ap);
                     } else {
-                        ctrl.loadSNMPInfo(ap);
+                        loadSNMPInfo(ap);
                     };
                 });
             });
@@ -122,8 +136,8 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
         var generateMarker = function(ap) {
             var message = "<p>" + ap.name + " , " + ap.location.name + "</p>";
             var marker = {
-                lat: ap.real_latitude,
-                lng: ap.real_longitude,
+                lat: ap.map_latitude || 0,
+                lng: ap.map_longitude || 0,
                 layer: ap.name,
                 label: {
                     message: message,
@@ -157,6 +171,10 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
 
         var init = function() {
             loadMap($stateParams.department_id);
+            $scope.$on('leafletDirectiveMarker.map.dragend', function(e, args) {
+                ctrl.markers[args.modelName].lat = args.model.lat;
+                ctrl.markers[args.modelName].lng = args.model.lng;
+            });
         };
         init();
     }

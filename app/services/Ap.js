@@ -9,6 +9,11 @@ angular.module('wifiUffLocation').service("Ap", ["$http", "API_URL", function($h
         });
     };
 
+    self.put = function(id, ap) {
+        var url = API_URL + "/api/aps/" + id + ".json";
+        return $http.put(url, {ap: ap});
+    };
+
     self.query = function(department_id) {
         var url = API_URL + "/api/aps.json";
         if (department_id) {

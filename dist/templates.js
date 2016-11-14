@@ -189,6 +189,9 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <br/>\n" +
     "</div>\n" +
     "<div class=\"row\">\n" +
+    "    <bm-alerts bm-items=\"ctrl.alerts\"></bm-alerts>\n" +
+    "</div>\n" +
+    "<div class=\"row\">\n" +
     "    <button ng-if=\"!ctrl.editing\" type=\"button\" ng-click=\"ctrl.edit()\" class=\"btn btn-primary\"><i class=\"fa fa-pencil\"></i></button>\n" +
     "    <form name=\"mark_aps\" class=\"form-inline\" ng-if=\"ctrl.editing\">\n" +
     "        <label class=\"text-success\" ng-hide=\"ctrl.unmarkedAps.length\"> 0 APs left to add, please verify before save </label>\n" +

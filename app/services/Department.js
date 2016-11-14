@@ -9,21 +9,16 @@ angular.module('wifiUffLocation').service("Department", ["$http", "API_URL", fun
     });
   };
 
+  self.put = function(id, aps) {
+      var url = API_URL + "/api/departments/" + id + ".json";
+      return $http.put(url, {department: {aps_attributes: aps} });
+  };
+
   self.query = function(name) {
     return $http({
       method: "get",
       url: API_URL + "/api/departments.json?department_or_campus_name=" + name
     });
-  };
-
-  self.put = function(aps) {
-      var url = API_URL + "/api/departments/" + department.id + ".json";
-      return $http({
-          method: "put",
-          url: url
-      }, {
-          "department": {"aps_attributes": aps}
-      });
   };
 
   self.typeahead = function(name) {

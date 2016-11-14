@@ -5,6 +5,9 @@
     <br/>
 </div>
 <div class="row">
+    <bm-alerts bm-items="ctrl.alerts"></bm-alerts>
+</div>
+<div class="row">
     <button ng-if="!ctrl.editing" type="button" ng-click="ctrl.edit()" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
     <form name="mark_aps" class="form-inline" ng-if="ctrl.editing">
         <label class="text-success" ng-hide="ctrl.unmarkedAps.length"> 0 APs left to add, please verify before save </label>
