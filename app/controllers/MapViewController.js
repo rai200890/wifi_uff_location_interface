@@ -178,8 +178,6 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
             $scope.$on('leafletDirectiveMarker.map.dragend', function(e, args) {
                 ctrl.markers[args.modelName].lat = args.model.lat;
                 ctrl.markers[args.modelName].lng = args.model.lng;
-                console.log(args.model.lat);
-                console.log(args.model.lng);
             });
         };
         init();
