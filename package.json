@@ -8,19 +8,31 @@
     "npm": "^3.5.3"
   },
   "dependencies": {
-    "angular": "^1.4.8",
-    "angular-file-upload": "^2.2.0",
-    "angular-resource": "^1.4.8",
-    "angular-route": "^1.4.8",
-    "angular-simple-logger": "^0.1.5",
-    "angular-smart-table": "^2.1.6",
-    "angular-ui-bootstrap": "^1.0.3",
-    "angular-ui-router": "^0.2.15",
-    "bootstrap": "^3.3.6",
+    "angular": "^1.5.8",
+    "angular-file-upload": "^2.3.4",
+    "angular-jwt": "^0.1.7",
+    "angular-local-storage": "^0.5.0",
+    "angular-route": "^1.5.8",
+    "angular-simple-logger": "^0.1.7",
+    "angular-smart-table": "^2.1.8",
+    "angular-ui-bootstrap": "^2.2.0",
+    "angular-ui-router": "^0.3.2",
+    "bootstrap": "^3.3.7",
+    "connect-modrewrite": "^0.9.0",
     "express": "^4.14.0",
-    "font-awesome": "^4.4.0",
-    "jquery": "^2.1.4",
-    "jquery-ui": "^1.10.5",
+    "font-awesome": "^4.7.0",
+    "grunt": "0.4.5",
+    "grunt-angular-templates": "^1.1.0",
+    "grunt-cli": "0.1.13",
+    "grunt-concat-css": "^0.3.1",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-connect": "^0.11.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-express-runner": "^0.2.1",
+    "jquery": "^3.1.1",
+    "jquery-ui": "^1.12.1",
     "leaflet": "^0.7.3",
     "leaflet-label": "^0.2.1-0",
     "ui-leaflet": "^1.0.0"
@@ -39,17 +51,5 @@
   "bugs": {
     "url": "https://github.com/rai200890/wifi_uff_location_interface/issues"
   },
-  "homepage": "https://github.com/rai200890/wifi_uff_location_interface#readme",
-  "devDependencies": {
-    "connect-modrewrite": "^0.8.2",
-    "grunt": "0.4.5",
-    "grunt-angular-templates": "^1.0.2",
-    "grunt-cli": "0.1.13",
-    "grunt-concat-css": "^0.3.1",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-uglify": "^0.11.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-express-runner": "^0.2.1"
-  }
+  "homepage": "https://github.com/rai200890/wifi_uff_location_interface#readme"
 }

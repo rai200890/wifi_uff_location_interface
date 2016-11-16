@@ -1,0 +1,26 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h2 class="panel-title">Database Importer</h2>
+  </div>
+  <div class="panel-body">
+    <div class="container">
+      <div class="row">
+          <bm-alerts bm-items="ctrl.alerts"></bm-alerts>
+      </div>
+      <div class="row">
+        <form name="upload" class="form-horizontal">
+          <div class="form-group">
+            <label for="file" class="control-label col-xs-2">Upload spreadsheet</label>
+            <div class="col-xs-9">
+              <input name="file" type="file" nv-file-select uploader="ctrl.uploader" class="form-control" options="" />
+            </div>
+          </div>
+          <div class="form-group">
+            <button ng-disabled="ctrl.uploader.queue.length == 0" ng-click="ctrl.upload()" type="submit" class="btn btn-primary" ng-if="!ctrl.uploading"> Send </button>
+            <button ng-click="ctrl.upload()" type="submit" class="btn btn-primary" ng-if="ctrl.uploading" disabled>Sending <i class="fa fa-spinner fa-spin"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

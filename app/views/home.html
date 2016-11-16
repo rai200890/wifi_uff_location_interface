@@ -1,18 +1,17 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" ui-sref=".aps.list">Wifi-Uff Location</a>
+      <a class="navbar-brand" ui-sref=".aps">Wifi-Uff Location</a>
     </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a ui-sref=".aps.list">APs</a></li>
-        <li><a ui-sref=".search">Search</a></li>
-        <li><a ui-sref=".db_uploader">DBUploader</a></li>
+        <li><a ui-sref=".aps">APs</a></li>
+        <li><a ui-sref=".departments">Departments</a></li>
+        <li><a ui-sref=".importer">Importer</a></li>
       </ul>
     </div>
   </div>
 </nav>
-<div class="container" ui-view></div>
+<ui-view></ui-view>
 <footer class="container">
-  <h5 class="text-center">Footer</h5>
 </footer>

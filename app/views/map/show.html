@@ -1,17 +1,23 @@
 <div class="row">
-  <h3>Map</h3>
+    <leaflet id="map" center="ctrl.center" layers="ctrl.layers" markers="ctrl.markers" event-broadcast="ctrl.events" legend="ctrl.legend" defaults="ctrl.defaults" width="100%" height="400px"></leaflet>
 </div>
-<div class="row" ng-if="loading">
-  <h2 class="text-center">Loading<i class="fa fa-spinner fa-5 fa-spin"></i></h2>
+<div class="row">
+    <br/>
 </div>
-<div class="row" ng-if="!loading && hasMap">
-  <div class="container">
-    <leaflet id="map" layers="layers" markers="markers" legend="legend" defaults="defaults" height="480px" width="640px"></leaflet>
-  </div>
+<div class="row">
+    <bm-alerts bm-items="ctrl.alerts"></bm-alerts>
 </div>
-<div class="row" ng-if="!loading && hasMap">
-  <div class="btn-group" role="group">
-    <button type="button" ng-click="restoreLocations()" class="btn btn-default">Restore</button>
-    <button type="button" ng-click="saveLocations()" class="btn btn-primary">Save</button>
-  </div>
+<div class="row">
+    <button ng-if="!ctrl.editing" type="button" ng-click="ctrl.edit()" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+    <form name="mark_aps" class="form-inline" ng-if="ctrl.editing">
+        <label class="text-success" ng-hide="ctrl.unmarkedAps.length"> 0 APs left to add, please verify before save </label>
+        <select name="unmarked_ap" ng-model="ctrl.unmarkedAp" ng-required="true" ng-show="ctrl.unmarkedAps.length > 0" class="form-control" ng-options="ap.name for ap in ctrl.unmarkedAps">
+          <option value="" disabled="">Add Ap to Map</option>
+        </select>
+        <button type="button" ng-click="ctrl.addApToMap(ctrl.unmarkedAp)" ng-disabled="mark_aps.$invalid" ng-show="ctrl.unmarkedAps.length > 0" class="btn btn-primary btn-small"><i class="fa fa-plus"></i></button>
+        <div class="btn-group" role="group">
+            <button type="button" ng-click="ctrl.cancel()" class="btn btn-small btn-danger"><i class="fa fa-times"></i></button>
+            <button type="button" ng-click="ctrl.save()" class="btn btn-small btn-success"><i class="fa fa-check"></i></button>
+        </div>
+    </form>
 </div>

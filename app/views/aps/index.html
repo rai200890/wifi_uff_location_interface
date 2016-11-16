@@ -1,2 +1,52 @@
-<div ui-view="">
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h2 class="panel-title">Aps</h2>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="table-responsive">
+        <table st-table="ctrl.displayedAps" st-safe-src="ctrl.aps" class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th colspan="7">
+                <form class="form-horizontal">
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      <input st-search="" type="search" class="form-control" placeholder="Search..." />
+                    </div>
+                  </div>
+                </form>
+              </th>
+            </tr>
+            <tr>
+              <th st-sort='name'>Name</th>
+              <th st-sort="ip">IP</th>
+              <th st-sort='campus_name'>Campus</th>
+              <th st-sort='department_name'>Department</th>
+              <th>Location</th>
+              <th st-sort='validated'>Validated</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr ng-repeat="ap in ctrl.displayedAps">
+              <td>{{ap.name}}</td>
+              <td>{{ap.ip}}</td>
+              <td tooltip-append-to-body="true" tooltip="{{ap.location.department_name + ',' + ap.location.name}}">{{ap.location.campus_name}}</td>
+              <td>{{ap.location.department_name}}</td>
+              <td>{{ap.location.name}}</td>
+              <td>
+                <span class="label label-success" ng-if='ap.validated'><i class="fa fa-thumbs-o-up"></i></span>
+                <span class="label label-danger" ng-if='!ap.validated'><i class="fa fa-thumbs-o-down"></i></span>
+              </td>
+              <td>
+                <button class="btn btn-default" ui-sref="root.departments.map({department_id: ap.location.department_id})"><i class="fa fa-search-plus"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
