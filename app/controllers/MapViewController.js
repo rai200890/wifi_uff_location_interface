@@ -98,6 +98,10 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
             Department.get(departmentID).success(function(department) {
                 var name = department.name + ", " + department.campus_name;
                 var bounds = L.latLngBounds(department.map_bounds);
+
+                ctrl.center.lat = department.map_center[0];
+                ctrl.center.lng = department.map_center[1];
+
                 ctrl.layers.baselayers.map = {
                     name: name,
                     type: 'imageOverlay',
@@ -174,6 +178,8 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
             $scope.$on('leafletDirectiveMarker.map.dragend', function(e, args) {
                 ctrl.markers[args.modelName].lat = args.model.lat;
                 ctrl.markers[args.modelName].lng = args.model.lng;
+                console.log(args.model.lat);
+                console.log(args.model.lng);
             });
         };
         init();

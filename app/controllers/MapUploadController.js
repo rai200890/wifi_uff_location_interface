@@ -30,7 +30,7 @@ angular.module('wifiUffLocation').controller("MapUploadController", ["$statePara
         ctrl.upload = function() {
             ctrl.uploading = true;
             var file = ctrl.uploader.queue[ctrl.uploader.queue.length - 1];
-            file.url = API_URL + "/api/departments/" + $stateParams.department_id + ".json";
+            file.url = API_URL + "/departments/" + $stateParams.department_id + ".json";
             ctrl.uploader.uploadItem(file);
             ctrl.uploader.addToQueue(file);
         };
