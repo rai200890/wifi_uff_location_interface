@@ -7,10 +7,15 @@ angular.module('wifiUffLocation').service("Marker", ["SNMPStatus", "BASE_URL", f
     other: "/images/circle-icon-blue.png"
   };
 
-  self.getIcon = function(channel, power) {
+  self.getIcon = function(channel, power, zoom) {
+    var zoom = 1;
+    if (zoom <= 0) {
+      zoom = zoom*(-1)/5;
+    }
+      console.log(power);
     var icon = {
       iconUrl: BASE_URL + CHANNEL_ICONS.other,
-      iconSize: [100, 100],
+      iconSize: [100*zoom, 100*zoom],
       opacity: 0.7
     };
     if ([1, 6, 11].indexOf(channel)) {

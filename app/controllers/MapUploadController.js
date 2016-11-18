@@ -23,7 +23,7 @@ angular.module('wifiUffLocation').controller("MapUploadController", ["$statePara
             ctrl.uploading = true;
             ctrl.alerts = [{
                 type: "danger",
-                messages: response.errors
+                messages: ['Invalid file!']
             }];
         };
 

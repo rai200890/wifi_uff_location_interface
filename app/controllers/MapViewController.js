@@ -37,6 +37,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
         ctrl.selectedAp = null;
         ctrl.unmarkedAps = [];
         ctrl.unmarkedAp = null;
+        ctrl.editing = false;
 
         ctrl.edit = function() {
             ctrl.legend = {};
@@ -140,8 +141,8 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
         var generateMarker = function(ap) {
             var message = "<p>" + ap.name + " , " + ap.location.name + "</p>";
             var marker = {
-                lat: ap.map_latitude || 0,
-                lng: ap.map_longitude || 0,
+                lat: ap.map_latitude || ctrl.center.lat,
+                lng: ap.map_longitude || ctrl.center.lng,
                 layer: ap.name,
                 label: {
                     message: message,
@@ -167,7 +168,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
 
             SNMPStatus.get(ap.id).success(function(data) {
                 ctrl.markers[ap.id] = marker;
-                ctrl.markers[ap.id].icon = Marker.getIcon(data.channel.value, data.power.value);
+                ctrl.markers[ap.id].icon = Marker.getIcon(data.channel, data.power);
             }).error(function() {
                 ctrl.markers[ap.id] = marker;
             });
@@ -180,6 +181,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
                 ctrl.markers[args.modelName].lng = args.model.lng;
             });
         };
+
         init();
     }
 ]);

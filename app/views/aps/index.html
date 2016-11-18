@@ -4,7 +4,8 @@
   </div>
   <div class="panel-body">
     <div class="row">
-      <div class="table-responsive">
+      <h3 class="text-center" ng-show="ctrl.loading">Loading <i class="fa fa-spinner fa-spin"></i></h3>
+      <div class="table-responsive" ng-hide="ctrl.loading">
         <table st-table="ctrl.displayedAps" st-safe-src="ctrl.aps" class="table table-hover table-striped">
           <thead>
             <tr>
