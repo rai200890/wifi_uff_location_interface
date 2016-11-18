@@ -4,7 +4,7 @@ angular.module('wifiUffLocation').controller('ImporterController', ['$scope', 'F
   ctrl.alerts = [];
 
   ctrl.uploader = new FileUploader({
-    url: API_URL + "/api/db_importer.json",
+    url: API_URL + "/db_importer.json",
     headers: {
       "Authorization": "Bearer " + Auth.getToken()
     }

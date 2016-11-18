@@ -17,7 +17,8 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  </div>\n" +
     "  <div class=\"panel-body\">\n" +
     "    <div class=\"row\">\n" +
-    "      <div class=\"table-responsive\">\n" +
+    "      <h3 class=\"text-center\" ng-show=\"ctrl.loading\">Loading <i class=\"fa fa-spinner fa-spin\"></i></h3>\n" +
+    "      <div class=\"table-responsive\" ng-hide=\"ctrl.loading\">\n" +
     "        <table st-table=\"ctrl.displayedAps\" st-safe-src=\"ctrl.aps\" class=\"table table-hover table-striped\">\n" +
     "          <thead>\n" +
     "            <tr>\n" +
@@ -74,7 +75,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <div class=\"panel-body\">\n" +
     "        <div class=\"container\">\n" +
     "          <div class=\"row\" ng-if=\"ctrl.loading\">\n" +
-    "            <h3 class=\"text-center\">Loading</h3>\n" +
+    "            <h3 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-spin\"></i></h3>\n" +
     "          </div>\n" +
     "          <div class=\"row\" ng-if=\"!ctrl.loading\">\n" +
     "                <form class=\"form-horizontal\" autocomplete=\"off\">\n" +

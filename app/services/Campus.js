@@ -4,7 +4,7 @@ angular.module('wifiUffLocation').service("Campus", ["$http", "API_URL", functio
   self.query = function(campus_name) {
     return $http({
       method: "get",
-      url: API_URL + "/api/campi.json?campus_name=" + campus_name
+      url: API_URL + "/campi.json?campus_name=" + campus_name
     });
   };
 

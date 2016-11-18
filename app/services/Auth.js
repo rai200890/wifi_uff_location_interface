@@ -1,7 +1,7 @@
 angular.module('wifiUffLocation').service("Auth", ["$http", "API_URL", "localStorageService", "jwtHelper", "User", "$q", function($http, API_URL, localStorageService, jwtHelper, User, $q) {
   var self = this;
   self.login = function(credentials, saveCredentials) {
-    var url = API_URL + "/api/sessions.json";
+    var url = API_URL + "/sessions.json";
     var deferred = $q.defer();
     $http({
         "url": url,
