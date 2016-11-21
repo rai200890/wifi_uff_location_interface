@@ -99,18 +99,39 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('home.html',
-    "<nav class=\"navbar navbar-default\">\n" +
-    "  <div class=\"container-fluid\">\n" +
-    "    <div class=\"navbar-header\">\n" +
-    "      <a class=\"navbar-brand\" ui-sref=\".aps\">Wifi-Uff Location</a>\n" +
-    "    </div>\n" +
-    "    <div class=\"collapse navbar-collapse\">\n" +
-    "      <ul class=\"nav navbar-nav\">\n" +
-    "        <li><a ui-sref=\".aps\">APs</a></li>\n" +
-    "        <li><a ui-sref=\".departments\">Departments</a></li>\n" +
-    "        <li><a ui-sref=\".importer\">Importer</a></li>\n" +
-    "      </ul>\n" +
-    "    </div>\n" +
+    "<nav class=\"navbar navbar-default\" role=\"navigation\" ng-controller=\"MenuController as ctrl\">\n" +
+    "  <div class=\"navbar-header\">\n" +
+    "    <a class=\"navbar-brand\" ui-sref=\"root.aps\">Wifi-Uff-Location</a>\n" +
+    "  </div>\n" +
+    "  <div class=\"collapse navbar-collapse\" ng-class=\"!navCollapsed && 'in'\">\n" +
+    "    <ul class=\"nav navbar-nav\">\n" +
+    "      <li uib-dropdown=\"\">\n" +
+    "        <a href=\"#\" uib-dropdown-toggle=\"\">\n" +
+    "                        Aps<b class=\"caret\"></b>\n" +
+    "                    </a>\n" +
+    "        <tree tree=\"ctrl.aps_menu\"></tree>\n" +
+    "      </li>\n" +
+    "      <li uib-dropdown=\"\">\n" +
+    "        <a href=\"#\" uib-dropdown-toggle=\"\">\n" +
+    "                        Departments<b class=\"caret\"></b>\n" +
+    "                    </a>\n" +
+    "        <tree  tree=\"ctrl.departments_menu\"></tree>\n" +
+    "      </li>\n" +
+    "      <li uib-dropdown=\"\">\n" +
+    "        <a href=\"#\" uib-dropdown-toggle=\"\">\n" +
+    "                        Importer<b class=\"caret\"></b>\n" +
+    "                    </a>\n" +
+    "        <tree tree=\"ctrl.importer_menu\"></tree>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "    <ul class=\"nav navbar-nav navbar-right\">\n" +
+    "      <li uib-dropdown=\"\">\n" +
+    "        <a href=\"#\" uib-dropdown-toggle=\"\">\n" +
+    "                        Hello, {{}}<b class=\"caret\"></b>\n" +
+    "                    </a>\n" +
+    "        <tree tree=\"ctrl.session_menu\"></tree>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
     "  </div>\n" +
     "</nav>\n" +
     "<ui-view></ui-view>\n" +

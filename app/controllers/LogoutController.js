@@ -5,7 +5,7 @@ angular.module('wifiUffLocation').controller("LogoutController", ['Auth', '$stat
     ctrl.init = function() {
       Auth.logout();
       $state.go('login');
-    }
+    };
 
     ctrl.init();
   }

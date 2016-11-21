@@ -35,7 +35,8 @@
     "jquery-ui": "^1.12.1",
     "leaflet": "^0.7.3",
     "leaflet-label": "^0.2.1-0",
-    "ui-leaflet": "^1.0.0"
+    "ui-leaflet": "^1.0.0",
+    "ui-navbar": "^0.5.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -51,5 +52,8 @@
   "bugs": {
     "url": "https://github.com/rai200890/wifi_uff_location_interface/issues"
   },
-  "homepage": "https://github.com/rai200890/wifi_uff_location_interface#readme"
+  "homepage": "https://github.com/rai200890/wifi_uff_location_interface#readme",
+  "devDependencies": {
+    "grunt-contrib-uglify": "^0.11.1"
+  }
 }
