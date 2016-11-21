@@ -38,6 +38,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
         ctrl.unmarkedAps = [];
         ctrl.unmarkedAp = null;
         ctrl.editing = false;
+        ctrl.department_id = $stateParams.department_id;
 
         ctrl.edit = function() {
             ctrl.legend = {};

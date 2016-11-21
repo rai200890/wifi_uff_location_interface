@@ -1,5 +1,7 @@
-angular.module('wifiUffLocation').controller("MenuController", [function() {
+angular.module('wifiUffLocation').controller("MenuController", ["Auth", function(Auth) {
   var ctrl = this;
+
+  ctrl.current_user = null;
 
   ctrl.aps_menu = [{
          name: "List Aps",
@@ -21,5 +23,8 @@ angular.module('wifiUffLocation').controller("MenuController", [function() {
             link: "logout"
   }];
 
+  Auth.getCurrentUser().then(function(response){
+    ctrl.current_user = response.data;
+  });
 
 }]);

@@ -127,7 +127,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <ul class=\"nav navbar-nav navbar-right\">\n" +
     "      <li uib-dropdown=\"\">\n" +
     "        <a href=\"#\" uib-dropdown-toggle=\"\">\n" +
-    "                        Hello, {{}}<b class=\"caret\"></b>\n" +
+    "          <img gravatar-src=\"ctrl.current_user.email\" class=\"img-circle\" gravatar-size=\"25\"></span><b class=\"caret\"></b>\n" +
     "                    </a>\n" +
     "        <tree tree=\"ctrl.session_menu\"></tree>\n" +
     "      </li>\n" +
@@ -214,16 +214,19 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "    <bm-alerts bm-items=\"ctrl.alerts\"></bm-alerts>\n" +
     "</div>\n" +
     "<div class=\"row\">\n" +
-    "    <button ng-if=\"!ctrl.editing\" type=\"button\" ng-click=\"ctrl.edit()\" class=\"btn btn-primary\"><i class=\"fa fa-pencil\"></i></button>\n" +
+    "  <div class=\"btn-group\" role=\"group\">\n" +
+    "    <button ng-if=\"!ctrl.editing\" type=\"button\" ui-sref=\"root.departments.upload_map({department_id: ctrl.department_id})\" uib-tooltip=\"Replace Map\" class=\"btn btn-warning\" tooltip-placement=\"top-left\"><i class=\"fa fa-cloud-upload\"></i></button>\n" +
+    "    <button ng-if=\"!ctrl.editing\" type=\"button\" ng-click=\"ctrl.edit()\" class=\"btn btn-primary\" uib-tooltip=\"Change routers configuration in map\" tooltip-placement=\"top-left\"><i class=\"fa fa-pencil\"></i></button>\n" +
+    "  </div>\n" +
     "    <form name=\"mark_aps\" class=\"form-inline\" ng-if=\"ctrl.editing\">\n" +
     "        <label class=\"text-success\" ng-hide=\"ctrl.unmarkedAps.length\"> 0 APs left to add, please verify before save </label>\n" +
     "        <select name=\"unmarked_ap\" ng-model=\"ctrl.unmarkedAp\" ng-required=\"true\" ng-show=\"ctrl.unmarkedAps.length > 0\" class=\"form-control\" ng-options=\"ap.name for ap in ctrl.unmarkedAps\">\n" +
     "          <option value=\"\" disabled=\"\">Add Ap to Map</option>\n" +
     "        </select>\n" +
-    "        <button type=\"button\" ng-click=\"ctrl.addApToMap(ctrl.unmarkedAp)\" ng-disabled=\"mark_aps.$invalid\" ng-show=\"ctrl.unmarkedAps.length > 0\" class=\"btn btn-primary btn-small\"><i class=\"fa fa-plus\"></i></button>\n" +
+    "        <button type=\"button\" ng-click=\"ctrl.addApToMap(ctrl.unmarkedAp)\" ng-disabled=\"mark_aps.$invalid\" ng-show=\"ctrl.unmarkedAps.length > 0\" class=\"btn btn-primary btn-small\" uib-tooltip=\"Add selected Ap to map\" tooltip-placement=\"top-left\"><i class=\"fa fa-plus\"></i></button>\n" +
     "        <div class=\"btn-group\" role=\"group\">\n" +
-    "            <button type=\"button\" ng-click=\"ctrl.cancel()\" class=\"btn btn-small btn-danger\"><i class=\"fa fa-times\"></i></button>\n" +
-    "            <button type=\"button\" ng-click=\"ctrl.save()\" class=\"btn btn-small btn-success\"><i class=\"fa fa-check\"></i></button>\n" +
+    "            <button type=\"button\" ng-click=\"ctrl.cancel()\" class=\"btn btn-small btn-danger\" uib-tooltip=\"Cancel\" tooltip-placement=\"top-left\"><i class=\"fa fa-times\"></i></button>\n" +
+    "            <button type=\"button\" ng-click=\"ctrl.save()\" class=\"btn btn-small btn-success\" uib-tooltip=\"Save\" tooltip-placement=\"top-left\"><i class=\"fa fa-check\"></i></button>\n" +
     "        </div>\n" +
     "    </form>\n" +
     "</div>\n"
@@ -232,21 +235,29 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
   $templateCache.put('map/upload.html',
     "<div class=\"row\">\n" +
-    "    <bm-alerts bm-items=\"ctrl.alerts\"></bm-alerts>\n" +
+    "  <bm-alerts bm-items=\"ctrl.alerts\"></bm-alerts>\n" +
+    "</div>\n" +
+    "<div class=\"row\" ng-if=\"ctrl.loading\">\n" +
+    "  <h3 class=\"text-center\">Loading<i class=\"fa fa-spinner fa-spin\"></i></h3>\n" +
     "</div>\n" +
     "<div class=\"row\">\n" +
-    "  <form name=\"upload_map\" class=\"form-horizontal\">\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <label for=\"file\" class=\"control-label col-xs-2\">Upload Map</label>\n" +
-    "      <div class=\"col-xs-10\">\n" +
-    "        <input name=\"file\" type=\"file\" ng-required=\"true\" nv-file-select uploader=\"ctrl.uploader\" class=\"form-control\" options=\"\" />\n" +
+    "  <div class=\"container\" ng-if=\"!ctrl.loading\">\n" +
+    "    <form name=\"upload_map\" class=\"form-horizontal\">\n" +
+    "      <div class=\"form-group\" ng-class=\"{'has-error': ctrl.department.map_url == null, 'has-warning': ctrl.department.map_url}\">\n" +
+    "        <label for=\"file\" class=\"control-label col-xs-2\">Upload</label>\n" +
+    "        <div class=\"col-xs-10\">\n" +
+    "          <input name=\"file\" type=\"file\" nv-file-select uploader=\"ctrl.uploader\" class=\"form-control\" options=\"\" />\n" +
+    "          <span class=\"help-block\" ng-hide=\"ctrl.department.map_url\">This department has not map yet! Please upload one!</span>\n" +
+    "          <span class=\"help-block\" ng-show=\"ctrl.department.map_url\">This department already has a map! Upload one to replace it!</span>\n" +
+    "        </div>\n" +
     "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"form-group\">\n" +
-    "      <button ng-disabled=\"ctrl.uploader.queue.length == 0\" ng-click=\"ctrl.upload()\" type=\"submit\" class=\"btn btn-primary\" ng-if=\"!ctrl.uploading\"> Send </button>\n" +
-    "      <button type=\"submit\" class=\"btn btn-primary\" ng-if=\"ctrl.uploading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\"></i></button>\n" +
-    "    </div>\n" +
-    "  </form>\n" +
+    "      <div class=\"form-group\">\n" +
+    "        <button uib-tooltip=\"Cancel\" ng-show=\"ctrl.department.map_url\" class=\"btn btn-warning\" name=\"show_map\" ui-sref=\"root.departments.map({department_id: ctrl.department.id})\">Cancel</button>\n" +
+    "        <button uib-tooltip=\"Upload a Map\" name=\"upload\" ng-disabled=\"ctrl.uploader.queue.length == 0\" ng-click=\"ctrl.upload()\" type=\"submit\" class=\"btn btn-primary\" ng-if=\"!ctrl.uploading\"> Send </button>\n" +
+    "        <button type=\"submit\" class=\"btn btn-primary\" ng-if=\"ctrl.uploading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\"></i></button>\n" +
+    "      </div>\n" +
+    "    </form>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
