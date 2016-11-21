@@ -12,7 +12,7 @@ angular.module('wifiUffLocation').service("Marker", ["SNMPStatus", "BASE_URL", f
     if (zoom <= 0) {
       zoom = zoom*(-1)/5;
     }
-      console.log(power);
+
     var icon = {
       iconUrl: BASE_URL + CHANNEL_ICONS.other,
       iconSize: [100*zoom, 100*zoom],

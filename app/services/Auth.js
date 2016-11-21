@@ -53,7 +53,7 @@ angular.module('wifiUffLocation').service("Auth", ["$http", "API_URL", "localSto
   self.getUserId = function() {
     var token = self.getToken(),
       decodedToken = (token) ? jwtHelper.decodeToken(token) : {};
-    return decodedToken['identity'];
+    return decodedToken['user'];
   };
 
   self.isTokenValid = function(token) {

@@ -1,5 +1,6 @@
 var app = angular.module('wifiUffLocation', ['smart-table', 'ui.bootstrap', 'ui-leaflet', 'ngRoute',
-    'ui.router', 'angularFileUpload', 'nemLogging', 'angular-jwt', 'LocalStorageModule'
+    'ui.router', 'angularFileUpload', 'nemLogging', 'angular-jwt', 'LocalStorageModule', 'ui.navbar',
+    'ui.gravatar'
 ]);
 
 app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'localStorageServiceProvider', 'jwtOptionsProvider', 'WHITELISTED_DOMAINS', '$httpProvider',
@@ -16,7 +17,6 @@ app.config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'localS
             })
             .state('logout', {
                 url: '/logout',
-                abstract: true,
                 controller: 'LogoutController',
                 data: {
                     requiresLogin: false

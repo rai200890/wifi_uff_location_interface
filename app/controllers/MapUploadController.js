@@ -2,7 +2,9 @@ angular.module('wifiUffLocation').controller("MapUploadController", ["$statePara
     "FileUploader", "API_URL", "Department", "Auth",
     function($stateParams, $state, FileUploader, API_URL, Department, Auth) {
         var ctrl = this;
+        ctrl.loading = true;
         ctrl.uploading = false;
+        ctrl.department_id = $stateParams.department_id;
         ctrl.uploader = new FileUploader({
             method: "PUT",
             alias: "map",
@@ -34,5 +36,10 @@ angular.module('wifiUffLocation').controller("MapUploadController", ["$statePara
             ctrl.uploader.uploadItem(file);
             ctrl.uploader.addToQueue(file);
         };
+
+        Department.get($stateParams.department_id).success(function(response){
+          ctrl.department = response;
+          ctrl.loading = false;
+        });
     }
 ]);
