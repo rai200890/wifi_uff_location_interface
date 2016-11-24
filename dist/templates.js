@@ -148,7 +148,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  <div class=\"panel-body\">\n" +
     "    <div class=\"container\">\n" +
     "      <div class=\"row\">\n" +
-    "          <bm-alerts bm-items=\"ctrl.alerts\"></bm-alerts>\n" +
+    "        <bm-alerts bm-items=\"ctrl.alerts\"></bm-alerts>\n" +
     "      </div>\n" +
     "      <div class=\"row\">\n" +
     "        <form name=\"upload\" class=\"form-horizontal\">\n" +
@@ -159,8 +159,8 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "            </div>\n" +
     "          </div>\n" +
     "          <div class=\"form-group\">\n" +
-    "            <button ng-disabled=\"ctrl.uploader.queue.length == 0\" ng-click=\"ctrl.upload()\" type=\"submit\" class=\"btn btn-primary\" ng-if=\"!ctrl.uploading\"> Send </button>\n" +
-    "            <button ng-click=\"ctrl.upload()\" type=\"submit\" class=\"btn btn-primary\" ng-if=\"ctrl.uploading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\"></i></button>\n" +
+    "            <button ng-disabled=\"ctrl.uploader.queue.length == 0\" ng-click=\"ctrl.upload()\" type=\"submit\" class=\"btn btn-primary\" ng-if=\"!ctrl.loading\"> Send </button>\n" +
+    "            <button ng-click=\"ctrl.upload()\" type=\"submit\" class=\"btn btn-primary\" ng-if=\"ctrl.loading\" disabled>Sending <i class=\"fa fa-spinner fa-spin\"></i></button>\n" +
     "          </div>\n" +
     "        </form>\n" +
     "      </div>\n" +
@@ -192,7 +192,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "                <label for=\"password\">Password</label>\n" +
     "                <input ng-model=\"ctrl.credentials.password\" ng-required=\"true\" name=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n" +
     "              </div>\n" +
-    "              <button ng-click=\"ctrl.login()\" ng-disabled=\"ctrl.loading\" type=\"submit\" class=\"btn btn-primary\">Login <span ng-show=\"ctrl.loading\" class=\"glyphicon glyphicon-repeat fast-right-spinner\"></span></button>\n" +
+    "              <button ng-click=\"ctrl.login()\" ng-disabled=\"ctrl.loading\" type=\"submit\" class=\"btn btn-primary\">Login <i ng-show=\"ctrl.loading\" class=\"fa fa-spinner fa-spin\"></i></button>\n" +
     "            </form>\n" +
     "          </div>\n" +
     "        </div>\n" +
@@ -205,7 +205,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
   $templateCache.put('map/show.html',
     "<div class=\"row\">\n" +
-    "    <leaflet id=\"map\" center=\"ctrl.center\" layers=\"ctrl.layers\" markers=\"ctrl.markers\" event-broadcast=\"ctrl.events\" legend=\"ctrl.legend\" defaults=\"ctrl.defaults\" width=\"100%\" height=\"400px\"></leaflet>\n" +
+    "    <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" event-broadcast=\"events\" legend=\"legend\" defaults=\"defaults\" width=\"100%\" height=\"400px\"></leaflet>\n" +
     "</div>\n" +
     "<div class=\"row\">\n" +
     "    <br/>\n" +
@@ -220,10 +220,10 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
     "  </div>\n" +
     "    <form name=\"mark_aps\" class=\"form-inline\" ng-if=\"ctrl.editing\">\n" +
     "        <label class=\"text-success\" ng-hide=\"ctrl.unmarkedAps.length\"> 0 APs left to add, please verify before save </label>\n" +
-    "        <select name=\"unmarked_ap\" ng-model=\"ctrl.unmarkedAp\" ng-required=\"true\" ng-show=\"ctrl.unmarkedAps.length > 0\" class=\"form-control\" ng-options=\"ap.name for ap in ctrl.unmarkedAps\">\n" +
+    "        <select name=\"unmarked_ap\" ng-model=\"ctrl.unmarkedAp\" ng-show=\"ctrl.unmarkedAps.length > 0\" class=\"form-control\"\n" +
+    "           ng-options=\"ap as ap.name for ap in ctrl.unmarkedAps\">\n" +
     "          <option value=\"\" disabled=\"\">Add Ap to Map</option>\n" +
     "        </select>\n" +
-    "        <button type=\"button\" ng-click=\"ctrl.addApToMap(ctrl.unmarkedAp)\" ng-disabled=\"mark_aps.$invalid\" ng-show=\"ctrl.unmarkedAps.length > 0\" class=\"btn btn-primary btn-small\" uib-tooltip=\"Add selected Ap to map\" tooltip-placement=\"top-left\"><i class=\"fa fa-plus\"></i></button>\n" +
     "        <div class=\"btn-group\" role=\"group\">\n" +
     "            <button type=\"button\" ng-click=\"ctrl.cancel()\" class=\"btn btn-small btn-danger\" uib-tooltip=\"Cancel\" tooltip-placement=\"top-left\"><i class=\"fa fa-times\"></i></button>\n" +
     "            <button type=\"button\" ng-click=\"ctrl.save()\" class=\"btn btn-small btn-success\" uib-tooltip=\"Save\" tooltip-placement=\"top-left\"><i class=\"fa fa-check\"></i></button>\n" +

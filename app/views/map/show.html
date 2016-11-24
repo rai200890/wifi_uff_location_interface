@@ -1,5 +1,5 @@
 <div class="row">
-    <leaflet id="map" center="ctrl.center" layers="ctrl.layers" markers="ctrl.markers" event-broadcast="ctrl.events" legend="ctrl.legend" defaults="ctrl.defaults" width="100%" height="400px"></leaflet>
+    <leaflet id="map" center="center" layers="layers" markers="markers" event-broadcast="events" legend="legend" defaults="defaults" width="100%" height="400px"></leaflet>
 </div>
 <div class="row">
     <br/>
@@ -14,10 +14,10 @@
   </div>
     <form name="mark_aps" class="form-inline" ng-if="ctrl.editing">
         <label class="text-success" ng-hide="ctrl.unmarkedAps.length"> 0 APs left to add, please verify before save </label>
-        <select name="unmarked_ap" ng-model="ctrl.unmarkedAp" ng-required="true" ng-show="ctrl.unmarkedAps.length > 0" class="form-control" ng-options="ap.name for ap in ctrl.unmarkedAps">
+        <select name="unmarked_ap" ng-model="ctrl.unmarkedAp" ng-show="ctrl.unmarkedAps.length > 0" class="form-control"
+           ng-options="ap as ap.name for ap in ctrl.unmarkedAps">
           <option value="" disabled="">Add Ap to Map</option>
         </select>
-        <button type="button" ng-click="ctrl.addApToMap(ctrl.unmarkedAp)" ng-disabled="mark_aps.$invalid" ng-show="ctrl.unmarkedAps.length > 0" class="btn btn-primary btn-small" uib-tooltip="Add selected Ap to map" tooltip-placement="top-left"><i class="fa fa-plus"></i></button>
         <div class="btn-group" role="group">
             <button type="button" ng-click="ctrl.cancel()" class="btn btn-small btn-danger" uib-tooltip="Cancel" tooltip-placement="top-left"><i class="fa fa-times"></i></button>
             <button type="button" ng-click="ctrl.save()" class="btn btn-small btn-success" uib-tooltip="Save" tooltip-placement="top-left"><i class="fa fa-check"></i></button>
