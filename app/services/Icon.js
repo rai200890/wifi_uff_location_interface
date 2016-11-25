@@ -8,8 +8,8 @@ angular.module('wifiUffLocation').service("Icon", ["BASE_URL", function(BASE_URL
     other: "/images/circle-icon-blue.png"
   };
 
-  self.generateBasicIcon = function(snmpInfo, zoom) {
-    var originalSize = [100 + snmpInfo.power * 0.3 * 100, 100 + snmpInfo.power * 0.3 * 100];
+  self.generateBasicIcon = function(snmpInfo, zoom, mapBounds) {
+    var originalSize = [20 + snmpInfo.power * 0.3 * 20, 20 + snmpInfo.power * 0.3 * 20];
     return {
       iconUrl: BASE_URL + CHANNEL_ICONS.other,
       originalSize: originalSize,
@@ -18,7 +18,7 @@ angular.module('wifiUffLocation').service("Icon", ["BASE_URL", function(BASE_URL
     };
   };
 
-  self.generateChannelIcon = function(snmpInfo, zoom) {
+  self.generateChannelIcon = function(snmpInfo, zoom, mapBounds) {
     var originalSize = [100 + snmpInfo.power * 0.3 * 100, 100 + snmpInfo.power * 0.3 * 100];
     return {
       iconUrl: BASE_URL + CHANNEL_ICONS[snmpInfo.channel],
@@ -44,7 +44,8 @@ angular.module('wifiUffLocation').service("Icon", ["BASE_URL", function(BASE_URL
     icon.iconSize = self.getIconSize(icon.originalSize, zoom);
   };
 
-  self.generate = function(snmpInfo, zoom) {
-    return ([1, 6, 11].indexOf(snmpInfo.channel) !== -1) ? self.generateChannelIcon(snmpInfo, zoom) : self.generateBasicIcon(snmpInfo, zoom);
+  self.generate = function(snmpInfo, zoom, mapBounds) {
+    console.log(mapBounds);
+    return ([1, 6, 11].indexOf(snmpInfo.channel) !== -1) ? self.generateChannelIcon(snmpInfo, zoom, mapBounds) : self.generateBasicIcon(snmpInfo, zoom, mapBounds);
   };
 }]);

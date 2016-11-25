@@ -205,7 +205,7 @@ angular.module('wifiUffLocation').run(['$templateCache', function($templateCache
 
   $templateCache.put('map/show.html',
     "<div class=\"row\">\n" +
-    "    <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" event-broadcast=\"events\" legend=\"legend\" defaults=\"defaults\" width=\"100%\" height=\"400px\"></leaflet>\n" +
+    "    <leaflet id=\"map\" center=\"center\" layers=\"layers\" markers=\"markers\" event-broadcast=\"events\" legend=\"legend\" defaults=\"defaults\" maxbounds=\"maxbounds\" width=\"100%\" height=\"400px\"></leaflet>\n" +
     "</div>\n" +
     "<div class=\"row\">\n" +
     "    <br/>\n" +
