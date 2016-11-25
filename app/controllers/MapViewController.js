@@ -1,188 +1,188 @@
 angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$stateParams", "$state",
-    "leafletData", "API_URL", "Ap", "Department", "Marker", "SNMPStatus", "Auth",
-    function($scope, $stateParams, $state, leafletData, API_URL, Ap, Department, Marker, SNMPStatus, Auth) {
-        var ctrl = this;
-        ctrl.alerts = [];
-        ctrl.layers = {
-            baselayers: {},
-            overlays: {}
-        };
-        ctrl.markers = {};
-        ctrl.center = {
-            lat: 0,
-            lng: 0,
-            zoom: -3
-        };
-        ctrl.defaults = {
-            maxZoom: 3,
-            minZoom: -3,
-            zoomControl: true,
-            crs: 'Simple',
-            legend: {
-                legendData: null
-            }
-        };
-        ctrl.events = {
-            map: {
-                enable: ['click', 'drag', 'dragend', 'blur', 'touchstart', 'mouseover'],
-                logic: 'emit'
-            },
-            marker: {
-                enable: ['click', 'mouseover', 'drag', 'dragend'],
-                logic: 'emit'
-            }
-        };
-        ctrl.legend = {};
-        ctrl.typeaheadNoResults = false;
-        ctrl.selectedAp = null;
-        ctrl.unmarkedAps = [];
-        ctrl.unmarkedAp = null;
-        ctrl.editing = false;
-        ctrl.department_id = $stateParams.department_id;
+  "leafletData", "Ap", "Department", "Marker", "SNMPStatus", "Auth",
+  function($scope, $stateParams, $state, leafletData, Ap, Department, Marker, SNMPStatus, Auth) {
+    var ctrl = this;
+    ctrl.alerts = [];
 
-        ctrl.edit = function() {
-            ctrl.legend = {};
-            angular.forEach(ctrl.markers, function(marker, name) {
-                marker.icon = null;
-                marker.draggable = true;
-            });
-            ctrl.editing = true;
+    $scope.zoom = -3;
+    $scope.layers = {
+      baselayers: {},
+      overlays: {}
+    };
+    $scope.markers = {};
+    $scope.center = {
+      lat: 0,
+      lng: 0,
+      zoom: $scope.zoom
+    };
+    $scope.defaults = {
+      maxZoom: 1,
+      minZoom: -3,
+      zoomControl: true,
+      doubleClickZoom: false,
+      crs: 'Simple',
+      legend: {
+        legendData: null
+      }
+    };
+
+    $scope.events = {
+      map: {
+        enable: ['click', 'drag', 'dragend', 'blur', 'touchstart', 'mouseover'],
+        logic: 'emit'
+      },
+      marker: {
+        enable: ['click', 'mouseover', 'drag', 'dragend'],
+        logic: 'emit'
+      }
+    };
+    $scope.legend = {};
+    ctrl.typeaheadNoResults = false;
+    ctrl.selectedAp = null;
+    ctrl.unmarkedAps = [];
+    ctrl.unmarkedAp = null;
+    ctrl.editing = false;
+    ctrl.department_id = $stateParams.department_id;
+
+    ctrl.edit = function() {
+      ctrl.legend = {};
+      angular.forEach($scope.markers, function(marker, name) {
+        delete $scope.markers[name].message;
+        marker.icon = null;
+        marker.draggable = true;
+      });
+      ctrl.editing = true;
+    };
+
+    ctrl.save = function() {
+      ctrl.editing = false;
+      var aps = [];
+      angular.forEach($scope.markers, function(marker, id) {
+        aps.push({
+          id: id,
+          map_latitude: marker.lat,
+          map_longitude: marker.lng
+        });
+      });
+      Department.put($stateParams.department_id, aps)
+        .success(function() {
+          ctrl.alerts = [{
+            type: "success",
+            messages: ["Ap's new configuration saved successfully!"]
+          }];
+        })
+        .error(function(response) {
+          ctrl.alerts = [{
+            type: "danger",
+            messages: response.errors
+          }];
+        }).finally(function() {
+          reloadAps($stateParams.department_id);
+        });
+    };
+
+    ctrl.cancel = function() {
+      ctrl.editing = false;
+      reloadAps($stateParams.department_id);
+    };
+
+    ctrl.addApToMap = function(ap, coordinates) {
+      var marker = Marker.generate(ap, coordinates);
+      marker.draggable = true;
+
+      $scope.layers.overlays[ap.name] = {
+        name: ap.name,
+        type: 'group',
+        visible: true
+      };
+      $scope.markers[ap.id] = marker;
+
+      var index = ctrl.unmarkedAps.indexOf(ap);
+      ctrl.unmarkedAps.splice(index, 1);
+      if (ctrl.unmarkedAps.length > 0) {
+        ctrl.unmarkedAp = ctrl.unmarkedAps[0];
+      };
+    };
+
+    var loadMap = function(departmentID) {
+      Department.get(departmentID).success(function(department) {
+        var name = department.name + ", " + department.campus_name;
+        var bounds = L.latLngBounds(department.map_bounds);
+
+        $scope.center.lat = department.map_center[0];
+        $scope.center.lng = department.map_center[1];
+
+        $scope.layers.baselayers.map = {
+          name: name,
+          type: 'imageOverlay',
+          url: department.map_url,
+          bounds: bounds,
+          layerParams: {
+            showOnSelector: false,
+            noWrap: true,
+            attribution: name
+          }
         };
+        reloadAps(departmentID);
+      });
+    };
 
-        ctrl.save = function() {
-            ctrl.editing = false;
-            var aps = [];
-            angular.forEach(ctrl.markers, function(marker, id) {
-                aps.push({
-                    id: id,
-                    map_latitude: marker.lat,
-                    map_longitude: marker.lng
-                });
-            });
-            Department.put($stateParams.department_id, aps)
-                .success(function() {
-                    ctrl.alerts = [{
-                        type: "success",
-                        messages: ["Ap's new configuration saved successfully!"]
-                    }];
-                })
-                .error(function(response) {
-                    ctrl.alerts = [{
-                        type: "danger",
-                        messages: response.errors
-                    }];
-                }).finally(function() {
-                    reloadAps($stateParams.department_id);
-                });
-        };
-
-        ctrl.cancel = function() {
-            ctrl.editing = false;
-            reloadAps($stateParams.department_id);
-        };
-
-        ctrl.addApToMap = function(ap) {
-            var marker = generateMarker(ap);
-            marker.draggable = true;
-
-            ctrl.layers.overlays[ap.name] = {
-                name: ap.name,
-                type: 'group',
-                visible: true
+    var reloadAps = function(departmentID) {
+      $scope.legend = {
+        colors: ['#008000', '#800080', '#FF0000', '#0000FF'],
+        labels: ['Channel 1', 'Channel 6', 'Channel 11', 'Other channels'],
+        legendData: null
+      };
+      ctrl.unmarkedAps = [];
+      $scope.markers = {};
+      $scope.layers.overlays = {};
+      Ap.query(departmentID).success(function(aps) {
+        aps.forEach(function(ap) {
+          if (ap.map_latitude == null && ap.map_longitude == null) {
+            ctrl.unmarkedAps.push(ap);
+          } else {
+            $scope.layers.overlays[ap.name] = {
+              name: ap.name,
+              type: 'group',
+              visible: true
             };
-            ctrl.markers[ap.id] = marker;
+            loadSNMPInfo(ap);
+          };
+        });
+      });
+    };
 
-            var index = ctrl.unmarkedAps.indexOf(ap);
-            ctrl.unmarkedAps.splice(index, 1);
+    var loadSNMPInfo = function(ap) {
+      SNMPStatus.get(ap.id).success(function(snmpInfo) {
+        $scope.markers[ap.id] = Marker.generate(ap, $scope.center, snmpInfo);
+      }).error(function() {
+        $scope.markers[ap.id] = Marker.generate(ap, $scope.center);
+      }).finally(function() {
+        $scope.markers[ap.id].draggable = false;
+      });
+    };
+
+    var init = function() {
+      loadMap($stateParams.department_id);
+      $scope.$on('leafletDirectiveMarker.map.dragend', function(e, args) {
+        $scope.markers[args.modelName].lat = args.model.lat;
+        $scope.markers[args.modelName].lng = args.model.lng;
+      });
+      $scope.$on('leafletDirectiveMap.map.click', function(e, args) {
+        var coordinates = args.leafletEvent.latlng;
+        if (ctrl.unmarkedAp && ctrl.editing) {
+          ctrl.addApToMap(ctrl.unmarkedAp, coordinates);
         };
+      });
+      $scope.$watch('center.zoom', function(newValue, oldValue) {
+        angular.forEach($scope.markers, function(marker, name) {
+          if (marker.icon !== null) {
+            Marker.resizeIcon(marker, newValue);
+          };
+        });
+      });
+    };
 
-        var loadMap = function(departmentID) {
-            Department.get(departmentID).success(function(department) {
-                var name = department.name + ", " + department.campus_name;
-                var bounds = L.latLngBounds(department.map_bounds);
-
-                ctrl.center.lat = department.map_center[0];
-                ctrl.center.lng = department.map_center[1];
-
-                ctrl.layers.baselayers.map = {
-                    name: name,
-                    type: 'imageOverlay',
-                    url: department.map_url,
-                    bounds: bounds,
-                    layerParams: {
-                        showOnSelector: false,
-                        noWrap: true,
-                        attribution: name
-                    }
-                };
-                reloadAps(departmentID);
-            });
-        };
-
-        var reloadAps = function(departmentID) {
-            ctrl.legend = {
-                colors: ['#008000', '#800080', '#FF0000', '#0000FF'],
-                labels: ['Channel 1', 'Channel 6', 'Channel 11', 'Other channels'],
-                legendData: null
-            };
-            ctrl.unmarkedAps = [];
-            ctrl.markers = {};
-            ctrl.layers.overlays = {};
-            Ap.query(departmentID).success(function(aps) {
-                aps.forEach(function(ap) {
-                    if (ap.map_latitude == null && ap.map_longitude == null) {
-                        ctrl.unmarkedAps.push(ap);
-                    } else {
-                        loadSNMPInfo(ap);
-                    };
-                });
-            });
-        };
-
-        var generateMarker = function(ap) {
-            var message = "<p>" + ap.name + " , " + ap.location.name + "</p>";
-            var marker = {
-                lat: ap.map_latitude || ctrl.center.lat,
-                lng: ap.map_longitude || ctrl.center.lng,
-                layer: ap.name,
-                label: {
-                    message: message,
-                    options: {
-                        direction: "auto",
-                        noHide: true
-                    }
-                },
-                focus: true
-            };
-            return marker
-        };
-
-        var loadSNMPInfo = function(ap) {
-            var marker = generateMarker(ap);
-            marker.draggable = false;
-
-            ctrl.layers.overlays[ap.name] = {
-                name: ap.name,
-                type: 'group',
-                visible: true
-            };
-
-            SNMPStatus.get(ap.id).success(function(data) {
-                ctrl.markers[ap.id] = marker;
-                ctrl.markers[ap.id].icon = Marker.getIcon(data.channel, data.power);
-            }).error(function() {
-                ctrl.markers[ap.id] = marker;
-            });
-        };
-
-        var init = function() {
-            loadMap($stateParams.department_id);
-            $scope.$on('leafletDirectiveMarker.map.dragend', function(e, args) {
-                ctrl.markers[args.modelName].lat = args.model.lat;
-                ctrl.markers[args.modelName].lng = args.model.lng;
-            });
-        };
-
-        init();
-    }
+    init();
+  }
 ]);
