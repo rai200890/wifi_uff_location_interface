@@ -47,11 +47,12 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
 
     ctrl.edit = function() {
       ctrl.legend = {};
-      $scope.layers.overlays = {};
-      $scope.layers.overlays['markers'] = {
+      $scope.layers.overlays = {
+        'markers': {
           name: 'Markers',
           type: 'group',
           visible: true
+        }
       };
       angular.forEach($scope.markers, function(marker, name) {
         marker.layer = 'markers';
@@ -95,13 +96,12 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
     };
 
     ctrl.addApToMap = function(ap, coordinates) {
-      var marker = Marker.generate(ap, coordinates);
-      marker.name = 'markers';
+      var marker = Marker.generate(ap);
+      marker.layer = 'markers';
       marker.draggable = true;
       $scope.markers[ap.id] = marker;
       var index = ctrl.unmarkedAps.indexOf(ap);
       ctrl.unmarkedAps.splice(index, 1);
-
       if (ctrl.unmarkedAps.length > 0) {
         ctrl.unmarkedAp = ctrl.unmarkedAps[0];
       };
@@ -111,10 +111,9 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
       Department.get(departmentID).success(function(department) {
         var name = department.name + ", " + department.campus_name;
         var bounds = L.latLngBounds(department.map_bounds);
-
-        //adicionar largura e altura, tamanho de marcador pode ser percentual do tamanho da imagem, 10%
         $scope.center.lat = department.map_center[0];
         $scope.center.lng = department.map_center[1];
+        ctrl.mapDimensions = department.map_dimensions;
         $scope.maxbounds = bounds;
         $scope.layers.baselayers.map = {
           name: name,
@@ -152,24 +151,21 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
     };
 
     var loadSNMPInfo = function(ap) {
-
       SNMPStatus.get(ap.id).success(function(snmpInfo) {
         $scope.layers.overlays['channel_' + snmpInfo.channel] = {
-          name: 'Channel '+ snmpInfo.channel,
+          name: 'Channel ' + snmpInfo.channel,
           type: 'group',
           visible: true
         };
-        $scope.markers[ap.id] = Marker.generate(ap, $scope.zoom, snmpInfo);
+        $scope.markers[ap.id] = Marker.generate(ap, $scope.zoom, ctrl.mapDimensions, snmpInfo);
       }).error(function() {
         $scope.layers.overlays['unknown_channel'] = {
           name: 'Unknown Channel',
           type: 'group',
           visible: true
         };
-        $scope.markers[ap.id] = Marker.generate(ap, $scope.zoom);
-
+        $scope.markers[ap.id] = Marker.generate(ap, $scope.zoom, ctrl.mapDimensions);
       }).finally(function() {
-
         $scope.markers[ap.id].draggable = false;
       });
     };
@@ -181,9 +177,11 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
         $scope.markers[args.modelName].lng = args.model.lng;
       });
       $scope.$on('leafletDirectiveMap.map.click', function(e, args) {
-        var coordinates = args.leafletEvent.latlng;
         if (ctrl.unmarkedAp && ctrl.editing) {
-          ctrl.addApToMap(ctrl.unmarkedAp, coordinates);
+          var coordinates = args.leafletEvent.latlng;
+          ctrl.unmarkedAp.map_latitude = coordinates.lat;
+          ctrl.unmarkedAp.map_longitude = coordinates.lng;
+          ctrl.addApToMap(ctrl.unmarkedAp, coordinates, ctrl.mapDimensions);
         };
       });
       $scope.$watch('center.zoom', function(newValue, oldValue) {
