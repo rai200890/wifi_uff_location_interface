@@ -157,14 +157,14 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
           type: 'group',
           visible: true
         };
-        $scope.markers[ap.id] = Marker.generate(ap, $scope.zoom, ctrl.mapDimensions, snmpInfo);
+        $scope.markers[ap.id] = Marker.generate(ap, $scope.center.zoom, ctrl.mapDimensions, snmpInfo);
       }).error(function() {
         $scope.layers.overlays['unknown_channel'] = {
           name: 'Unknown Channel',
           type: 'group',
           visible: true
         };
-        $scope.markers[ap.id] = Marker.generate(ap, $scope.zoom, ctrl.mapDimensions);
+        $scope.markers[ap.id] = Marker.generate(ap, $scope.center.zoom, ctrl.mapDimensions);
       }).finally(function() {
         $scope.markers[ap.id].draggable = false;
       });
