@@ -9,6 +9,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
       baselayers: {},
       overlays: {}
     };
+    $scope.maxbounds = {};
     $scope.markers = {};
     $scope.center = {
       lat: 0,
@@ -46,8 +47,16 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
 
     ctrl.edit = function() {
       ctrl.legend = {};
+      $scope.layers.overlays = {
+        'markers': {
+          name: 'Markers',
+          type: 'group',
+          visible: true
+        }
+      };
       angular.forEach($scope.markers, function(marker, name) {
-        delete $scope.markers[name].message;
+        marker.layer = 'markers';
+        delete marker.message;
         marker.icon = null;
         marker.draggable = true;
       });
@@ -87,16 +96,10 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
     };
 
     ctrl.addApToMap = function(ap, coordinates) {
-      var marker = Marker.generate(ap, coordinates);
+      var marker = Marker.generate(ap);
+      marker.layer = 'markers';
       marker.draggable = true;
-
-      $scope.layers.overlays[ap.name] = {
-        name: ap.name,
-        type: 'group',
-        visible: true
-      };
       $scope.markers[ap.id] = marker;
-
       var index = ctrl.unmarkedAps.indexOf(ap);
       ctrl.unmarkedAps.splice(index, 1);
       if (ctrl.unmarkedAps.length > 0) {
@@ -108,10 +111,10 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
       Department.get(departmentID).success(function(department) {
         var name = department.name + ", " + department.campus_name;
         var bounds = L.latLngBounds(department.map_bounds);
-
         $scope.center.lat = department.map_center[0];
         $scope.center.lng = department.map_center[1];
-
+        ctrl.mapDimensions = department.map_dimensions;
+        $scope.maxbounds = bounds;
         $scope.layers.baselayers.map = {
           name: name,
           type: 'imageOverlay',
@@ -123,7 +126,7 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
             attribution: name
           }
         };
-        reloadAps(departmentID);
+        reloadAps(departmentID, bounds);
       });
     };
 
@@ -141,11 +144,6 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
           if (ap.map_latitude == null && ap.map_longitude == null) {
             ctrl.unmarkedAps.push(ap);
           } else {
-            $scope.layers.overlays[ap.name] = {
-              name: ap.name,
-              type: 'group',
-              visible: true
-            };
             loadSNMPInfo(ap);
           };
         });
@@ -154,9 +152,19 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
 
     var loadSNMPInfo = function(ap) {
       SNMPStatus.get(ap.id).success(function(snmpInfo) {
-        $scope.markers[ap.id] = Marker.generate(ap, $scope.center, snmpInfo);
+        $scope.layers.overlays['channel_' + snmpInfo.channel] = {
+          name: 'Channel ' + snmpInfo.channel,
+          type: 'group',
+          visible: true
+        };
+        $scope.markers[ap.id] = Marker.generate(ap, $scope.center.zoom, ctrl.mapDimensions, snmpInfo);
       }).error(function() {
-        $scope.markers[ap.id] = Marker.generate(ap, $scope.center);
+        $scope.layers.overlays['unknown_channel'] = {
+          name: 'Unknown Channel',
+          type: 'group',
+          visible: true
+        };
+        $scope.markers[ap.id] = Marker.generate(ap, $scope.center.zoom, ctrl.mapDimensions);
       }).finally(function() {
         $scope.markers[ap.id].draggable = false;
       });
@@ -169,9 +177,11 @@ angular.module('wifiUffLocation').controller("MapViewController", ["$scope", "$s
         $scope.markers[args.modelName].lng = args.model.lng;
       });
       $scope.$on('leafletDirectiveMap.map.click', function(e, args) {
-        var coordinates = args.leafletEvent.latlng;
         if (ctrl.unmarkedAp && ctrl.editing) {
-          ctrl.addApToMap(ctrl.unmarkedAp, coordinates);
+          var coordinates = args.leafletEvent.latlng;
+          ctrl.unmarkedAp.map_latitude = coordinates.lat;
+          ctrl.unmarkedAp.map_longitude = coordinates.lng;
+          ctrl.addApToMap(ctrl.unmarkedAp, coordinates, ctrl.mapDimensions);
         };
       });
       $scope.$watch('center.zoom', function(newValue, oldValue) {
