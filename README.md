@@ -1,4 +1,4 @@
-# scifi_viz_interface
+# wifi_uff_location_interface
 [![Code Climate](https://codeclimate.com/github/rai200890/wifi_uff_location_interface/badges/gpa.svg)](https://codeclimate.com/github/rai200890/wifi_uff_location_interface)
 [![Dependency Status](https://gemnasium.com/rai200890/wifi_uff_location_interface.svg)](https://gemnasium.com/rai200890/wifi_uff_location_interface)
 [![Build Status](https://travis-ci.org/rai200890/wifi_uff_location_interface.svg?branch=master)](https://travis-ci.org/rai200890/wifi_uff_location_interface)
